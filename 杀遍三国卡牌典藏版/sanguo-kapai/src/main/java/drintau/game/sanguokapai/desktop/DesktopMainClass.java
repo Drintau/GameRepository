@@ -1,7 +1,9 @@
 package drintau.game.sanguokapai.desktop;
 
+import drintau.game.sanguokapai.desktop.event.BeginEvent;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -10,16 +12,16 @@ public class DesktopMainClass extends Application {
 
     @Override
     public void start(Stage stage) {
-        int rows = 3; // 行
-        int cols = 14; // 列
-        StackPane[][] cells = new StackPane[rows][cols];
+        DesktopContext desktopContext = DesktopContext.getInstance();
+
+        StackPane[][] cells = new StackPane[DesktopContext.rows][DesktopContext.cols];
+        desktopContext.setCells(cells);
 
         Border cellBorder = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1)));
-        Background background = Background.fill(Color.web("#2196F3", 1.0));
 
         GridPane gridPane = new GridPane();
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
+        for (int row = 0; row < DesktopContext.rows; row++) {
+            for (int col = 0; col < DesktopContext.cols; col++) {
                 StackPane cell = new StackPane();
                 cell.setBorder(cellBorder);
                 cell.setPrefSize(100, 150);
@@ -28,9 +30,13 @@ public class DesktopMainClass extends Application {
             }
         }
 
-        cells[1][5].setBackground(background);
+        HBox hBox = new HBox();
+        Button begin = new Button("开始");
+        begin.setOnAction(new BeginEvent());
+        hBox.getChildren().addAll(begin);
 
         BorderPane borderPane = new BorderPane();
+        borderPane.setTop(hBox);
         borderPane.setCenter(gridPane);
 
         Scene scene = new Scene(borderPane);
