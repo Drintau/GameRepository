@@ -17,13 +17,11 @@ public class DesktopMainClass extends Application {
         StackPane[][] cells = new StackPane[DesktopContext.rows][DesktopContext.cols];
         desktopContext.setCells(cells);
 
-        Border cellBorder = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1)));
-
         GridPane gridPane = new GridPane();
         for (int row = 0; row < DesktopContext.rows; row++) {
             for (int col = 0; col < DesktopContext.cols; col++) {
                 StackPane cell = new StackPane();
-                cell.setBorder(cellBorder);
+                cell.setBorder(StyleConstants.CELL_BORDER);
                 cell.setPrefSize(100, 150);
                 gridPane.add(cell, col ,row);
                 cells[row][col] = cell;
@@ -36,6 +34,7 @@ public class DesktopMainClass extends Application {
         hBox.getChildren().addAll(begin);
 
         BorderPane borderPane = new BorderPane();
+        borderPane.setBackground(StyleConstants.LIGHTGRAY_BACKGROUND);
         borderPane.setTop(hBox);
         borderPane.setCenter(gridPane);
 
