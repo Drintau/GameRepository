@@ -1,9 +1,10 @@
 package drintau.game.sanguokapai.desktop.event;
 
+import drintau.game.sanguokapai.data.HeroData;
 import drintau.game.sanguokapai.desktop.DesktopContext;
-import drintau.game.sanguokapai.desktop.StyleConstants;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 
 public class BeginEvent implements EventHandler<ActionEvent> {
@@ -17,10 +18,10 @@ public class BeginEvent implements EventHandler<ActionEvent> {
         StackPane[][] cells = desktopContext.getCells();
 
         if (!(desktopContext.getNowRowIndex() == desktopContext.getPreRowIndex() && desktopContext.getNowColIndex() == desktopContext.getPreColIndex())) {
-            cells[desktopContext.getPreRowIndex()][desktopContext.getPreColIndex()].setBackground(StyleConstants.LIGHTGRAY_BACKGROUND);
+            cells[desktopContext.getPreRowIndex()][desktopContext.getPreColIndex()].getChildren().clear();
         }
 
-        cells[desktopContext.getNowRowIndex()][desktopContext.getNowColIndex()].setBackground(StyleConstants.BLUE_BACKGROUND);
+        cells[desktopContext.getNowRowIndex()][desktopContext.getNowColIndex()].getChildren().addAll(new Label(HeroData.GUAN_YU.getName()));
         desktopContext.setPreRowIndex(desktopContext.getNowRowIndex());
         desktopContext.setPreColIndex(desktopContext.getNowColIndex());
 

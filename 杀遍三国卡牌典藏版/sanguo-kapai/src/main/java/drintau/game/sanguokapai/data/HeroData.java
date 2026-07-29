@@ -5,7 +5,7 @@ import drintau.game.sanguokapai.card.UnitCard;
 
 public final class HeroData {
 
-    public final UnitCard GUAN_YU = new UnitCard("关羽", CardConstants.UnitType.CAVALRY, 5, 4, 9);
+    public static final UnitCard GUAN_YU = new UnitCard("关羽", CardConstants.UnitType.CAVALRY, 5, 4, 9);
 
 
 }
