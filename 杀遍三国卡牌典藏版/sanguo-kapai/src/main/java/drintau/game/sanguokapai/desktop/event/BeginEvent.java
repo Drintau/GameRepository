@@ -77,6 +77,7 @@ public class BeginEvent implements EventHandler<ActionEvent> {
                                     cells[curRowIndex][removeColIndex].getChildren().clear();
                                     cells[curRowIndex][removeColIndex].setUserData(null);
                                 });
+                                move(actionItem, nextColIndex);
                             } else if (u1Attack < u2Attack) {
                                 actionItem.setFlag(false);
                                 int removeColIndex = actionItem.getCurColIndex();
@@ -101,15 +102,7 @@ public class BeginEvent implements EventHandler<ActionEvent> {
                     }
 
                     // 移动
-                    actionItem.setCurColIndex(nextColIndex);
-                    int curColIndex = actionItem.getCurColIndex();
-                    ActionItem cellData = actionItem;
-                    Platform.runLater(() -> {
-                        cells[curRowIndex][preColIndex].getChildren().clear();
-                        cells[curRowIndex][preColIndex].setUserData(null);
-                        cells[curRowIndex][curColIndex].getChildren().addAll(new Label(unitName));
-                        cells[curRowIndex][curColIndex].setUserData(cellData);
-                    });
+                    move(actionItem, nextColIndex);
                     ThreadSleepUtil.sleepSeconds(1L);
                 }
                 if (actionItem.isFlag()) {
@@ -120,6 +113,20 @@ public class BeginEvent implements EventHandler<ActionEvent> {
             desktopContext.getNextActionDeque().clear();
         }, 1L, TimeUnit.SECONDS);
 
+    }
+
+    private void move(ActionItem actionItem, int nextColIndex) {
+        StackPane[][] cells = DesktopContext.getInstance().getCells();
+        int curRowIndex = actionItem.getCurRowIndex();
+        int preColIndex = actionItem.getCurColIndex();
+        actionItem.setCurColIndex(nextColIndex);
+        int curColIndex = actionItem.getCurColIndex();
+        Platform.runLater(() -> {
+            cells[curRowIndex][preColIndex].getChildren().clear();
+            cells[curRowIndex][preColIndex].setUserData(null);
+            cells[curRowIndex][curColIndex].getChildren().addAll(new Label(actionItem.getUnitCard().getName()));
+            cells[curRowIndex][curColIndex].setUserData(actionItem);
+        });
     }
 
 }
