@@ -1,8 +1,12 @@
 package drintau.game.sanguokapai.desktop;
 
+import drintau.game.sanguokapai.data.HeroData;
+import drintau.game.sanguokapai.data.UnitDataFactory;
 import javafx.scene.layout.StackPane;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayDeque;
 
 @Setter
 @Getter
@@ -26,5 +30,14 @@ public class DesktopContext {
 
     private int preRowIndex = 0;
     private int preColIndex = 0;
+
+    private ArrayDeque<ActionItem> actionDeque = new ArrayDeque<>();
+    private ArrayDeque<ActionItem> nextActionDeque = new ArrayDeque<>();
+
+    public void init() {
+        UnitDataFactory unitDataFactory = new UnitDataFactory();
+        actionDeque.add(new ActionItem(true, 0,0, HeroData.GUAN_YU));
+        actionDeque.add(new ActionItem(false, 0,13, unitDataFactory.createQiangBing()));
+    }
 
 }

@@ -1,11 +1,11 @@
 package drintau.game.sanguokapai.desktop;
 
 import drintau.game.sanguokapai.desktop.event.BeginEvent;
+import drintau.game.sanguokapai.util.DaemonScheduler;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class DesktopMainClass extends Application {
@@ -13,6 +13,8 @@ public class DesktopMainClass extends Application {
     @Override
     public void start(Stage stage) {
         DesktopContext desktopContext = DesktopContext.getInstance();
+        desktopContext.init();
+        DaemonScheduler.getInstance();
 
         StackPane[][] cells = new StackPane[DesktopContext.rows][DesktopContext.cols];
         desktopContext.setCells(cells);
@@ -29,7 +31,7 @@ public class DesktopMainClass extends Application {
         }
 
         HBox hBox = new HBox();
-        Button begin = new Button("开始");
+        Button begin = new Button("下一步");
         begin.setOnAction(new BeginEvent());
         hBox.getChildren().addAll(begin);
 
