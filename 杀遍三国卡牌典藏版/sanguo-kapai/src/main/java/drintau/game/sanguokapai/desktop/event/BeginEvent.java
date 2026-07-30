@@ -31,17 +31,7 @@ public class BeginEvent implements EventHandler<ActionEvent> {
                     continue;
                 }
 
-                String unitName = actionItem.getUnitCard().getName();
-                if (cells[actionItem.getCurRowIndex()][actionItem.getCurColIndex()].getChildren().isEmpty()) {
-                    int initRowIndex = actionItem.getCurRowIndex();
-                    int initColIndex = actionItem.getCurColIndex();
-                    ActionItem cellData = actionItem;
-                    Platform.runLater(() -> {
-                        cells[initRowIndex][initColIndex].getChildren().addAll(new Label(unitName));
-                        cells[initRowIndex][initColIndex].setUserData(cellData);
-                    });
-                    ThreadSleepUtil.sleepSeconds(1L);
-                }
+                //前进
                 for (int i = actionItem.getUnitCard().getSpeed(); i > 0 ; i--) {
                     // 当前行
                     int curRowIndex = actionItem.getCurRowIndex();
@@ -54,7 +44,7 @@ public class BeginEvent implements EventHandler<ActionEvent> {
                         nextColIndex = actionItem.getCurColIndex() - 1;
                     }
                     // 到达终点
-                    if (nextColIndex < 0 || nextColIndex >= DesktopContext.cols) {
+                    if (nextColIndex < DesktopContext.moveMinColIndex || nextColIndex > DesktopContext.moveMaxColIndex) {
                         Platform.runLater(() -> {
                             cells[curRowIndex][preColIndex].getChildren().clear();
                             cells[curRowIndex][preColIndex].setUserData(null);
