@@ -1,9 +1,9 @@
 package drintau.game.sanguokapai.desktop.event;
 
-import drintau.game.sanguokapai.data.HeroData;
 import drintau.game.sanguokapai.desktop.ActionItem;
 import drintau.game.sanguokapai.desktop.DesktopContext;
 import drintau.game.sanguokapai.util.DaemonScheduler;
+import drintau.game.sanguokapai.util.ThreadSleepUtil;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -32,12 +32,7 @@ public class BeginEvent implements EventHandler<ActionEvent> {
                     Platform.runLater(() -> {
                         cells[initRowIndex][initColIndex].getChildren().addAll(new Label(unitName));
                     });
-                    try {
-                        Thread.sleep(1000L);  // 参数是毫秒，1000毫秒 = 1秒
-                    } catch (InterruptedException e) {
-                        // 线程被中断时的处理（通常恢复中断标志或退出）
-                        Thread.currentThread().interrupt();
-                    }
+                    ThreadSleepUtil.sleepSeconds(1L);
                 }
                 for (int i = actionItem.getUnitCard().getSpeed(); i > 0 ; i--) {
                     int preColIndex = actionItem.getCurColIndex();
@@ -52,13 +47,7 @@ public class BeginEvent implements EventHandler<ActionEvent> {
                         cells[curRowIndex][preColIndex].getChildren().clear();
                         cells[curRowIndex][curColIndex].getChildren().addAll(new Label(unitName));
                     });
-
-                    try {
-                        Thread.sleep(1000L);  // 参数是毫秒，1000毫秒 = 1秒
-                    } catch (InterruptedException e) {
-                        // 线程被中断时的处理（通常恢复中断标志或退出）
-                        Thread.currentThread().interrupt();
-                    }
+                    ThreadSleepUtil.sleepSeconds(1L);
                 }
                 desktopContext.getNextActionDeque().add(actionItem);
             }
