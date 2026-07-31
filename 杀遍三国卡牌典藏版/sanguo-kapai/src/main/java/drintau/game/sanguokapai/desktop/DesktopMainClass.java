@@ -52,7 +52,12 @@ public class DesktopMainClass extends Application {
         scrim.setFill(Color.color(0, 0.5, 0, 0.2));
 
         // 选择卡牌
-        VBox vBox = new VBox();
+        VBox vBox = new VBox(10);
+        vBox.setBackground(StyleConstants.WHITE_BACKGROUND);
+        vBox.setPrefWidth(600);
+        vBox.setPrefHeight(300);
+        vBox.setMinSize(600, 300);
+        vBox.setMaxSize(600, 300);
         vBox.setAlignment(Pos.CENTER);
         vBox.getChildren().add(new Label("选择卡牌"));
         Button button = new Button("关闭");
