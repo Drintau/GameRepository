@@ -1,11 +1,13 @@
 package drintau.game.sanguokapai.desktop;
 
-import drintau.game.sanguokapai.desktop.event.BeginEvent;
-import drintau.game.sanguokapai.util.DaemonScheduler;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class DesktopMainClass extends Application {
@@ -14,33 +16,54 @@ public class DesktopMainClass extends Application {
     public void start(Stage stage) {
         DesktopContext desktopContext = DesktopContext.getInstance();
         desktopContext.init();
-        DaemonScheduler.getInstance();
+
+        // 根节点
+        StackPane root = new StackPane();
+
+        // 棋盘
+        HBox borderPaneTop = new HBox();
+        Button begin = new Button("下一回合");
+//        begin.setOnAction(new BeginEvent());
+        borderPaneTop.getChildren().addAll(begin);
 
         StackPane[][] cells = new StackPane[DesktopContext.rows][DesktopContext.cols];
         desktopContext.setCells(cells);
-
         GridPane gridPane = new GridPane();
         for (int row = 0; row < DesktopContext.rows; row++) {
             for (int col = 0; col < DesktopContext.cols; col++) {
                 StackPane cell = new StackPane();
                 cell.setBorder(StyleConstants.CELL_BORDER);
+                cell.setBackground(StyleConstants.LIGHTGRAY_BACKGROUND);
                 cell.setPrefSize(100, 150);
                 gridPane.add(cell, col ,row);
                 cells[row][col] = cell;
             }
         }
 
-        HBox hBox = new HBox();
-        Button begin = new Button("下一步");
-        begin.setOnAction(new BeginEvent());
-        hBox.getChildren().addAll(begin);
-
         BorderPane borderPane = new BorderPane();
-        borderPane.setBackground(StyleConstants.LIGHTGRAY_BACKGROUND);
-        borderPane.setTop(hBox);
+        borderPane.setBackground(StyleConstants.BLUE_BACKGROUND);
+        borderPane.setTop(borderPaneTop);
         borderPane.setCenter(gridPane);
 
-        Scene scene = new Scene(borderPane);
+        // 遮盖层
+        Rectangle scrim = new Rectangle();
+        scrim.widthProperty().bind(root.widthProperty());
+        scrim.heightProperty().bind(root.heightProperty());
+        scrim.setFill(Color.color(0, 0.5, 0, 0.2));
+
+        // 选择卡牌
+        VBox vBox = new VBox();
+        vBox.setAlignment(Pos.CENTER);
+        vBox.getChildren().add(new Label("选择卡牌"));
+        Button button = new Button("关闭");
+        vBox.getChildren().add(button);
+
+        // 跳转
+        begin.setOnAction(e -> root.getChildren().addAll(scrim, vBox));
+        button.setOnAction(e -> root.getChildren().removeAll(scrim,vBox));
+
+        root.getChildren().addAll(borderPane);
+        Scene scene = new Scene(root);
 
         stage.setScene(scene);
         stage.setTitle("杀遍三国卡牌典藏版");

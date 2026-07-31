@@ -1,9 +1,12 @@
 package drintau.game.sanguokapai.util;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 public class DaemonScheduler {
 
     private DaemonScheduler() {}
@@ -53,7 +56,7 @@ public class DaemonScheduler {
             try {
                 task.run();
             } catch (Exception e) {
-                System.out.println(e);
+                log.error("任务执行异常", e);
             }
         };
     }
