@@ -5,6 +5,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -52,20 +54,43 @@ public class DesktopMainClass extends Application {
         scrim.setFill(Color.color(0, 0.5, 0, 0.2));
 
         // 选择卡牌
-        VBox vBox = new VBox(10);
-        vBox.setBackground(StyleConstants.WHITE_BACKGROUND);
-        vBox.setPrefWidth(600);
-        vBox.setPrefHeight(300);
-        vBox.setMinSize(600, 300);
-        vBox.setMaxSize(600, 300);
-        vBox.setAlignment(Pos.CENTER);
-        vBox.getChildren().add(new Label("选择卡牌"));
-        Button button = new Button("关闭");
-        vBox.getChildren().add(button);
+        VBox cardSelectRoot = new VBox(10);
+        cardSelectRoot.setBackground(StyleConstants.WHITE_BACKGROUND);
+        cardSelectRoot.setPrefWidth(600);
+        cardSelectRoot.setPrefHeight(300);
+        cardSelectRoot.setMinSize(600, 300);
+        cardSelectRoot.setMaxSize(600, 300);
+        cardSelectRoot.setAlignment(Pos.CENTER);
+        cardSelectRoot.getChildren().add(new Label("选择卡牌"));
+
+        ToggleGroup cardSelectGroup = new ToggleGroup();
+        ToggleButton cardBtn1 = new ToggleButton("卡牌A");
+        ToggleButton cardBtn2 = new ToggleButton("卡牌B");
+        ToggleButton cardBtn3 = new ToggleButton("卡牌C");
+        ToggleButton cardBtn4 = new ToggleButton("卡牌C");
+        ToggleButton cardBtn5 = new ToggleButton("卡牌C");
+        cardBtn1.setToggleGroup(cardSelectGroup);
+        cardBtn2.setToggleGroup(cardSelectGroup);
+        cardBtn3.setToggleGroup(cardSelectGroup);
+        cardBtn4.setToggleGroup(cardSelectGroup);
+        cardBtn5.setToggleGroup(cardSelectGroup);
+        cardSelectGroup.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                ToggleButton selected = (ToggleButton) newVal;
+            }
+        });
+        HBox cardSelectHBox = new HBox(10);
+        cardSelectHBox.setAlignment(Pos.CENTER);
+        cardSelectHBox.getChildren().addAll(cardBtn1, cardBtn2, cardBtn3, cardBtn4, cardBtn5);
+        cardSelectRoot.getChildren().add(cardSelectHBox);
+
+        Button cardSelectSureButton = new Button("确认");
+        Button cardSelectCloseButton = new Button("关闭");
+        cardSelectRoot.getChildren().add(cardSelectCloseButton);
 
         // 跳转
-        begin.setOnAction(e -> root.getChildren().addAll(scrim, vBox));
-        button.setOnAction(e -> root.getChildren().removeAll(scrim,vBox));
+        begin.setOnAction(e -> root.getChildren().addAll(scrim, cardSelectRoot));
+        cardSelectCloseButton.setOnAction(e -> root.getChildren().removeAll(scrim,cardSelectRoot));
 
         root.getChildren().addAll(borderPane);
         Scene scene = new Scene(root);
