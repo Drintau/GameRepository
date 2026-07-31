@@ -11,7 +11,9 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class DesktopMainClass extends Application {
 
     @Override
@@ -37,6 +39,11 @@ public class DesktopMainClass extends Application {
                 cell.setBorder(StyleConstants.CELL_BORDER);
                 cell.setBackground(StyleConstants.LIGHTGRAY_BACKGROUND);
                 cell.setPrefSize(100, 150);
+                int finalRow = row;
+                int finalCol = col;
+                cell.setOnMouseClicked(e -> {
+                    log.warn("点击格子：row={},col={}", finalRow, finalCol);
+                });
                 gridPane.add(cell, col ,row);
                 cells[row][col] = cell;
             }
@@ -86,7 +93,7 @@ public class DesktopMainClass extends Application {
 
         Button cardSelectSureButton = new Button("确认");
         Button cardSelectCloseButton = new Button("关闭");
-        cardSelectRoot.getChildren().add(cardSelectCloseButton);
+        cardSelectRoot.getChildren().addAll(cardSelectSureButton,cardSelectCloseButton);
 
         // 跳转
         begin.setOnAction(e -> root.getChildren().addAll(scrim, cardSelectRoot));
