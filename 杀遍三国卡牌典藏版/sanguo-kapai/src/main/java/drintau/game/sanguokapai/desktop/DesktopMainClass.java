@@ -82,14 +82,18 @@ public class DesktopMainClass extends Application {
         scrim.setFill(Color.color(0, 0.5, 0, 0.2));
 
         // 选择卡牌
-        VBox cardSelectRoot = new VBox(10);
+        BorderPane cardSelectRoot = new BorderPane();
+        cardSelectRoot.setPadding(new Insets(10));
         cardSelectRoot.setBackground(StyleConstants.WHITE_BACKGROUND);
         cardSelectRoot.setPrefWidth(600);
         cardSelectRoot.setPrefHeight(300);
         cardSelectRoot.setMinSize(600, 300);
         cardSelectRoot.setMaxSize(600, 300);
-        cardSelectRoot.setAlignment(Pos.CENTER);
-        cardSelectRoot.getChildren().add(new Label("选择卡牌"));
+
+        Label cardSelectTitle = new Label("选择卡牌");
+        cardSelectTitle.setFont(font20);
+        cardSelectRoot.setTop(cardSelectTitle);
+        BorderPane.setAlignment(cardSelectTitle, Pos.CENTER);
 
         ToggleGroup cardSelectGroup = new ToggleGroup();
         ToggleButton cardBtn1 = new ToggleButton("卡牌A");
@@ -107,14 +111,19 @@ public class DesktopMainClass extends Application {
                 ToggleButton selected = (ToggleButton) newVal;
             }
         });
-        HBox cardSelectHBox = new HBox(10);
-        cardSelectHBox.setAlignment(Pos.CENTER);
-        cardSelectHBox.getChildren().addAll(cardBtn1, cardBtn2, cardBtn3, cardBtn4, cardBtn5);
-        cardSelectRoot.getChildren().add(cardSelectHBox);
+        HBox cardSelectCenter = new HBox(10);
+        cardSelectCenter.setAlignment(Pos.CENTER);
+        cardSelectCenter.getChildren().addAll(cardBtn1, cardBtn2, cardBtn3, cardBtn4, cardBtn5);
+        cardSelectRoot.setCenter(cardSelectCenter);
 
+        HBox cardSelectBottom = new HBox(10);
+        cardSelectBottom.setAlignment(Pos.CENTER);
         Button cardSelectSureButton = new Button("确认");
+        cardSelectSureButton.setFont(font16);
         Button cardSelectCloseButton = new Button("关闭");
-        cardSelectRoot.getChildren().addAll(cardSelectSureButton,cardSelectCloseButton);
+        cardSelectCloseButton.setFont(font16);
+        cardSelectBottom.getChildren().addAll(cardSelectSureButton, cardSelectCloseButton);
+        cardSelectRoot.setBottom(cardSelectBottom);
 
         // 跳转
         nextTurn.setOnAction(e -> root.getChildren().addAll(scrim, cardSelectRoot));
