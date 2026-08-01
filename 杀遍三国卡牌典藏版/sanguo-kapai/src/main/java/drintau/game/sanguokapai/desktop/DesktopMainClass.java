@@ -25,6 +25,7 @@ public class DesktopMainClass extends Application {
         DesktopContext desktopContext = DesktopContext.getInstance();
         desktopContext.init();
 
+        Font font14 = Font.font(14);
         Font font16 = Font.font(16);
         Font font20 = Font.font(20);
 
@@ -100,8 +101,12 @@ public class DesktopMainClass extends Application {
         HBox cardSelectCenter = new HBox(10);
         cardSelectCenter.setAlignment(Pos.CENTER);
         for (int i = 0; i < 5; i++) {
-            ToggleButton cardBtn = new ToggleButton(HeroData.GUAN_YU.getName());
+            ToggleButton cardBtn = new ToggleButton();
+            cardBtn.setPrefSize(100,150);
             cardBtn.setUserData(HeroData.GUAN_YU);
+            Label cardInfoLabel = new Label(HeroData.GUAN_YU.getDescription());
+            cardInfoLabel.setFont(font14);
+            cardBtn.setGraphic(cardInfoLabel);
             cardBtn.setToggleGroup(cardSelectGroup);
             cardSelectCenter.getChildren().add(cardBtn);
         }

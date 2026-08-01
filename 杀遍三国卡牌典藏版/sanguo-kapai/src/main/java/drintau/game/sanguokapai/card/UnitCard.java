@@ -36,4 +36,14 @@ public class UnitCard extends AbstractCard {
                 ", baseAttack=" + baseAttack +
                 '}';
     }
+
+    public String getDescription() {
+        return """
+            %s
+            兵种：%s
+            等级：%d
+            速度：%d
+            攻击力：%d
+            """.formatted(name, unitType.displayName, level, speed, baseAttack);
+    }
 }
