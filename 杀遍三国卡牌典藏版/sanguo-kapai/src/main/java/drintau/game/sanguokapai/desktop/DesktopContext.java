@@ -5,6 +5,8 @@ import drintau.game.sanguokapai.data.PlayerData;
 import drintau.game.sanguokapai.data.SoldierData;
 import drintau.game.sanguokapai.util.DaemonScheduler;
 import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import lombok.Getter;
@@ -33,6 +35,8 @@ public class DesktopContext {
     public static final int player2UnitInitColIndex = 12; // 玩家2出兵列
     public static final int moveMinColIndex = 2; // 单位移动最小列
     public static final int moveMaxColIndex = 11; // 单位移动最大列
+
+    private IntegerProperty turnCount = new SimpleIntegerProperty(1);
 
     private StackPane[][] cells;
 
