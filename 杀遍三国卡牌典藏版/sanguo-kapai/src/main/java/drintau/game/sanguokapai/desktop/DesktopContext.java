@@ -2,7 +2,7 @@ package drintau.game.sanguokapai.desktop;
 
 import drintau.game.sanguokapai.data.HeroData;
 import drintau.game.sanguokapai.data.PlayerData;
-import drintau.game.sanguokapai.data.UnitDataFactory;
+import drintau.game.sanguokapai.data.SoldierData;
 import drintau.game.sanguokapai.util.DaemonScheduler;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
@@ -46,12 +46,8 @@ public class DesktopContext {
         player1.setFlag(true);
         player2.setFlag(false);
 
-        UnitDataFactory unitDataFactory = new UnitDataFactory();
-        actionDeque.add(new ActionItem(true, 0,player1UnitInitColIndex, HeroData.GUAN_YU));
-        actionDeque.add(new ActionItem(false, 0,player2UnitInitColIndex, unitDataFactory.createQiangBing()));
-
-        nextActionDeque.addAll(actionDeque);
         // 出兵
+        /*
         DaemonScheduler.getInstance().submitOnceDelayTask(() -> {
 
             ActionItem actionItem;
@@ -67,6 +63,7 @@ public class DesktopContext {
                 }
             }
         }, 1L, TimeUnit.SECONDS);
+         */
     }
 
 }
