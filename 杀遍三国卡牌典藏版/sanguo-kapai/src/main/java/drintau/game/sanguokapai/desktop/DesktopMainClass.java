@@ -1,5 +1,6 @@
 package drintau.game.sanguokapai.desktop;
 
+import drintau.game.sanguokapai.card.UnitCard;
 import drintau.game.sanguokapai.data.HeroData;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
@@ -66,6 +67,17 @@ public class DesktopMainClass extends Application {
                 int finalCol = col;
                 cell.setOnMouseClicked(e -> {
                     log.warn("点击格子：row={},col={}", finalRow, finalCol);
+                    if (desktopContext.getPlayer1().getSelectCard() != null) {
+                        ToggleButton selectCard = desktopContext.getPlayer1().getSelectCard();
+                        Object userData = selectCard.getUserData();
+                        if (userData instanceof UnitCard unitCard) {
+                            Label label = new Label(unitCard.getDescription());
+                            label.setFont(font14);
+                            cell.getChildren().add(label);
+                        }
+
+                        desktopContext.getPlayer1().setSelectCard(null);
+                    }
                 });
                 gridPane.add(cell, col ,row);
                 cells[row][col] = cell;
@@ -113,7 +125,9 @@ public class DesktopMainClass extends Application {
         cardSelectGroup.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 ToggleButton selected = (ToggleButton) newVal;
-                log.warn("{}", selected.getUserData());
+                desktopContext.getPlayer1().setSelectCard(selected);
+            } else {
+                desktopContext.getPlayer1().setSelectCard(null);
             }
         });
 
@@ -129,6 +143,11 @@ public class DesktopMainClass extends Application {
         cardSelectRoot.setBottom(cardSelectBottom);
 
         // 跳转
+        cardSelectSureButton.setOnAction(e -> {
+            if (desktopContext.getPlayer1().getSelectCard() != null) {
+                root.getChildren().removeAll(scrim,cardSelectRoot);
+            }
+        });
         nextTurn.setOnAction(e -> root.getChildren().addAll(scrim, cardSelectRoot));
         cardSelectCloseButton.setOnAction(e -> root.getChildren().removeAll(scrim,cardSelectRoot));
 
