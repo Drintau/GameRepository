@@ -16,7 +16,7 @@ public final class CardConstants {
         MAGE("术士"),      // 术 → 盾
         SHIELD("盾卫");   // 盾 → 射
 
-        private final String displayName;
+        public final String displayName;
 
         UnitType(String displayName) {
             this.displayName = displayName;

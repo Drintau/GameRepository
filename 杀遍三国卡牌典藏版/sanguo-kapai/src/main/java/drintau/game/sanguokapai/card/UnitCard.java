@@ -26,4 +26,14 @@ public class UnitCard extends AbstractCard {
         this.baseAttack = baseAttack;
     }
 
+    @Override
+    public String toString() {
+        return "UnitCard{" +
+                "name='" + name + '\'' +
+                ", unitType=" + unitType.displayName +
+                ", level=" + level +
+                ", speed=" + speed +
+                ", baseAttack=" + baseAttack +
+                '}';
+    }
 }

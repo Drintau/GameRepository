@@ -1,5 +1,6 @@
 package drintau.game.sanguokapai.desktop;
 
+import drintau.game.sanguokapai.data.HeroData;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
@@ -96,24 +97,21 @@ public class DesktopMainClass extends Application {
         BorderPane.setAlignment(cardSelectTitle, Pos.CENTER);
 
         ToggleGroup cardSelectGroup = new ToggleGroup();
-        ToggleButton cardBtn1 = new ToggleButton("卡牌A");
-        ToggleButton cardBtn2 = new ToggleButton("卡牌B");
-        ToggleButton cardBtn3 = new ToggleButton("卡牌C");
-        ToggleButton cardBtn4 = new ToggleButton("卡牌C");
-        ToggleButton cardBtn5 = new ToggleButton("卡牌C");
-        cardBtn1.setToggleGroup(cardSelectGroup);
-        cardBtn2.setToggleGroup(cardSelectGroup);
-        cardBtn3.setToggleGroup(cardSelectGroup);
-        cardBtn4.setToggleGroup(cardSelectGroup);
-        cardBtn5.setToggleGroup(cardSelectGroup);
+        HBox cardSelectCenter = new HBox(10);
+        cardSelectCenter.setAlignment(Pos.CENTER);
+        for (int i = 0; i < 5; i++) {
+            ToggleButton cardBtn = new ToggleButton(HeroData.GUAN_YU.getName());
+            cardBtn.setUserData(HeroData.GUAN_YU);
+            cardBtn.setToggleGroup(cardSelectGroup);
+            cardSelectCenter.getChildren().add(cardBtn);
+        }
         cardSelectGroup.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 ToggleButton selected = (ToggleButton) newVal;
+                log.warn("{}", selected.getUserData());
             }
         });
-        HBox cardSelectCenter = new HBox(10);
-        cardSelectCenter.setAlignment(Pos.CENTER);
-        cardSelectCenter.getChildren().addAll(cardBtn1, cardBtn2, cardBtn3, cardBtn4, cardBtn5);
+
         cardSelectRoot.setCenter(cardSelectCenter);
 
         HBox cardSelectBottom = new HBox(10);
