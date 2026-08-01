@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration name="account-manager-application" status="error">
+<Configuration>
 
     <Properties>
         <Property name="CONSOLE_PATTERN">%date{DEFAULT} [%-5level] %X{TRACE_ID} (%file:%line) - %msg%n</Property>

@@ -1,6 +1,7 @@
 package drintau.game.sanguokapai.desktop;
 
 import drintau.game.sanguokapai.data.HeroData;
+import drintau.game.sanguokapai.data.PlayerData;
 import drintau.game.sanguokapai.data.UnitDataFactory;
 import drintau.game.sanguokapai.util.DaemonScheduler;
 import javafx.application.Platform;
@@ -35,16 +36,16 @@ public class DesktopContext {
 
     private StackPane[][] cells;
 
-    private int nowRowIndex = 0;
-    private int nowColIndex = 0;
-
-    private int preRowIndex = 0;
-    private int preColIndex = 0;
-
     private ArrayDeque<ActionItem> actionDeque = new ArrayDeque<>();
     private ArrayDeque<ActionItem> nextActionDeque = new ArrayDeque<>();
 
+    private PlayerData player1 = new PlayerData();
+    private PlayerData player2 = new PlayerData();
+
     public void init() {
+        player1.setFlag(true);
+        player2.setFlag(false);
+
         UnitDataFactory unitDataFactory = new UnitDataFactory();
         actionDeque.add(new ActionItem(true, 0,player1UnitInitColIndex, HeroData.GUAN_YU));
         actionDeque.add(new ActionItem(false, 0,player2UnitInitColIndex, unitDataFactory.createQiangBing()));

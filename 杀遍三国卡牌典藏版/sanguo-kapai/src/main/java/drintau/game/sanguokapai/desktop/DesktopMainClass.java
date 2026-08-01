@@ -1,6 +1,8 @@
 package drintau.game.sanguokapai.desktop;
 
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -10,6 +12,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,14 +24,32 @@ public class DesktopMainClass extends Application {
         DesktopContext desktopContext = DesktopContext.getInstance();
         desktopContext.init();
 
+        Font font16 = Font.font(16);
+        Font font20 = Font.font(20);
+
         // 根节点
         StackPane root = new StackPane();
 
         // 棋盘
-        HBox borderPaneTop = new HBox();
-        Button begin = new Button("下一回合");
-//        begin.setOnAction(new BeginEvent());
-        borderPaneTop.getChildren().addAll(begin);
+        BorderPane gameBoardPaneTop = new BorderPane();
+        gameBoardPaneTop.setPadding(new Insets(10));
+        gameBoardPaneTop.setPrefHeight(50);
+        Label player1HpLabel = new Label();
+        player1HpLabel.setFont(font20);
+        player1HpLabel.textProperty().bind(
+                Bindings.format("玩家1 生命值：%d / %d", desktopContext.getPlayer1().getHp(), desktopContext.getPlayer1().getMaxHp())
+        );
+        Label player2HpLabel = new Label();
+        player2HpLabel.setFont(font20);
+        player2HpLabel.textProperty().bind(
+                Bindings.format("玩家2 生命值：%d / %d", desktopContext.getPlayer2().getHp(), desktopContext.getPlayer2().getMaxHp())
+        );
+
+        Button nextTurn = new Button("下一回合");
+        nextTurn.setFont(font16);
+        gameBoardPaneTop.setLeft(player1HpLabel);
+        gameBoardPaneTop.setCenter(nextTurn);
+        gameBoardPaneTop.setRight(player2HpLabel);
 
         StackPane[][] cells = new StackPane[DesktopContext.rows][DesktopContext.cols];
         desktopContext.setCells(cells);
@@ -49,10 +70,10 @@ public class DesktopMainClass extends Application {
             }
         }
 
-        BorderPane borderPane = new BorderPane();
-        borderPane.setBackground(StyleConstants.BLUE_BACKGROUND);
-        borderPane.setTop(borderPaneTop);
-        borderPane.setCenter(gridPane);
+        BorderPane gameBoardPane = new BorderPane();
+        gameBoardPane.setBackground(StyleConstants.BLUE_BACKGROUND);
+        gameBoardPane.setTop(gameBoardPaneTop);
+        gameBoardPane.setCenter(gridPane);
 
         // 遮盖层
         Rectangle scrim = new Rectangle();
@@ -96,10 +117,10 @@ public class DesktopMainClass extends Application {
         cardSelectRoot.getChildren().addAll(cardSelectSureButton,cardSelectCloseButton);
 
         // 跳转
-        begin.setOnAction(e -> root.getChildren().addAll(scrim, cardSelectRoot));
+        nextTurn.setOnAction(e -> root.getChildren().addAll(scrim, cardSelectRoot));
         cardSelectCloseButton.setOnAction(e -> root.getChildren().removeAll(scrim,cardSelectRoot));
 
-        root.getChildren().addAll(borderPane);
+        root.getChildren().addAll(gameBoardPane);
         Scene scene = new Scene(root);
 
         stage.setScene(scene);
