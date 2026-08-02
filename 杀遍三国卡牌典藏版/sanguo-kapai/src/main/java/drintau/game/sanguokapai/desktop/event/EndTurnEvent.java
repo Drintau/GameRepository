@@ -81,6 +81,38 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                         ActionItem targetCellActionItem = (ActionItem) cells[curRowIndex][nextColIndex].getUserData();
                         // 敌方单位
                         if (actionItem.isAiPlayer() != targetCellActionItem.isAiPlayer()) {
+
+                            ActionItem finalActionItem = actionItem;
+                            Platform.runLater(() -> {
+                                Label peoplePlayerUnit;
+                                Label aiPlayerUnit;
+                                if (finalActionItem.isAiPlayer()) {
+                                    aiPlayerUnit = new Label(finalActionItem.getUnitCard().getDescription());
+                                    peoplePlayerUnit = new Label(targetCellActionItem.getUnitCard().getDescription());
+                                } else {
+                                    peoplePlayerUnit = new Label(finalActionItem.getUnitCard().getDescription());
+                                    aiPlayerUnit = new Label(targetCellActionItem.getUnitCard().getDescription());
+                                }
+                                peoplePlayerUnit.setFont(StyleConstants.font16);
+                                peoplePlayerUnit.setBackground(StyleConstants.PLAYER_UNIT_BACKGROUND);
+                                aiPlayerUnit.setFont(StyleConstants.font16);
+                                aiPlayerUnit.setBackground(StyleConstants.RED_BACKGROUND);
+                                desktopContext.getAttackRoot().setLeft(peoplePlayerUnit);
+                                desktopContext.getAttackRoot().setRight(aiPlayerUnit);
+                                desktopContext.getRoot().getChildren().add(desktopContext.getAttackRoot());
+                            });
+
+                            synchronized (desktopContext.getBattleLock()) {
+                                try {
+                                    desktopContext.getBattleLock().wait();
+                                } catch (InterruptedException e) {
+                                    Thread.currentThread().interrupt();
+                                    break;
+                                }
+                            }
+
+                            ThreadSleepUtil.sleepSeconds(1L);
+
                             int u1Attack = actionItem.getUnitCard().getBaseAttack();
                             int u2Attack = targetCellActionItem.getUnitCard().getBaseAttack();
                             if (u1Attack > u2Attack) {

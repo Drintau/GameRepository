@@ -10,6 +10,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import lombok.Getter;
@@ -51,6 +52,10 @@ public class DesktopContext {
     // 选卡牌界面的控件
     private HBox cardSelectCenter;
     private List<ToggleButton> cardList = new ArrayList<>(5);
+    // 战斗界面需要的控件
+    private StackPane root;
+    private BorderPane attackRoot;
+    private final Object battleLock = new Object();
 
     private ArrayDeque<ActionItem> actionDeque = new ArrayDeque<>();
     private ArrayDeque<ActionItem> nextActionDeque = new ArrayDeque<>();

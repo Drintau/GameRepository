@@ -26,6 +26,7 @@ public class DesktopMainClass extends Application {
 
         // 根节点
         StackPane root = new StackPane();
+        desktopContext.setRoot(root);
 
         // 棋盘界面
         BorderPane gameBoardPaneTop = new BorderPane();
@@ -87,7 +88,7 @@ public class DesktopMainClass extends Application {
         Button selectCard = new Button("选择卡牌");
         selectCard.setFont(StyleConstants.font20);
         selectCard.setDisable(true);
-        Button endTurn = new Button("结束回合");
+        Button endTurn = new Button("结束操作");
         endTurn.setFont(StyleConstants.font20);
         endTurn.setDisable(true);
         gameBoardPaneBottom.getChildren().addAll(beginTurn, selectCard, endTurn);
@@ -138,6 +139,36 @@ public class DesktopMainClass extends Application {
         cardSelectCloseButton.setFont(StyleConstants.font20);
         cardSelectBottom.getChildren().addAll(cardSelectSureButton, cardSelectCloseButton);
         cardSelectRoot.setBottom(cardSelectBottom);
+
+        // 战斗画面
+        BorderPane attackRoot = new BorderPane();
+        attackRoot.setPadding(new Insets(10));
+        attackRoot.setBackground(StyleConstants.WHITE_BACKGROUND);
+        attackRoot.setPrefWidth(600);
+        attackRoot.setPrefHeight(300);
+        attackRoot.setMinSize(600, 300);
+        attackRoot.setMaxSize(600, 300);
+
+        Label attackTitle = new Label("战斗");
+        attackTitle.setFont(StyleConstants.font24);
+        attackRoot.setTop(attackTitle);
+        BorderPane.setAlignment(attackTitle, Pos.CENTER);
+
+        HBox attackBottom = new HBox(10);
+        attackBottom.setAlignment(Pos.CENTER);
+        Button attackSureButton = new Button("确认");
+        attackSureButton.setFont(StyleConstants.font20);
+        attackSureButton.setOnAction(e -> {
+            desktopContext.getRoot().getChildren().remove(desktopContext.getAttackRoot());
+            Object battleLock = desktopContext.getBattleLock();
+            synchronized (battleLock) {
+                battleLock.notify();
+            }
+        });
+        attackBottom.getChildren().addAll(attackSureButton);
+        attackRoot.setBottom(attackBottom);
+
+        desktopContext.setAttackRoot(attackRoot);
 
         // 跳转
         cardSelectSureButton.setOnAction(e -> {
