@@ -1,6 +1,7 @@
 package drintau.game.sanguokapai.desktop.event;
 
 import drintau.game.sanguokapai.card.UnitCard;
+import drintau.game.sanguokapai.data.PlayerData;
 import drintau.game.sanguokapai.desktop.DesktopContext;
 import drintau.game.sanguokapai.desktop.StyleConstants;
 import drintau.game.sanguokapai.util.RandomUtil;
@@ -26,24 +27,27 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         desktopContext.getEndTurn().setDisable(false);
 
         // Ai行动
+        for (PlayerData playerData : desktopContext.getPlayerDeque()) {
+            if (playerData.isAiFlag()) {
+                aiPlayGame();
+            } else {
+                peoplePlayGame();
+            }
+        }
+    }
 
+    private void aiPlayGame() {
+        DesktopContext desktopContext = DesktopContext.getInstance();
+    }
+
+    private void peoplePlayGame() {
+        DesktopContext desktopContext = DesktopContext.getInstance();
         // 抽取卡牌，重新生成卡牌选项
         HBox cardSelectCenter = desktopContext.getCardSelectCenter();
         if (desktopContext.getCardList().size() < 5) {
             int createNum = 5 - desktopContext.getCardList().size();
             for (int i = 0; i < createNum; i++) {
-                UnitCard randomUnit;
-                int flag1 = RandomUtil.randomInt(10);
-                // 英雄抽取概率20%
-                if (flag1 <= 1) {
-                    List<UnitCard> heroList = desktopContext.getHeroList();
-                    int heroIndex = RandomUtil.randomInt(heroList.size());
-                    randomUnit = heroList.get(heroIndex);
-                } else {
-                    List<UnitCard> soldierList = desktopContext.getSoldierList();
-                    int soldierIndex = RandomUtil.randomInt(soldierList.size());
-                    randomUnit = soldierList.get(soldierIndex);
-                }
+                UnitCard randomUnit = getRandomUnit();
 
                 ToggleButton cardBtn = new ToggleButton();
                 cardBtn.setPrefSize(100,150);
@@ -71,6 +75,22 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
                 desktopContext.getPeoplePlayer().setSelectCard(null);
             }
         });
+    }
+
+    private UnitCard getRandomUnit() {
+        UnitCard randomUnit;
+        int randomInt = RandomUtil.randomInt(10);
+        // 英雄抽取概率20%
+        if (randomInt <= 1) {
+            List<UnitCard> heroList = DesktopContext.getInstance().getHeroList();
+            int heroIndex = RandomUtil.randomInt(heroList.size());
+            randomUnit = heroList.get(heroIndex);
+        } else {
+            List<UnitCard> soldierList = DesktopContext.getInstance().getSoldierList();
+            int soldierIndex = RandomUtil.randomInt(soldierList.size());
+            randomUnit = soldierList.get(soldierIndex);
+        }
+        return randomUnit;
     }
 
 }
