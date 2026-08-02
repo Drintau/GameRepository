@@ -79,7 +79,8 @@ public class DesktopMainClass extends Application {
                                 label.setFont(StyleConstants.font16);
                                 cell.getChildren().add(label);
                                 desktopContext.getActionDeque().add(new ActionItem(false, finalRow, finalCol, unitCard));
-                                putFlag  =true;
+                                putFlag = true;
+                                desktopContext.getPeoplePlayer().setCurTurnPutUnitCardFlag(true);
                             }
                         }
 
@@ -188,7 +189,12 @@ public class DesktopMainClass extends Application {
         // 跳转
         cardSelectSureButton.setOnAction(e -> {
             if (desktopContext.getPeoplePlayer().getSelectCard() != null) {
-                root.getChildren().removeAll(scrim,cardSelectRoot);
+                Object userData = desktopContext.getPeoplePlayer().getSelectCard().getUserData();
+                if (userData instanceof UnitCard) {
+                    if (!desktopContext.getPeoplePlayer().isCurTurnPutUnitCardFlag()) {
+                        root.getChildren().removeAll(scrim,cardSelectRoot);
+                    }
+                }
             }
         });
         selectCard.setOnAction(e -> root.getChildren().addAll(scrim, cardSelectRoot));

@@ -28,7 +28,10 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         desktopContext.getSelectCard().setDisable(false);
         desktopContext.getEndTurn().setDisable(false);
 
-        // Ai行动
+        desktopContext.getPeoplePlayer().setCurTurnPutUnitCardFlag(false);
+        desktopContext.getPeoplePlayer().setCurTurnPutEqCardFlag(false);
+
+        // 轮流行动
         for (PlayerData playerData : desktopContext.getPlayerDeque()) {
             if (playerData.isAiFlag()) {
                 aiPlayGame();

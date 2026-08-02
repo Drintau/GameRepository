@@ -22,6 +22,8 @@ public class PlayerData {
     private IntegerProperty maxHp = new SimpleIntegerProperty(100);
 
     private ToggleButton selectCard;
+    private boolean curTurnPutUnitCardFlag;
+    private boolean curTurnPutEqCardFlag;
 
     public boolean beAttack(int colIndex) {
         if (aiFlag) {
