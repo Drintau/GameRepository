@@ -68,7 +68,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                                 Rectangle scrim = new Rectangle();
                                 scrim.widthProperty().bind(desktopContext.getRoot().widthProperty());
                                 scrim.heightProperty().bind(desktopContext.getRoot().heightProperty());
-                                scrim.setFill(Color.color(1, 1, 1, 1));
+                                scrim.setFill(Color.color(0, 0.5, 0, 0.5));
 
                                 BorderPane gameOverPane = new BorderPane();
                                 Label gameOverLabel = new Label("游戏结束！很遗憾输了！请关闭程序重新游玩。");
@@ -91,7 +91,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                                 Rectangle scrim = new Rectangle();
                                 scrim.widthProperty().bind(desktopContext.getRoot().widthProperty());
                                 scrim.heightProperty().bind(desktopContext.getRoot().heightProperty());
-                                scrim.setFill(Color.color(1, 1, 1, 1));
+                                scrim.setFill(Color.color(0, 0.5, 0, 0.5));
 
                                 BorderPane gameOverPane = new BorderPane();
                                 Label gameOverLabel = new Label("游戏结束！恭喜赢了！请关闭程序重新游玩。");
