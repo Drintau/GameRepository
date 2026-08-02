@@ -77,6 +77,8 @@ public class DesktopContext {
     private Label player1HpLabel;
     private Label player2HpLabel;
 
+    private boolean gameOverFlag;
+
     public void ruleInit() {
         ADVANTAGE_MAP.put(CardConstants.UnitType.GUNNER, CardConstants.UnitType.CAVALRY);   // 枪 → 骑
         ADVANTAGE_MAP.put(CardConstants.UnitType.CAVALRY, CardConstants.UnitType.ARMOR);    // 骑 → 甲

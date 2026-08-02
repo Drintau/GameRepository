@@ -60,69 +60,29 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
 
                     // 到达终点
                     if (actionItem.isAiPlayer() && desktopContext.getPeoplePlayer().beAttack(nextColIndex)) {
-                        int aiEqAddAttack = 0;
-                        if (!cells[curRowIndex][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getChildren().isEmpty()) {
-                            // 电脑有装备
-                            if (cells[curRowIndex][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
-                                if (equipmentCard.getUnitType() == CardConstants.UnitType.ALL || equipmentCard.getUnitType() == actionItem.getUnitCard().getUnitType()) {
-                                    aiEqAddAttack = equipmentCard.getAddAttack();
-                                }
-                            }
-                        }
-                        actionItem.setAddAttack(aiEqAddAttack);
+                        int eqAddAttack = calcEqAddAttack(actionItem);
+                        actionItem.setAddAttack(eqAddAttack);
                         actionItem.setCurAttack(actionItem.getUnitCard().getBaseAttack() + actionItem.getAddAttack());
                         int lowerHP = actionItem.getCurAttack();
                         Platform.runLater(() -> {
                             desktopContext.getPeoplePlayer().getHp().set(desktopContext.getPeoplePlayer().getHp().get() - lowerHP);
                             cells[curRowIndex][preColIndex].getChildren().clear();
                             cells[curRowIndex][preColIndex].setUserData(null);
-                            if (desktopContext.getPeoplePlayer().getHp().get() <= 0) {
-                                Rectangle scrim = new Rectangle();
-                                scrim.widthProperty().bind(desktopContext.getRoot().widthProperty());
-                                scrim.heightProperty().bind(desktopContext.getRoot().heightProperty());
-                                scrim.setFill(Color.color(0, 0.5, 0, 0.5));
-
-                                BorderPane gameOverPane = new BorderPane();
-                                Label gameOverLabel = new Label("游戏结束！很遗憾输了！请关闭程序重新游玩。");
-                                gameOverLabel.setFont(StyleConstants.font24);
-                                gameOverPane.setCenter(gameOverLabel);
-
-                                desktopContext.getRoot().getChildren().addAll(scrim, gameOverPane);
-                            }
+                            testGameOver();
                         });
                         actionItem.setFinishFlag(true);
                         ThreadSleepUtil.sleepSeconds(1L);
                         break;
                     } else if (!actionItem.isAiPlayer() && desktopContext.getAiPlayer().beAttack(nextColIndex)) {
-                        int peopleEqAddAttack = 0;
-                        if (!cells[curRowIndex][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getChildren().isEmpty()) {
-                            // 玩家有装备
-                            if (cells[curRowIndex][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
-                                if (equipmentCard.getUnitType() == CardConstants.UnitType.ALL || equipmentCard.getUnitType() == actionItem.getUnitCard().getUnitType()) {
-                                    peopleEqAddAttack = equipmentCard.getAddAttack();
-                                }
-                            }
-                        }
-                        actionItem.setAddAttack(peopleEqAddAttack);
+                        int eqAddAttack = calcEqAddAttack(actionItem);
+                        actionItem.setAddAttack(eqAddAttack);
                         actionItem.setCurAttack(actionItem.getUnitCard().getBaseAttack() + actionItem.getAddAttack());
                         int lowerHP = actionItem.getCurAttack();
                         Platform.runLater(() -> {
                             desktopContext.getAiPlayer().getHp().set(desktopContext.getAiPlayer().getHp().get() - lowerHP);
                             cells[curRowIndex][preColIndex].getChildren().clear();
                             cells[curRowIndex][preColIndex].setUserData(null);
-                            if (desktopContext.getAiPlayer().getHp().get() <= 0) {
-                                Rectangle scrim = new Rectangle();
-                                scrim.widthProperty().bind(desktopContext.getRoot().widthProperty());
-                                scrim.heightProperty().bind(desktopContext.getRoot().heightProperty());
-                                scrim.setFill(Color.color(0, 0.5, 0, 0.5));
-
-                                BorderPane gameOverPane = new BorderPane();
-                                Label gameOverLabel = new Label("游戏结束！恭喜赢了！请关闭程序重新游玩。");
-                                gameOverLabel.setFont(StyleConstants.font24);
-                                gameOverPane.setCenter(gameOverLabel);
-
-                                desktopContext.getRoot().getChildren().addAll(scrim, gameOverPane);
-                            }
+                            testGameOver();
                         });
                         actionItem.setFinishFlag(true);
                         ThreadSleepUtil.sleepSeconds(1L);
@@ -360,6 +320,61 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
             cells[curRowIndex][curColIndex].getChildren().addAll(label);
             cells[curRowIndex][curColIndex].setUserData(actionItem);
         });
+    }
+
+    private int calcEqAddAttack(ActionItem actionItem) {
+        DesktopContext desktopContext = DesktopContext.getInstance();
+        StackPane[][] cells = desktopContext.getCells();
+
+        if (actionItem.isAiPlayer()) {
+            if (!cells[actionItem.getCurRowIndex()][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getChildren().isEmpty()) {
+                if (cells[actionItem.getCurRowIndex()][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
+                    if (equipmentCard.getUnitType() == CardConstants.UnitType.ALL || equipmentCard.getUnitType() == actionItem.getUnitCard().getUnitType()) {
+                        return equipmentCard.getAddAttack();
+                    }
+                }
+            }
+        } else {
+            if (!cells[actionItem.getCurRowIndex()][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getChildren().isEmpty()) {
+                if (cells[actionItem.getCurRowIndex()][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
+                    if (equipmentCard.getUnitType() == CardConstants.UnitType.ALL || equipmentCard.getUnitType() == actionItem.getUnitCard().getUnitType()) {
+                        return equipmentCard.getAddAttack();
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
+    private void testGameOver() {
+        DesktopContext desktopContext = DesktopContext.getInstance();
+
+        if (desktopContext.getPeoplePlayer().getHp().get() <= 0) {
+            if (!desktopContext.isGameOverFlag()) {
+                Rectangle scrim = new Rectangle();
+                scrim.widthProperty().bind(desktopContext.getRoot().widthProperty());
+                scrim.heightProperty().bind(desktopContext.getRoot().heightProperty());
+                scrim.setFill(Color.color(0, 0.5, 0, 0.5));
+                BorderPane gameOverPane = new BorderPane();
+                Label gameOverLabel = new Label("游戏结束！很遗憾输了！请关闭程序重新游玩。");
+                gameOverLabel.setFont(StyleConstants.font24);
+                gameOverPane.setCenter(gameOverLabel);
+                desktopContext.getRoot().getChildren().addAll(scrim, gameOverPane);
+            }
+        } else if (desktopContext.getAiPlayer().getHp().get() <= 0) {
+            if (!desktopContext.isGameOverFlag()) {
+                Rectangle scrim = new Rectangle();
+                scrim.widthProperty().bind(desktopContext.getRoot().widthProperty());
+                scrim.heightProperty().bind(desktopContext.getRoot().heightProperty());
+                scrim.setFill(Color.color(0, 0.5, 0, 0.5));
+                BorderPane gameOverPane = new BorderPane();
+                Label gameOverLabel = new Label("游戏结束！恭喜赢了！请关闭程序重新游玩。");
+                gameOverLabel.setFont(StyleConstants.font24);
+                gameOverPane.setCenter(gameOverLabel);
+
+                desktopContext.getRoot().getChildren().addAll(scrim, gameOverPane);
+            }
+        }
     }
 
 }
