@@ -53,11 +53,13 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         EquipmentCard randomEquipment = getRandomEquipment();
         if (randomEquipment != null) {
             int aiEqColIndex = desktopContext.getAiPlayer().getEqColIndex();
+            cells[rowIndex][aiEqColIndex].getChildren().clear();
+            cells[rowIndex][aiEqColIndex].setUserData(null);
             Label label = new Label(randomEquipment.getDescription());
             label.setBackground(StyleConstants.WHITE_BACKGROUND);
             label.setFont(StyleConstants.font16);
-            cells[rowIndex][aiEqColIndex].getChildren().clear();
             cells[rowIndex][aiEqColIndex].getChildren().add(label);
+            cells[rowIndex][aiEqColIndex].setUserData(randomEquipment);
         }
 
         rowIndex = RandomUtil.randomInt(3);
