@@ -25,6 +25,8 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         desktopContext.getSelectCard().setDisable(false);
         desktopContext.getEndTurn().setDisable(false);
 
+        // Ai行动
+
         // 抽取卡牌，重新生成卡牌选项
         HBox cardSelectCenter = desktopContext.getCardSelectCenter();
         if (desktopContext.getCardList().size() < 5) {
@@ -64,9 +66,9 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         cardSelectGroup.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 ToggleButton selected = (ToggleButton) newVal;
-                desktopContext.getPlayer1().setSelectCard(selected);
+                desktopContext.getPeoplePlayer().setSelectCard(selected);
             } else {
-                desktopContext.getPlayer1().setSelectCard(null);
+                desktopContext.getPeoplePlayer().setSelectCard(null);
             }
         });
     }

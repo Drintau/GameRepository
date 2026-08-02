@@ -10,12 +10,25 @@ import lombok.Setter;
 @Getter
 public class PlayerData {
 
-    // true:玩家，在左边，false：电脑，在右边
-    private boolean flag;
+    // 电脑标记
+    private boolean aiFlag;
+
+    // 装备列下标
+    private int eqColIndex;
+    // 出兵列下表，也是大本营下标
+    private int unitInitColIndex;
 
     private IntegerProperty hp = new SimpleIntegerProperty(100);
     private IntegerProperty maxHp = new SimpleIntegerProperty(100);
 
     private ToggleButton selectCard;
+
+    public boolean beAttack(int colIndex) {
+        if (aiFlag) {
+            return colIndex >= unitInitColIndex;
+        } else {
+            return colIndex <= unitInitColIndex;
+        }
+    }
 
 }

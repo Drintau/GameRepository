@@ -23,12 +23,11 @@ public class DesktopMainClass extends Application {
     @Override
     public void start(Stage stage) {
         DesktopContext desktopContext = DesktopContext.getInstance();
-        desktopContext.init();
 
         // 根节点
         StackPane root = new StackPane();
 
-        // 棋盘
+        // 棋盘界面
         BorderPane gameBoardPaneTop = new BorderPane();
         gameBoardPaneTop.setPadding(new Insets(10));
         gameBoardPaneTop.setPrefHeight(50);
@@ -39,14 +38,10 @@ public class DesktopMainClass extends Application {
         );
         Label player1HpLabel = new Label();
         player1HpLabel.setFont(StyleConstants.font24);
-        player1HpLabel.textProperty().bind(
-                Bindings.format("玩家1 生命值：%d / %d", desktopContext.getPlayer1().getHp(), desktopContext.getPlayer1().getMaxHp())
-        );
+        desktopContext.setPlayer1HpLabel(player1HpLabel);
         Label player2HpLabel = new Label();
         player2HpLabel.setFont(StyleConstants.font24);
-        player2HpLabel.textProperty().bind(
-                Bindings.format("玩家2 生命值：%d / %d", desktopContext.getPlayer2().getHp(), desktopContext.getPlayer2().getMaxHp())
-        );
+        desktopContext.setPlayer2HpLabel(player2HpLabel);
         gameBoardPaneTop.setLeft(player1HpLabel);
         gameBoardPaneTop.setCenter(turnCountLabel);
         gameBoardPaneTop.setRight(player2HpLabel);
@@ -63,8 +58,8 @@ public class DesktopMainClass extends Application {
                 int finalRow = row;
                 int finalCol = col;
                 cell.setOnMouseClicked(e -> {
-                    if (desktopContext.getPlayer1().getSelectCard() != null) {
-                        ToggleButton selectCard = desktopContext.getPlayer1().getSelectCard();
+                    if (desktopContext.getPeoplePlayer().getSelectCard() != null) {
+                        ToggleButton selectCard = desktopContext.getPeoplePlayer().getSelectCard();
                         Object userData = selectCard.getUserData();
                         if (userData instanceof UnitCard unitCard) {
                             Label label = new Label(unitCard.getDescription());
@@ -73,7 +68,7 @@ public class DesktopMainClass extends Application {
                             desktopContext.getActionDeque().add(new ActionItem(true, finalRow, finalCol, unitCard));
                         }
 
-                        desktopContext.getPlayer1().setSelectCard(null);
+                        desktopContext.getPeoplePlayer().setSelectCard(null);
                         desktopContext.getCardList().remove(selectCard);
                         desktopContext.getCardSelectCenter().getChildren().remove(selectCard);
                     }
@@ -145,7 +140,7 @@ public class DesktopMainClass extends Application {
 
         // 跳转
         cardSelectSureButton.setOnAction(e -> {
-            if (desktopContext.getPlayer1().getSelectCard() != null) {
+            if (desktopContext.getPeoplePlayer().getSelectCard() != null) {
                 root.getChildren().removeAll(scrim,cardSelectRoot);
             }
         });
@@ -154,6 +149,9 @@ public class DesktopMainClass extends Application {
 
         root.getChildren().addAll(gameBoardPane);
         Scene scene = new Scene(root);
+
+        // 玩家初始化
+        desktopContext.playerInit();
 
         stage.setScene(scene);
         stage.setTitle("杀遍三国卡牌典藏版");

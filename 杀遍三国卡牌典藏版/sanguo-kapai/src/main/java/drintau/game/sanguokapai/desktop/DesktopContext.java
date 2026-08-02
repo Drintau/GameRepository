@@ -4,9 +4,11 @@ import drintau.game.sanguokapai.card.UnitCard;
 import drintau.game.sanguokapai.data.HeroData;
 import drintau.game.sanguokapai.data.PlayerData;
 import drintau.game.sanguokapai.data.SoldierData;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -56,31 +58,26 @@ public class DesktopContext {
     private List<UnitCard> heroList = HeroData.getAllHeroes();
     private List<UnitCard> soldierList = SoldierData.getAllSoldiers();
 
-    private PlayerData player1 = new PlayerData();
-    private PlayerData player2 = new PlayerData();
+    private ArrayDeque<PlayerData> playerDeque = new ArrayDeque<>();
+    private ArrayDeque<PlayerData> nextPlayerDeque = new ArrayDeque<>();
+    private PlayerData aiPlayer = new PlayerData();
+    private PlayerData peoplePlayer = new PlayerData();
+    private Label player1HpLabel;
+    private Label player2HpLabel;
 
-    public void init() {
-        player1.setFlag(true);
-        player2.setFlag(false);
+    public void playerInit() {
+        aiPlayer.setAiFlag(true);
+        player2HpLabel.textProperty().bind(
+                Bindings.format("电脑 生命值：%d / %d", aiPlayer.getHp(), aiPlayer.getMaxHp())
+        );
 
-        // 出兵
-        /*
-        DaemonScheduler.getInstance().submitOnceDelayTask(() -> {
+        peoplePlayer.setAiFlag(false);
+        player1HpLabel.textProperty().bind(
+                Bindings.format("玩家 生命值：%d / %d", peoplePlayer.getHp(), peoplePlayer.getMaxHp())
+        );
 
-            ActionItem actionItem;
-            while ((actionItem = nextActionDeque.pollFirst()) != null) {
-                if (actionItem.getCurColIndex() == DesktopContext.player1UnitInitColIndex || actionItem.getCurColIndex() == DesktopContext.player2UnitInitColIndex) {
-                    int initRowIndex = actionItem.getCurRowIndex();
-                    int initColIndex = actionItem.getCurColIndex();
-                    ActionItem cellData = actionItem;
-                    Platform.runLater(() -> {
-                        cells[initRowIndex][initColIndex].getChildren().addAll(new Label(cellData.getUnitCard().getName()));
-                        cells[initRowIndex][initColIndex].setUserData(cellData);
-                    });
-                }
-            }
-        }, 1L, TimeUnit.SECONDS);
-         */
+        playerDeque.add(aiPlayer);
+        playerDeque.add(peoplePlayer);
     }
 
 }
