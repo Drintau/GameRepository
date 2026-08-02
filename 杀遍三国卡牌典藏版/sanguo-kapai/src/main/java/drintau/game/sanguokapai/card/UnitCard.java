@@ -44,7 +44,7 @@ public class UnitCard extends AbstractCard {
             兵种：%s
             等级：%d
             速度：%d
-            攻击力：%d
+            战力：%d
             """.formatted(name, unitType.displayName, level, speed, baseAttack);
     }
 }
