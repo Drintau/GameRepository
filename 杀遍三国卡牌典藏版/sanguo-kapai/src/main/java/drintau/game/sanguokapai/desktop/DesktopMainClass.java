@@ -23,6 +23,7 @@ public class DesktopMainClass extends Application {
     @Override
     public void start(Stage stage) {
         DesktopContext desktopContext = DesktopContext.getInstance();
+        desktopContext.ruleInit();
 
         // 根节点
         StackPane root = new StackPane();

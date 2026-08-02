@@ -1,5 +1,6 @@
 package drintau.game.sanguokapai.desktop;
 
+import drintau.game.sanguokapai.card.CardConstants;
 import drintau.game.sanguokapai.card.UnitCard;
 import drintau.game.sanguokapai.data.HeroData;
 import drintau.game.sanguokapai.data.PlayerData;
@@ -18,6 +19,7 @@ import lombok.Setter;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 
 @Setter
@@ -63,12 +65,23 @@ public class DesktopContext {
     private List<UnitCard> heroList = HeroData.getAllHeroes();
     private List<UnitCard> soldierList = SoldierData.getAllSoldiers();
 
+    public EnumMap<CardConstants.UnitType, CardConstants.UnitType> ADVANTAGE_MAP = new EnumMap<>(CardConstants.UnitType.class);
+
     private ArrayDeque<PlayerData> playerDeque = new ArrayDeque<>();
     private ArrayDeque<PlayerData> nextPlayerDeque = new ArrayDeque<>();
     private PlayerData aiPlayer = new PlayerData();
     private PlayerData peoplePlayer = new PlayerData();
     private Label player1HpLabel;
     private Label player2HpLabel;
+
+    public void ruleInit() {
+        ADVANTAGE_MAP.put(CardConstants.UnitType.GUNNER, CardConstants.UnitType.CAVALRY);   // 枪 → 骑
+        ADVANTAGE_MAP.put(CardConstants.UnitType.CAVALRY, CardConstants.UnitType.ARMOR);    // 骑 → 甲
+        ADVANTAGE_MAP.put(CardConstants.UnitType.ARMOR, CardConstants.UnitType.MAGE);       // 甲 → 术
+        ADVANTAGE_MAP.put(CardConstants.UnitType.MAGE, CardConstants.UnitType.SHIELD);      // 术 → 盾
+        ADVANTAGE_MAP.put(CardConstants.UnitType.SHIELD, CardConstants.UnitType.SHOOTER);   // 盾 → 射
+        ADVANTAGE_MAP.put(CardConstants.UnitType.SHOOTER, CardConstants.UnitType.GUNNER);   // 射 → 枪
+    }
 
     public void playerInit() {
         aiPlayer.setAiFlag(true);

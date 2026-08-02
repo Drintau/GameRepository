@@ -1,5 +1,6 @@
 package drintau.game.sanguokapai.desktop.event;
 
+import drintau.game.sanguokapai.card.CardConstants;
 import drintau.game.sanguokapai.card.UnitCard;
 import drintau.game.sanguokapai.desktop.ActionItem;
 import drintau.game.sanguokapai.desktop.DesktopContext;
@@ -81,17 +82,32 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                         ActionItem targetCellActionItem = (ActionItem) cells[curRowIndex][nextColIndex].getUserData();
                         // 敌方单位
                         if (actionItem.isAiPlayer() != targetCellActionItem.isAiPlayer()) {
+                            actionItem.setAddAttack(0);
+                            targetCellActionItem.setAddAttack(0);
+                            CardConstants.UnitType beatUnitType1 = desktopContext.ADVANTAGE_MAP.get(actionItem.getUnitCard().getUnitType());
+                            CardConstants.UnitType beatUnitType2 = desktopContext.ADVANTAGE_MAP.get(targetCellActionItem.getUnitCard().getUnitType());
+
+                            if (beatUnitType1 == targetCellActionItem.getUnitCard().getUnitType()) {
+                                actionItem.setAddAttack(actionItem.getAddAttack() + 1);
+                                targetCellActionItem.setAddAttack(targetCellActionItem.getAddAttack() - 1);
+                            }
+                            if (beatUnitType2 == actionItem.getUnitCard().getUnitType()) {
+                                actionItem.setAddAttack(actionItem.getAddAttack() - 1);
+                                targetCellActionItem.setAddAttack(targetCellActionItem.getAddAttack() + 1);
+                            }
+                            actionItem.setCurAttack(actionItem.getUnitCard().getBaseAttack() + actionItem.getAddAttack());
+                            targetCellActionItem.setCurAttack(targetCellActionItem.getUnitCard().getBaseAttack() + targetCellActionItem.getAddAttack());
 
                             ActionItem finalActionItem = actionItem;
                             Platform.runLater(() -> {
                                 Label peoplePlayerUnit;
                                 Label aiPlayerUnit;
                                 if (finalActionItem.isAiPlayer()) {
-                                    aiPlayerUnit = new Label(finalActionItem.getUnitCard().getDescription());
-                                    peoplePlayerUnit = new Label(targetCellActionItem.getUnitCard().getDescription());
+                                    aiPlayerUnit = new Label(finalActionItem.getAttackInfo());
+                                    peoplePlayerUnit = new Label(targetCellActionItem.getAttackInfo());
                                 } else {
-                                    peoplePlayerUnit = new Label(finalActionItem.getUnitCard().getDescription());
-                                    aiPlayerUnit = new Label(targetCellActionItem.getUnitCard().getDescription());
+                                    peoplePlayerUnit = new Label(finalActionItem.getAttackInfo());
+                                    aiPlayerUnit = new Label(targetCellActionItem.getAttackInfo());
                                 }
                                 peoplePlayerUnit.setFont(StyleConstants.font16);
                                 peoplePlayerUnit.setBackground(StyleConstants.PLAYER_UNIT_BACKGROUND);
@@ -113,8 +129,8 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
 
                             ThreadSleepUtil.sleepSeconds(1L);
 
-                            int u1Attack = actionItem.getUnitCard().getBaseAttack();
-                            int u2Attack = targetCellActionItem.getUnitCard().getBaseAttack();
+                            int u1Attack = actionItem.getCurAttack();
+                            int u2Attack = targetCellActionItem.getCurAttack();
                             if (u1Attack > u2Attack) {
                                 // u2死了
                                 targetCellActionItem.setFinishFlag(true);
