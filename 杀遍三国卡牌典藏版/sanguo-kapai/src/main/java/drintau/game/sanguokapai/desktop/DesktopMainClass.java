@@ -59,10 +59,7 @@ public class DesktopMainClass extends Application {
                 cell.setBorder(StyleConstants.CELL_BORDER);
                 cell.setBackground(StyleConstants.LIGHTGRAY_BACKGROUND);
                 cell.setPrefSize(100, 150);
-                int finalRow = row;
-                int finalCol = col;
                 cell.setOnMouseClicked(e -> {
-                    log.warn("点击格子：row={},col={}", finalRow, finalCol);
                     if (desktopContext.getPlayer1().getSelectCard() != null) {
                         ToggleButton selectCard = desktopContext.getPlayer1().getSelectCard();
                         Object userData = selectCard.getUserData();
@@ -73,6 +70,8 @@ public class DesktopMainClass extends Application {
                         }
 
                         desktopContext.getPlayer1().setSelectCard(null);
+                        desktopContext.getCardList().remove(selectCard);
+                        desktopContext.getCardSelectCenter().getChildren().remove(selectCard);
                     }
                 });
                 gridPane.add(cell, col ,row);
