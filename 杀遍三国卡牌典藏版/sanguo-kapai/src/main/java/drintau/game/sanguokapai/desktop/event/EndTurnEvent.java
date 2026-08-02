@@ -181,43 +181,29 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                                 }
                                 // 到达终点
                                 if (actionItem.isAiPlayer() && desktopContext.getPeoplePlayer().beAttack(nextColIndex2)) {
-                                    int aiEqAddAttack = 0;
-                                    if (!cells[curRowIndex][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getChildren().isEmpty()) {
-                                        // 电脑有装备
-                                        if (cells[curRowIndex][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
-                                            if (equipmentCard.getUnitType() == CardConstants.UnitType.ALL || equipmentCard.getUnitType() == actionItem.getUnitCard().getUnitType()) {
-                                                aiEqAddAttack = equipmentCard.getAddAttack();
-                                            }
-                                        }
-                                    }
-                                    actionItem.setAddAttack(aiEqAddAttack);
+                                    int eqAddAttack = calcEqAddAttack(actionItem);
+                                    actionItem.setAddAttack(eqAddAttack);
                                     actionItem.setCurAttack(actionItem.getUnitCard().getBaseAttack() + actionItem.getAddAttack());
                                     int lowerHP = actionItem.getCurAttack();
                                     Platform.runLater(() -> {
                                         desktopContext.getPeoplePlayer().getHp().set(desktopContext.getPeoplePlayer().getHp().get() - lowerHP);
                                         cells[curRowIndex][preColIndex].getChildren().clear();
                                         cells[curRowIndex][preColIndex].setUserData(null);
+                                        testGameOver();
                                     });
                                     actionItem.setFinishFlag(true);
                                     ThreadSleepUtil.sleepSeconds(1L);
                                     break;
                                 } else if (!actionItem.isAiPlayer() && desktopContext.getAiPlayer().beAttack(nextColIndex2)) {
-                                    int peopleEqAddAttack = 0;
-                                    if (!cells[curRowIndex][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getChildren().isEmpty()) {
-                                        // 玩家有装备
-                                        if (cells[curRowIndex][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
-                                            if (equipmentCard.getUnitType() == CardConstants.UnitType.ALL || equipmentCard.getUnitType() == actionItem.getUnitCard().getUnitType()) {
-                                                peopleEqAddAttack = equipmentCard.getAddAttack();
-                                            }
-                                        }
-                                    }
-                                    actionItem.setAddAttack(peopleEqAddAttack);
+                                    int eqAddAttack = calcEqAddAttack(actionItem);
+                                    actionItem.setAddAttack(eqAddAttack);
                                     actionItem.setCurAttack(actionItem.getUnitCard().getBaseAttack() + actionItem.getAddAttack());
                                     int lowerHP = actionItem.getCurAttack();
                                     Platform.runLater(() -> {
                                         desktopContext.getAiPlayer().getHp().set(desktopContext.getAiPlayer().getHp().get() - lowerHP);
                                         cells[curRowIndex][preColIndex].getChildren().clear();
                                         cells[curRowIndex][preColIndex].setUserData(null);
+                                        testGameOver();
                                     });
                                     actionItem.setFinishFlag(true);
                                     ThreadSleepUtil.sleepSeconds(1L);
