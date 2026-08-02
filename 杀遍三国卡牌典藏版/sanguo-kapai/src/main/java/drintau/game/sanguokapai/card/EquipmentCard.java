@@ -30,7 +30,7 @@ public class EquipmentCard extends AbstractCard {
     public String getDescription() {
         return """
             %s
-            生效兵种：%s
+            兵种：%s
             加速度：%d
             加战力：%d
             """.formatted(name, unitType.displayName, addSpeed, addAttack);
