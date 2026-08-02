@@ -193,6 +193,11 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
             cells[curRowIndex][preColIndex].getChildren().clear();
             cells[curRowIndex][preColIndex].setUserData(null);
             Label label = new Label(actionItem.getUnitCard().getDescription());
+            if (actionItem.isAiPlayer()) {
+                label.setBackground(StyleConstants.RED_BACKGROUND);
+            } else {
+                label.setBackground(StyleConstants.PLAYER_UNIT_BACKGROUND);
+            }
             label.setFont(StyleConstants.font16);
             cells[curRowIndex][curColIndex].getChildren().addAll(label);
             cells[curRowIndex][curColIndex].setUserData(actionItem);

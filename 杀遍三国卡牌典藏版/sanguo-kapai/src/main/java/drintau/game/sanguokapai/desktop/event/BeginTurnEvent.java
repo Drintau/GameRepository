@@ -48,6 +48,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         int aiUnitInitColIndex = desktopContext.getAiPlayer().getUnitInitColIndex();
 
         Label label = new Label(randomUnit.getDescription());
+        label.setBackground(StyleConstants.RED_BACKGROUND);
         label.setFont(StyleConstants.font16);
         cells[rowIndex][aiUnitInitColIndex].getChildren().add(label);
         desktopContext.getActionDeque().add(new ActionItem(true, rowIndex, aiUnitInitColIndex, randomUnit));

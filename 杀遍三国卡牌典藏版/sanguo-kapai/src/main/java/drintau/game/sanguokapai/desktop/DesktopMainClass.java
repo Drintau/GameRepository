@@ -63,6 +63,7 @@ public class DesktopMainClass extends Application {
                         Object userData = selectCard.getUserData();
                         if (userData instanceof UnitCard unitCard) {
                             Label label = new Label(unitCard.getDescription());
+                            label.setBackground(StyleConstants.PLAYER_UNIT_BACKGROUND);
                             label.setFont(StyleConstants.font16);
                             cell.getChildren().add(label);
                             desktopContext.getActionDeque().add(new ActionItem(false, finalRow, finalCol, unitCard));
