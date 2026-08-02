@@ -60,7 +60,18 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
 
                     // 到达终点
                     if (actionItem.isAiPlayer() && desktopContext.getPeoplePlayer().beAttack(nextColIndex)) {
-                        int lowerHP = unitCard.getBaseAttack();
+                        int aiEqAddAttack = 0;
+                        if (!cells[curRowIndex][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getChildren().isEmpty()) {
+                            // 电脑有装备
+                            if (cells[curRowIndex][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
+                                if (equipmentCard.getUnitType() == CardConstants.UnitType.ALL || equipmentCard.getUnitType() == actionItem.getUnitCard().getUnitType()) {
+                                    aiEqAddAttack = equipmentCard.getAddAttack();
+                                }
+                            }
+                        }
+                        actionItem.setAddAttack(aiEqAddAttack);
+                        actionItem.setCurAttack(actionItem.getUnitCard().getBaseAttack() + actionItem.getAddAttack());
+                        int lowerHP = actionItem.getCurAttack();
                         Platform.runLater(() -> {
                             desktopContext.getPeoplePlayer().getHp().set(desktopContext.getPeoplePlayer().getHp().get() - lowerHP);
                             cells[curRowIndex][preColIndex].getChildren().clear();
@@ -83,7 +94,18 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                         ThreadSleepUtil.sleepSeconds(1L);
                         break;
                     } else if (!actionItem.isAiPlayer() && desktopContext.getAiPlayer().beAttack(nextColIndex)) {
-                        int lowerHP = unitCard.getBaseAttack();
+                        int peopleEqAddAttack = 0;
+                        if (!cells[curRowIndex][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getChildren().isEmpty()) {
+                            // 玩家有装备
+                            if (cells[curRowIndex][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
+                                if (equipmentCard.getUnitType() == CardConstants.UnitType.ALL || equipmentCard.getUnitType() == actionItem.getUnitCard().getUnitType()) {
+                                    peopleEqAddAttack = equipmentCard.getAddAttack();
+                                }
+                            }
+                        }
+                        actionItem.setAddAttack(peopleEqAddAttack);
+                        actionItem.setCurAttack(actionItem.getUnitCard().getBaseAttack() + actionItem.getAddAttack());
+                        int lowerHP = actionItem.getCurAttack();
                         Platform.runLater(() -> {
                             desktopContext.getAiPlayer().getHp().set(desktopContext.getAiPlayer().getHp().get() - lowerHP);
                             cells[curRowIndex][preColIndex].getChildren().clear();
@@ -237,7 +259,18 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                                 }
                                 // 到达终点
                                 if (actionItem.isAiPlayer() && desktopContext.getPeoplePlayer().beAttack(nextColIndex2)) {
-                                    int lowerHP = unitCard.getBaseAttack();
+                                    int aiEqAddAttack = 0;
+                                    if (!cells[curRowIndex][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getChildren().isEmpty()) {
+                                        // 电脑有装备
+                                        if (cells[curRowIndex][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
+                                            if (equipmentCard.getUnitType() == CardConstants.UnitType.ALL || equipmentCard.getUnitType() == actionItem.getUnitCard().getUnitType()) {
+                                                aiEqAddAttack = equipmentCard.getAddAttack();
+                                            }
+                                        }
+                                    }
+                                    actionItem.setAddAttack(aiEqAddAttack);
+                                    actionItem.setCurAttack(actionItem.getUnitCard().getBaseAttack() + actionItem.getAddAttack());
+                                    int lowerHP = actionItem.getCurAttack();
                                     Platform.runLater(() -> {
                                         desktopContext.getPeoplePlayer().getHp().set(desktopContext.getPeoplePlayer().getHp().get() - lowerHP);
                                         cells[curRowIndex][preColIndex].getChildren().clear();
@@ -247,7 +280,18 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                                     ThreadSleepUtil.sleepSeconds(1L);
                                     break;
                                 } else if (!actionItem.isAiPlayer() && desktopContext.getAiPlayer().beAttack(nextColIndex2)) {
-                                    int lowerHP = unitCard.getBaseAttack();
+                                    int peopleEqAddAttack = 0;
+                                    if (!cells[curRowIndex][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getChildren().isEmpty()) {
+                                        // 玩家有装备
+                                        if (cells[curRowIndex][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
+                                            if (equipmentCard.getUnitType() == CardConstants.UnitType.ALL || equipmentCard.getUnitType() == actionItem.getUnitCard().getUnitType()) {
+                                                peopleEqAddAttack = equipmentCard.getAddAttack();
+                                            }
+                                        }
+                                    }
+                                    actionItem.setAddAttack(peopleEqAddAttack);
+                                    actionItem.setCurAttack(actionItem.getUnitCard().getBaseAttack() + actionItem.getAddAttack());
+                                    int lowerHP = actionItem.getCurAttack();
                                     Platform.runLater(() -> {
                                         desktopContext.getAiPlayer().getHp().set(desktopContext.getAiPlayer().getHp().get() - lowerHP);
                                         cells[curRowIndex][preColIndex].getChildren().clear();
