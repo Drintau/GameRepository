@@ -1,5 +1,6 @@
 package drintau.game.sanguokapai.desktop;
 
+import drintau.game.sanguokapai.card.EquipmentCard;
 import drintau.game.sanguokapai.card.UnitCard;
 import drintau.game.sanguokapai.desktop.event.BeginTurnEvent;
 import drintau.game.sanguokapai.desktop.event.EndTurnEvent;
@@ -82,6 +83,16 @@ public class DesktopMainClass extends Application {
                                 desktopContext.getActionDeque().add(new ActionItem(false, finalRow, finalCol, unitCard));
                                 putFlag = true;
                                 desktopContext.getPeoplePlayer().setCurTurnPutUnitCardFlag(true);
+                            }
+                        } else if (userData instanceof EquipmentCard equipmentCard) {
+                            if (finalCol == DesktopContext.player1EqColIndex) {
+                                cell.getChildren().clear();
+                                Label label = new Label(equipmentCard.getDescription());
+                                label.setBackground(StyleConstants.WHITE_BACKGROUND);
+                                label.setFont(StyleConstants.font16);
+                                cell.getChildren().add(label);
+                                putFlag = true;
+                                desktopContext.getPeoplePlayer().setCurTurnPutEqCardFlag(true);
                             }
                         }
 

@@ -1,6 +1,7 @@
 package drintau.game.sanguokapai.desktop.event;
 
 import drintau.game.sanguokapai.card.CardConstants;
+import drintau.game.sanguokapai.card.EquipmentCard;
 import drintau.game.sanguokapai.card.UnitCard;
 import drintau.game.sanguokapai.desktop.ActionItem;
 import drintau.game.sanguokapai.desktop.DesktopContext;
@@ -113,6 +114,8 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                         if (actionItem.isAiPlayer() != targetCellActionItem.isAiPlayer()) {
                             actionItem.setAddAttack(0);
                             targetCellActionItem.setAddAttack(0);
+
+                            // 属性克制
                             CardConstants.UnitType beatUnitType1 = desktopContext.ADVANTAGE_MAP.get(actionItem.getUnitCard().getUnitType());
                             CardConstants.UnitType beatUnitType2 = desktopContext.ADVANTAGE_MAP.get(targetCellActionItem.getUnitCard().getUnitType());
 
@@ -124,6 +127,41 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                                 actionItem.setAddAttack(actionItem.getAddAttack() - 1);
                                 targetCellActionItem.setAddAttack(targetCellActionItem.getAddAttack() + 1);
                             }
+
+                            // 装备加成
+                            int peopleEqAddAttack = 0;
+                            if (!cells[curRowIndex][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getChildren().isEmpty()) {
+                                // 玩家有装备
+                                if (cells[curRowIndex][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
+                                    if (equipmentCard.getUnitType() == null) {
+                                        peopleEqAddAttack = equipmentCard.getAddAttack();
+                                    } else if (equipmentCard.getUnitType() == actionItem.getUnitCard().getUnitType()) {
+                                        peopleEqAddAttack = equipmentCard.getAddAttack();
+                                    }
+                                }
+                            }
+                            int aiEqAddAttack = 0;
+                            if (!cells[curRowIndex][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getChildren().isEmpty()) {
+                                // 电脑有装备
+                                if (cells[curRowIndex][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
+                                    if (equipmentCard.getUnitType() == null) {
+                                        aiEqAddAttack = equipmentCard.getAddAttack();
+                                    } else if (equipmentCard.getUnitType() == targetCellActionItem.getUnitCard().getUnitType()) {
+                                        aiEqAddAttack = equipmentCard.getAddAttack();
+                                    }
+                                }
+                            }
+
+                            if (!actionItem.isAiPlayer()) {
+                                // 己方是人，对方是电脑
+                                actionItem.setAddAttack(actionItem.getAddAttack() + peopleEqAddAttack);
+                                targetCellActionItem.setAddAttack(targetCellActionItem.getAddAttack() + aiEqAddAttack);
+                            } else {
+                                // 己方是电脑，对方是人
+                                actionItem.setAddAttack(actionItem.getAddAttack() + aiEqAddAttack);
+                                targetCellActionItem.setAddAttack(targetCellActionItem.getAddAttack() + peopleEqAddAttack);
+                            }
+
                             actionItem.setCurAttack(actionItem.getUnitCard().getBaseAttack() + actionItem.getAddAttack());
                             targetCellActionItem.setCurAttack(targetCellActionItem.getUnitCard().getBaseAttack() + targetCellActionItem.getAddAttack());
 

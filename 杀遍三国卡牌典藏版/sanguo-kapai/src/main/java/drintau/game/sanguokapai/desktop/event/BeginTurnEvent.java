@@ -1,5 +1,7 @@
 package drintau.game.sanguokapai.desktop.event;
 
+import drintau.game.sanguokapai.card.AbstractCard;
+import drintau.game.sanguokapai.card.EquipmentCard;
 import drintau.game.sanguokapai.card.UnitCard;
 import drintau.game.sanguokapai.data.PlayerData;
 import drintau.game.sanguokapai.desktop.ActionItem;
@@ -45,16 +47,25 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         DesktopContext desktopContext = DesktopContext.getInstance();
         StackPane[][] cells = desktopContext.getCells();
 
-        UnitCard randomUnit = getRandomUnit();
+        AbstractCard randomCard = getRandomCard();
         int rowIndex = RandomUtil.randomInt(3);
 
-        int aiUnitInitColIndex = desktopContext.getAiPlayer().getUnitInitColIndex();
+        if (randomCard instanceof UnitCard randomUnit) {
+            int aiUnitInitColIndex = desktopContext.getAiPlayer().getUnitInitColIndex();
+            Label label = new Label(randomUnit.getDescription());
+            label.setBackground(StyleConstants.RED_BACKGROUND);
+            label.setFont(StyleConstants.font16);
+            cells[rowIndex][aiUnitInitColIndex].getChildren().add(label);
+            desktopContext.getActionDeque().add(new ActionItem(true, rowIndex, aiUnitInitColIndex, randomUnit));
+        } else if (randomCard instanceof EquipmentCard randomEq) {
+            int aiEqColIndex = desktopContext.getAiPlayer().getEqColIndex();
+            Label label = new Label(randomEq.getDescription());
+            label.setBackground(StyleConstants.WHITE_BACKGROUND);
+            label.setFont(StyleConstants.font16);
+            cells[rowIndex][aiEqColIndex].getChildren().clear();
+            cells[rowIndex][aiEqColIndex].getChildren().add(label);
+        }
 
-        Label label = new Label(randomUnit.getDescription());
-        label.setBackground(StyleConstants.RED_BACKGROUND);
-        label.setFont(StyleConstants.font16);
-        cells[rowIndex][aiUnitInitColIndex].getChildren().add(label);
-        desktopContext.getActionDeque().add(new ActionItem(true, rowIndex, aiUnitInitColIndex, randomUnit));
     }
 
     private void peoplePlayGame() {
@@ -64,12 +75,17 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         if (desktopContext.getCardList().size() < 5) {
             int createNum = 5 - desktopContext.getCardList().size();
             for (int i = 0; i < createNum; i++) {
-                UnitCard randomUnit = getRandomUnit();
+                AbstractCard randomCard = getRandomCard();
 
                 ToggleButton cardBtn = new ToggleButton();
                 cardBtn.setPrefSize(100,150);
-                cardBtn.setUserData(randomUnit);
-                Label cardInfoLabel = new Label(randomUnit.getDescription());
+                cardBtn.setUserData(randomCard);
+                Label cardInfoLabel = new Label(randomCard.getDescription());
+                if (randomCard instanceof UnitCard) {
+                    cardInfoLabel.setBackground(StyleConstants.PLAYER_UNIT_BACKGROUND);
+                } else if (randomCard instanceof EquipmentCard) {
+                    cardInfoLabel.setBackground(StyleConstants.WHITE_BACKGROUND);
+                }
                 cardInfoLabel.setFont(StyleConstants.font16);
                 cardBtn.setGraphic(cardInfoLabel);
 
@@ -94,20 +110,26 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         });
     }
 
-    private UnitCard getRandomUnit() {
-        UnitCard randomUnit;
-        int randomInt = RandomUtil.randomInt(10);
-        // 英雄抽取概率20%
-        if (randomInt <= 1) {
+    private AbstractCard getRandomCard() {
+        AbstractCard randomCard;
+        int randomInt = RandomUtil.randomInt(100);
+
+        if (randomInt < 10) {
+            // 英雄抽取概率10%
             List<UnitCard> heroList = DesktopContext.getInstance().getHeroList();
             int heroIndex = RandomUtil.randomInt(heroList.size());
-            randomUnit = heroList.get(heroIndex);
+            randomCard = heroList.get(heroIndex);
+        } else if (randomInt < 20) {
+            // 装备抽取概率
+            List<EquipmentCard> equipmentList = DesktopContext.getInstance().getEquipmentList();
+            int eqIndex = RandomUtil.randomInt(equipmentList.size());
+            randomCard = equipmentList.get(eqIndex);
         } else {
             List<UnitCard> soldierList = DesktopContext.getInstance().getSoldierList();
             int soldierIndex = RandomUtil.randomInt(soldierList.size());
-            randomUnit = soldierList.get(soldierIndex);
+            randomCard = soldierList.get(soldierIndex);
         }
-        return randomUnit;
+        return randomCard;
     }
 
 }

@@ -37,6 +37,7 @@ public class UnitCard extends AbstractCard {
                 '}';
     }
 
+    @Override
     public String getDescription() {
         return """
             %s

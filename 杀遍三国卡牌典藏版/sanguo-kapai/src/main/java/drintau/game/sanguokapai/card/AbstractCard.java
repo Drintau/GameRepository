@@ -9,4 +9,6 @@ public abstract class AbstractCard {
 
     private CardConstants.CardType cardType;
 
+    public abstract String getDescription();
+
 }

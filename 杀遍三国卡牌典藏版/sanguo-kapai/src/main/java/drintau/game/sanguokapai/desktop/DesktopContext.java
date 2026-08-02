@@ -1,7 +1,9 @@
 package drintau.game.sanguokapai.desktop;
 
 import drintau.game.sanguokapai.card.CardConstants;
+import drintau.game.sanguokapai.card.EquipmentCard;
 import drintau.game.sanguokapai.card.UnitCard;
+import drintau.game.sanguokapai.data.EquipmentData;
 import drintau.game.sanguokapai.data.HeroData;
 import drintau.game.sanguokapai.data.PlayerData;
 import drintau.game.sanguokapai.data.SoldierData;
@@ -64,6 +66,7 @@ public class DesktopContext {
 
     private List<UnitCard> heroList = HeroData.getAllHeroes();
     private List<UnitCard> soldierList = SoldierData.getAllSoldiers();
+    private List<EquipmentCard> equipmentList = EquipmentData.getAllEquipments();
 
     public EnumMap<CardConstants.UnitType, CardConstants.UnitType> ADVANTAGE_MAP = new EnumMap<>(CardConstants.UnitType.class);
 

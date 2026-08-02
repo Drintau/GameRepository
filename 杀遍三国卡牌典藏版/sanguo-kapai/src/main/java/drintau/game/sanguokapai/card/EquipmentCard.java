@@ -25,4 +25,15 @@ public class EquipmentCard extends AbstractCard {
         this.addSpeed = addSpeed;
         this.addAttack = addAttack;
     }
+
+    @Override
+    public String getDescription() {
+        return """
+            %s
+            兵种：%s
+            加速度：%d
+            加战力：%d
+            """.formatted(name, unitType.displayName, addSpeed, addAttack);
+    }
+
 }
