@@ -24,7 +24,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
     public void handle(ActionEvent event) {
         DesktopContext desktopContext = DesktopContext.getInstance();
 
-        desktopContext.getBeginTurn().setDisable(false);
+        desktopContext.getBeginTurn().setDisable(true);
         desktopContext.getSelectCard().setDisable(true);
         desktopContext.getEndTurn().setDisable(true);
 
@@ -227,6 +227,9 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
             // 回合数+1
             Platform.runLater(() -> {
                 desktopContext.getTurnCount().set(desktopContext.getTurnCount().get() + 1);
+                desktopContext.getBeginTurn().setDisable(false);
+                desktopContext.getSelectCard().setDisable(true);
+                desktopContext.getEndTurn().setDisable(true);
             });
         }, 1L, TimeUnit.SECONDS);
     }
