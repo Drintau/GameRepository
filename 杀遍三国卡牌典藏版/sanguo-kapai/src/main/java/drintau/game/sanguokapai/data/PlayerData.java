@@ -18,8 +18,8 @@ public class PlayerData {
     // 出兵列下表，也是大本营下标
     private int unitInitColIndex;
 
-    private IntegerProperty hp = new SimpleIntegerProperty(100);
-    private IntegerProperty maxHp = new SimpleIntegerProperty(100);
+    private IntegerProperty hp = new SimpleIntegerProperty(50);
+    private IntegerProperty maxHp = new SimpleIntegerProperty(50);
 
     private ToggleButton selectCard;
     private boolean curTurnPutUnitCardFlag;

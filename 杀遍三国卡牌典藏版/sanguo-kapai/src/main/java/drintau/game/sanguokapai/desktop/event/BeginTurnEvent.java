@@ -122,7 +122,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
             List<UnitCard> heroList = DesktopContext.getInstance().getHeroList();
             int heroIndex = RandomUtil.randomInt(heroList.size());
             randomCard = heroList.get(heroIndex);
-        } else if (randomInt < 20) {
+        } else if (randomInt < 30) {
             // 装备抽取概率
             List<EquipmentCard> equipmentList = DesktopContext.getInstance().getEquipmentList();
             int eqIndex = RandomUtil.randomInt(equipmentList.size());
