@@ -65,7 +65,7 @@ public class DesktopMainClass extends Application {
                             Label label = new Label(unitCard.getDescription());
                             label.setFont(StyleConstants.font16);
                             cell.getChildren().add(label);
-                            desktopContext.getActionDeque().add(new ActionItem(true, finalRow, finalCol, unitCard));
+                            desktopContext.getActionDeque().add(new ActionItem(false, finalRow, finalCol, unitCard));
                         }
 
                         desktopContext.getPeoplePlayer().setSelectCard(null);

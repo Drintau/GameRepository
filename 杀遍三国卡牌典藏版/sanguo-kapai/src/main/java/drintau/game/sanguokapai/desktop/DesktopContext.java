@@ -67,11 +67,15 @@ public class DesktopContext {
 
     public void playerInit() {
         aiPlayer.setAiFlag(true);
+        aiPlayer.setEqColIndex(player2EqColIndex);
+        aiPlayer.setUnitInitColIndex(player2UnitInitColIndex);
         player2HpLabel.textProperty().bind(
                 Bindings.format("电脑 生命值：%d / %d", aiPlayer.getHp(), aiPlayer.getMaxHp())
         );
 
         peoplePlayer.setAiFlag(false);
+        peoplePlayer.setEqColIndex(player1EqColIndex);
+        peoplePlayer.setUnitInitColIndex(player1UnitInitColIndex);
         player1HpLabel.textProperty().bind(
                 Bindings.format("玩家 生命值：%d / %d", peoplePlayer.getHp(), peoplePlayer.getMaxHp())
         );

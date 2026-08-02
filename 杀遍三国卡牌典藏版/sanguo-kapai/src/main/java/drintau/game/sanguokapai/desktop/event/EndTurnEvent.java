@@ -62,6 +62,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                             cells[curRowIndex][preColIndex].setUserData(null);
                         });
                         actionItem.setFinishFlag(true);
+                        ThreadSleepUtil.sleepSeconds(1L);
                         break;
                     } else if (!actionItem.isAiPlayer() && desktopContext.getAiPlayer().beAttack(nextColIndex)) {
                         int lowerHP = unitCard.getBaseAttack();
@@ -71,6 +72,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                             cells[curRowIndex][preColIndex].setUserData(null);
                         });
                         actionItem.setFinishFlag(true);
+                        ThreadSleepUtil.sleepSeconds(1L);
                         break;
                     }
 
