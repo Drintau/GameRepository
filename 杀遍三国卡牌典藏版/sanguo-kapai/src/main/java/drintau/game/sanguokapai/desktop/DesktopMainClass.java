@@ -87,10 +87,12 @@ public class DesktopMainClass extends Application {
                         } else if (userData instanceof EquipmentCard equipmentCard) {
                             if (finalCol == DesktopContext.player1EqColIndex) {
                                 cell.getChildren().clear();
+                                cell.setUserData(null);
                                 Label label = new Label(equipmentCard.getDescription());
                                 label.setBackground(StyleConstants.WHITE_BACKGROUND);
                                 label.setFont(StyleConstants.font16);
                                 cell.getChildren().add(label);
+                                cell.setUserData(equipmentCard);
                                 putFlag = true;
                                 desktopContext.getPeoplePlayer().setCurTurnPutEqCardFlag(true);
                             }
