@@ -10,6 +10,7 @@ import lombok.Setter;
 @Getter
 public class PlayerData {
 
+    // true:玩家，在左边，false：电脑，在右边
     private boolean flag;
 
     private IntegerProperty hp = new SimpleIntegerProperty(100);

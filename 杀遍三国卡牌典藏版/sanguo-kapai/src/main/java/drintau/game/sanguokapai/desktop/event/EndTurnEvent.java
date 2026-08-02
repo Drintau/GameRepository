@@ -1,5 +1,6 @@
 package drintau.game.sanguokapai.desktop.event;
 
+import drintau.game.sanguokapai.card.UnitCard;
 import drintau.game.sanguokapai.desktop.ActionItem;
 import drintau.game.sanguokapai.desktop.DesktopContext;
 import drintau.game.sanguokapai.desktop.StyleConstants;
@@ -51,10 +52,26 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                     }
                     // 到达终点
                     if (nextColIndex < DesktopContext.moveMinColIndex || nextColIndex > DesktopContext.moveMaxColIndex) {
+                        ActionItem userData = (ActionItem) cells[curRowIndex][preColIndex].getUserData();
+                        UnitCard unitCard = userData.getUnitCard();
+                        int baseAttack = unitCard.getBaseAttack();
+                        // 玩家2攻入玩家1大本营，玩家1扣生命值
+                        if (nextColIndex < DesktopContext.moveMinColIndex) {
+                            Platform.runLater(() -> {
+                                desktopContext.getPlayer1().getHp().set(desktopContext.getPlayer1().getHp().get() - baseAttack);
+                            });
+                        }
+                        if (nextColIndex > DesktopContext.moveMaxColIndex) {
+                            Platform.runLater(() -> {
+                                desktopContext.getPlayer2().getHp().set(desktopContext.getPlayer2().getHp().get() - baseAttack);
+                            });
+                        }
+
                         Platform.runLater(() -> {
                             cells[curRowIndex][preColIndex].getChildren().clear();
                             cells[curRowIndex][preColIndex].setUserData(null);
                         });
+                        userData.setFlag(false);
                         break;
                     }
 
