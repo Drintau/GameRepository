@@ -79,8 +79,8 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                     // 碰撞
                     if (!cells[curRowIndex][nextColIndex].getChildren().isEmpty()) {
                         ActionItem targetCellActionItem = (ActionItem) cells[curRowIndex][nextColIndex].getUserData();
+                        // 敌方单位
                         if (actionItem.isAiPlayer() != targetCellActionItem.isAiPlayer()) {
-                            log.warn("战斗");
                             int u1Attack = actionItem.getUnitCard().getBaseAttack();
                             int u2Attack = targetCellActionItem.getUnitCard().getBaseAttack();
                             if (u1Attack > u2Attack) {
@@ -111,8 +111,58 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                                     cells[curRowIndex][removeColIndex2].setUserData(null);
                                 });
                             }
+                            ThreadSleepUtil.sleepSeconds(1L);
+                            break;
+                        } else {
+                            // 己方单位
+                            // 当前单位剩余移动力大于等于2，且前面第二格无归属，就超越，移动力-1；如果前面第二格是地方阵营，那就是攻入
+                            // 剩余移动力就是当前的i
+                            if (i >= 2) {
+                                int nextColIndex2;
+                                if (actionItem.isAiPlayer()) {
+                                    nextColIndex2 = nextColIndex - 1;
+                                } else {
+                                    nextColIndex2 = nextColIndex + 1;
+                                }
+                                // 到达终点
+                                if (actionItem.isAiPlayer() && desktopContext.getPeoplePlayer().beAttack(nextColIndex2)) {
+                                    int lowerHP = unitCard.getBaseAttack();
+                                    Platform.runLater(() -> {
+                                        desktopContext.getPeoplePlayer().getHp().set(desktopContext.getPeoplePlayer().getHp().get() - lowerHP);
+                                        cells[curRowIndex][preColIndex].getChildren().clear();
+                                        cells[curRowIndex][preColIndex].setUserData(null);
+                                    });
+                                    actionItem.setFinishFlag(true);
+                                    ThreadSleepUtil.sleepSeconds(1L);
+                                    break;
+                                } else if (!actionItem.isAiPlayer() && desktopContext.getAiPlayer().beAttack(nextColIndex2)) {
+                                    int lowerHP = unitCard.getBaseAttack();
+                                    Platform.runLater(() -> {
+                                        desktopContext.getAiPlayer().getHp().set(desktopContext.getAiPlayer().getHp().get() - lowerHP);
+                                        cells[curRowIndex][preColIndex].getChildren().clear();
+                                        cells[curRowIndex][preColIndex].setUserData(null);
+                                    });
+                                    actionItem.setFinishFlag(true);
+                                    ThreadSleepUtil.sleepSeconds(1L);
+                                    break;
+                                }
+                                // 前面第二格是否空白
+                                if (cells[curRowIndex][nextColIndex2].getChildren().isEmpty()) {
+                                    move(actionItem, nextColIndex2);
+                                    i--;
+                                    ThreadSleepUtil.sleepSeconds(1L);
+                                    continue;
+                                } else {
+                                    i = 0;
+                                    ThreadSleepUtil.sleepSeconds(1L);
+                                    continue;
+                                }
+                            } else {
+                                i = 0;
+                                ThreadSleepUtil.sleepSeconds(1L);
+                                continue;
+                            }
                         }
-                        break;
                     }
 
                     // 移动
