@@ -2,6 +2,7 @@ package drintau.game.sanguokapai.desktop;
 
 import drintau.game.sanguokapai.card.UnitCard;
 import drintau.game.sanguokapai.desktop.event.BeginTurnEvent;
+import drintau.game.sanguokapai.desktop.event.EndTurnEvent;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
@@ -59,6 +60,8 @@ public class DesktopMainClass extends Application {
                 cell.setBorder(StyleConstants.CELL_BORDER);
                 cell.setBackground(StyleConstants.LIGHTGRAY_BACKGROUND);
                 cell.setPrefSize(100, 150);
+                int finalRow = row;
+                int finalCol = col;
                 cell.setOnMouseClicked(e -> {
                     if (desktopContext.getPlayer1().getSelectCard() != null) {
                         ToggleButton selectCard = desktopContext.getPlayer1().getSelectCard();
@@ -67,6 +70,7 @@ public class DesktopMainClass extends Application {
                             Label label = new Label(unitCard.getDescription());
                             label.setFont(StyleConstants.font16);
                             cell.getChildren().add(label);
+                            desktopContext.getActionDeque().add(new ActionItem(true, finalRow, finalCol, unitCard));
                         }
 
                         desktopContext.getPlayer1().setSelectCard(null);
@@ -96,11 +100,7 @@ public class DesktopMainClass extends Application {
         desktopContext.setEndTurn(endTurn);
 
         beginTurn.setOnAction(new BeginTurnEvent());
-        endTurn.setOnAction(e -> {
-            beginTurn.setDisable(false);
-            selectCard.setDisable(true);
-            endTurn.setDisable(true);
-        });
+        endTurn.setOnAction(new EndTurnEvent());
 
         BorderPane gameBoardPane = new BorderPane();
         gameBoardPane.setBackground(StyleConstants.BLUE_BACKGROUND);

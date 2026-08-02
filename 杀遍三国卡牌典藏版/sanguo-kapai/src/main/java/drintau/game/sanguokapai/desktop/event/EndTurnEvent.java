@@ -2,6 +2,7 @@ package drintau.game.sanguokapai.desktop.event;
 
 import drintau.game.sanguokapai.desktop.ActionItem;
 import drintau.game.sanguokapai.desktop.DesktopContext;
+import drintau.game.sanguokapai.desktop.StyleConstants;
 import drintau.game.sanguokapai.util.DaemonScheduler;
 import drintau.game.sanguokapai.util.ThreadSleepUtil;
 import javafx.application.Platform;
@@ -15,12 +16,17 @@ import java.util.ArrayDeque;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-public class BeginEvent implements EventHandler<ActionEvent> {
+public class EndTurnEvent implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent event) {
         DesktopContext desktopContext = DesktopContext.getInstance();
 
+        desktopContext.getBeginTurn().setDisable(false);
+        desktopContext.getSelectCard().setDisable(true);
+        desktopContext.getEndTurn().setDisable(true);
+
+        // 移动单位
         DaemonScheduler.getInstance().submitOnceDelayTask(() -> {
             StackPane[][] cells = desktopContext.getCells();
 
@@ -101,8 +107,12 @@ public class BeginEvent implements EventHandler<ActionEvent> {
             }
             desktopContext.getActionDeque().addAll(desktopContext.getNextActionDeque());
             desktopContext.getNextActionDeque().clear();
-        }, 1L, TimeUnit.SECONDS);
 
+            // 回合数+1
+            Platform.runLater(() -> {
+                desktopContext.getTurnCount().set(desktopContext.getTurnCount().get() + 1);
+            });
+        }, 1L, TimeUnit.SECONDS);
     }
 
     private void move(ActionItem actionItem, int nextColIndex) {
@@ -114,7 +124,9 @@ public class BeginEvent implements EventHandler<ActionEvent> {
         Platform.runLater(() -> {
             cells[curRowIndex][preColIndex].getChildren().clear();
             cells[curRowIndex][preColIndex].setUserData(null);
-            cells[curRowIndex][curColIndex].getChildren().addAll(new Label(actionItem.getUnitCard().getName()));
+            Label label = new Label(actionItem.getUnitCard().getDescription());
+            label.setFont(StyleConstants.font16);
+            cells[curRowIndex][curColIndex].getChildren().addAll(label);
             cells[curRowIndex][curColIndex].setUserData(actionItem);
         });
     }
