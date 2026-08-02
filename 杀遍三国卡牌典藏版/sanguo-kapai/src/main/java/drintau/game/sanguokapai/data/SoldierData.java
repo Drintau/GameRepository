@@ -3,6 +3,8 @@ package drintau.game.sanguokapai.data;
 import drintau.game.sanguokapai.card.CardConstants;
 import drintau.game.sanguokapai.card.UnitCard;
 
+import java.util.List;
+
 public final class SoldierData {
 
     public static final UnitCard CHANG_QIANG_BING = new UnitCard("长枪兵", CardConstants.UnitType.GUNNER, 1, 2, 4);
@@ -23,5 +25,21 @@ public final class SoldierData {
     public static final UnitCard GONG_JIAN_SHOU = new UnitCard("弓箭手", CardConstants.UnitType.SHOOTER, 2, 2, 3);
     public static final UnitCard LIAN_NU_SHOU = new UnitCard("连弩手", CardConstants.UnitType.SHOOTER, 2, 1, 4);
 
+    public static List<UnitCard> getAllSoldiers() {
+        return List.of(
+                CHANG_QIANG_BING,
+                SHAO_JI,
+                XI_LIANG_YOU_QI,
+                JING_RUI_TIE_QI,
+                JIAN_DUN_JIA_SHI,
+                CHANG_MAO_JIA_SHI,
+                SHU_SHI,
+                GE_NV,
+                PU_DAO_BING,
+                ZHONG_DUN_BING,
+                GONG_JIAN_SHOU,
+                LIAN_NU_SHOU
+        );
+    }
 
 }

@@ -1,7 +1,7 @@
 package drintau.game.sanguokapai.desktop;
 
 import drintau.game.sanguokapai.card.UnitCard;
-import drintau.game.sanguokapai.data.HeroData;
+import drintau.game.sanguokapai.desktop.event.BeginTurnEvent;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
@@ -10,11 +10,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,10 +24,6 @@ public class DesktopMainClass extends Application {
         DesktopContext desktopContext = DesktopContext.getInstance();
         desktopContext.init();
 
-        Font font16 = Font.font(16); // 卡牌文字用
-        Font font20 = Font.font(20); // 按钮用
-        Font font24 = Font.font(24); // 标题、展示值用
-
         // 根节点
         StackPane root = new StackPane();
 
@@ -38,17 +32,17 @@ public class DesktopMainClass extends Application {
         gameBoardPaneTop.setPadding(new Insets(10));
         gameBoardPaneTop.setPrefHeight(50);
         Label turnCountLabel = new Label();
-        turnCountLabel.setFont(font24);
+        turnCountLabel.setFont(StyleConstants.font24);
         turnCountLabel.textProperty().bind(
                 Bindings.format("回合数：%d", desktopContext.getTurnCount())
         );
         Label player1HpLabel = new Label();
-        player1HpLabel.setFont(font24);
+        player1HpLabel.setFont(StyleConstants.font24);
         player1HpLabel.textProperty().bind(
                 Bindings.format("玩家1 生命值：%d / %d", desktopContext.getPlayer1().getHp(), desktopContext.getPlayer1().getMaxHp())
         );
         Label player2HpLabel = new Label();
-        player2HpLabel.setFont(font24);
+        player2HpLabel.setFont(StyleConstants.font24);
         player2HpLabel.textProperty().bind(
                 Bindings.format("玩家2 生命值：%d / %d", desktopContext.getPlayer2().getHp(), desktopContext.getPlayer2().getMaxHp())
         );
@@ -74,7 +68,7 @@ public class DesktopMainClass extends Application {
                         Object userData = selectCard.getUserData();
                         if (userData instanceof UnitCard unitCard) {
                             Label label = new Label(unitCard.getDescription());
-                            label.setFont(font16);
+                            label.setFont(StyleConstants.font16);
                             cell.getChildren().add(label);
                         }
 
@@ -90,20 +84,19 @@ public class DesktopMainClass extends Application {
         gameBoardPaneBottom.setAlignment(Pos.CENTER);
         gameBoardPaneBottom.setPadding(new Insets(10));
         Button beginTurn = new Button("开始回合");
-        beginTurn.setFont(font20);
+        beginTurn.setFont(StyleConstants.font20);
         Button selectCard = new Button("选择卡牌");
-        selectCard.setFont(font20);
+        selectCard.setFont(StyleConstants.font20);
         selectCard.setDisable(true);
         Button endTurn = new Button("结束回合");
-        endTurn.setFont(font20);
+        endTurn.setFont(StyleConstants.font20);
         endTurn.setDisable(true);
         gameBoardPaneBottom.getChildren().addAll(beginTurn, selectCard, endTurn);
+        desktopContext.setBeginTurn(beginTurn);
+        desktopContext.setSelectCard(selectCard);
+        desktopContext.setEndTurn(endTurn);
 
-        beginTurn.setOnAction(e -> {
-            beginTurn.setDisable(true);
-            selectCard.setDisable(false);
-            endTurn.setDisable(false);
-        });
+        beginTurn.setOnAction(new BeginTurnEvent());
         endTurn.setOnAction(e -> {
             beginTurn.setDisable(false);
             selectCard.setDisable(true);
@@ -132,40 +125,22 @@ public class DesktopMainClass extends Application {
         cardSelectRoot.setMaxSize(600, 300);
 
         Label cardSelectTitle = new Label("选择卡牌");
-        cardSelectTitle.setFont(font24);
+        cardSelectTitle.setFont(StyleConstants.font24);
         cardSelectRoot.setTop(cardSelectTitle);
         BorderPane.setAlignment(cardSelectTitle, Pos.CENTER);
 
-        ToggleGroup cardSelectGroup = new ToggleGroup();
         HBox cardSelectCenter = new HBox(10);
         cardSelectCenter.setAlignment(Pos.CENTER);
-        for (int i = 0; i < 5; i++) {
-            ToggleButton cardBtn = new ToggleButton();
-            cardBtn.setPrefSize(100,150);
-            cardBtn.setUserData(HeroData.GUAN_YU);
-            Label cardInfoLabel = new Label(HeroData.GUAN_YU.getDescription());
-            cardInfoLabel.setFont(font16);
-            cardBtn.setGraphic(cardInfoLabel);
-            cardBtn.setToggleGroup(cardSelectGroup);
-            cardSelectCenter.getChildren().add(cardBtn);
-        }
-        cardSelectGroup.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != null) {
-                ToggleButton selected = (ToggleButton) newVal;
-                desktopContext.getPlayer1().setSelectCard(selected);
-            } else {
-                desktopContext.getPlayer1().setSelectCard(null);
-            }
-        });
+        desktopContext.setCardSelectCenter(cardSelectCenter);
 
         cardSelectRoot.setCenter(cardSelectCenter);
 
         HBox cardSelectBottom = new HBox(10);
         cardSelectBottom.setAlignment(Pos.CENTER);
         Button cardSelectSureButton = new Button("确认");
-        cardSelectSureButton.setFont(font20);
+        cardSelectSureButton.setFont(StyleConstants.font20);
         Button cardSelectCloseButton = new Button("关闭");
-        cardSelectCloseButton.setFont(font20);
+        cardSelectCloseButton.setFont(StyleConstants.font20);
         cardSelectBottom.getChildren().addAll(cardSelectSureButton, cardSelectCloseButton);
         cardSelectRoot.setBottom(cardSelectBottom);
 

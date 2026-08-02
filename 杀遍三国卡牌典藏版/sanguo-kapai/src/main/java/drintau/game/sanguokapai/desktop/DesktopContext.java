@@ -1,19 +1,19 @@
 package drintau.game.sanguokapai.desktop;
 
+import drintau.game.sanguokapai.card.UnitCard;
 import drintau.game.sanguokapai.data.HeroData;
 import drintau.game.sanguokapai.data.PlayerData;
 import drintau.game.sanguokapai.data.SoldierData;
-import drintau.game.sanguokapai.util.DaemonScheduler;
-import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.scene.control.Label;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayDeque;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
 
 @Setter
 @Getter
@@ -40,8 +40,18 @@ public class DesktopContext {
 
     private StackPane[][] cells;
 
+    // 玩游戏界面的控件
+    private Button beginTurn;
+    private Button selectCard;
+    private Button endTurn;
+    // 选卡牌界面的控件
+    private HBox cardSelectCenter;
+
     private ArrayDeque<ActionItem> actionDeque = new ArrayDeque<>();
     private ArrayDeque<ActionItem> nextActionDeque = new ArrayDeque<>();
+
+    private List<UnitCard> heroList = HeroData.getAllHeroes();
+    private List<UnitCard> soldierList = SoldierData.getAllSoldiers();
 
     private PlayerData player1 = new PlayerData();
     private PlayerData player2 = new PlayerData();
