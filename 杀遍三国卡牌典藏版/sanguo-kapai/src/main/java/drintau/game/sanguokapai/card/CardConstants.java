@@ -8,13 +8,13 @@ public final class CardConstants {
     }
 
     public enum UnitType {
-        // 射->枪、枪->骑，骑->甲，甲->术，术->盾，盾->射
-        SHOOTER("射手"),   // 射 → 枪
+        // 枪->骑,骑->甲,甲->术,术->盾,盾->射,射->枪
         GUNNER("枪兵"),   // 枪 → 骑
         CAVALRY("骑兵"),    // 骑 → 甲
         ARMOR("甲士"),       // 甲 → 术
         MAGE("术士"),      // 术 → 盾
-        SHIELD("盾卫");   // 盾 → 射
+        SHIELD("盾卫"),   // 盾 → 射
+        SHOOTER("射手");   // 射 → 枪
 
         public final String displayName;
 

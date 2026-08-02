@@ -5,17 +5,23 @@ import drintau.game.sanguokapai.card.UnitCard;
 
 public final class SoldierData {
 
-    public static final UnitCard QIANG_BING = new UnitCard("枪兵", CardConstants.UnitType.GUNNER, 1, 2, 4);
+    public static final UnitCard CHANG_QIANG_BING = new UnitCard("长枪兵", CardConstants.UnitType.GUNNER, 1, 2, 4);
 
-    public static final UnitCard SHAO_JI = new UnitCard("哨骑", CardConstants.UnitType.CAVALRY, 1, 2, 3);
+    public static final UnitCard SHAO_JI = new UnitCard("哨骑", CardConstants.UnitType.CAVALRY, 3, 3, 5);
+    public static final UnitCard XI_LIANG_YOU_QI = new UnitCard("西凉游骑", CardConstants.UnitType.CAVALRY, 3, 4, 5);
+    public static final UnitCard JING_RUI_TIE_QI = new UnitCard("精锐铁骑", CardConstants.UnitType.CAVALRY, 4, 3, 6);
 
-    public static final UnitCard JIAN_DUN_JIA_SHI = new UnitCard("剑盾甲士", CardConstants.UnitType.ARMOR, 1, 2, 3);
+    public static final UnitCard JIAN_DUN_JIA_SHI = new UnitCard("剑盾甲士", CardConstants.UnitType.ARMOR, 3, 1, 5);
+    public static final UnitCard CHANG_MAO_JIA_SHI = new UnitCard("长矛甲士", CardConstants.UnitType.ARMOR, 2, 2, 5);
 
-    public static final UnitCard SHU_SHI = new UnitCard("术士", CardConstants.UnitType.MAGE, 1, 2, 3);
+    public static final UnitCard SHU_SHI = new UnitCard("术士", CardConstants.UnitType.MAGE, 2, 2, 3);
+    public static final UnitCard GE_NV = new UnitCard("歌女", CardConstants.UnitType.MAGE, 2, 2, 3);
 
-    public static final UnitCard DUN_BING = new UnitCard("盾兵", CardConstants.UnitType.SHIELD, 1, 2, 3);
+    public static final UnitCard PU_DAO_BING = new UnitCard("朴刀兵", CardConstants.UnitType.SHIELD, 1, 2, 3);
+    public static final UnitCard ZHONG_DUN_BING = new UnitCard("重盾兵", CardConstants.UnitType.SHIELD, 2, 1, 4);
 
-    public static final UnitCard SHE_SHOU = new UnitCard("射手", CardConstants.UnitType.SHIELD, 1, 2, 3);
+    public static final UnitCard GONG_JIAN_SHOU = new UnitCard("弓箭手", CardConstants.UnitType.SHOOTER, 2, 2, 3);
+    public static final UnitCard LIAN_NU_SHOU = new UnitCard("连弩手", CardConstants.UnitType.SHOOTER, 2, 1, 4);
 
 
 }

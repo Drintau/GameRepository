@@ -8,5 +8,7 @@ public final class HeroData {
     public static final UnitCard GUAN_YU = new UnitCard("关羽", CardConstants.UnitType.CAVALRY, 5, 4, 9);
     public static final UnitCard ZHANG_FEI = new UnitCard("张飞", CardConstants.UnitType.GUNNER, 5, 3, 8);
     public static final UnitCard MA_CHAO = new UnitCard("马超", CardConstants.UnitType.CAVALRY, 5, 5, 8);
+    public static final UnitCard ZHAO_YUN = new UnitCard("赵云", CardConstants.UnitType.GUNNER, 5, 4, 8);
+    public static final UnitCard HUANG_ZHONG = new UnitCard("黄忠", CardConstants.UnitType.SHOOTER, 5, 2, 7);
 
 }
