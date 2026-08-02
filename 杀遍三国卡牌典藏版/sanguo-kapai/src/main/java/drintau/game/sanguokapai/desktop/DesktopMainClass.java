@@ -54,7 +54,16 @@ public class DesktopMainClass extends Application {
             for (int col = 0; col < DesktopContext.cols; col++) {
                 StackPane cell = new StackPane();
                 cell.setBorder(StyleConstants.CELL_BORDER);
-                cell.setBackground(StyleConstants.LIGHTGRAY_BACKGROUND);
+                if (col == DesktopContext.player1EqColIndex || col == DesktopContext.player2EqColIndex) {
+                    cell.setBackground(StyleConstants.WHITE_BACKGROUND);
+                    cell.getChildren().add(new Label("装备区"));
+                } else if (col == DesktopContext.player1UnitInitColIndex){
+                    cell.setBackground(StyleConstants.PLAYER_UNIT_BACKGROUND);
+                } else if (col == DesktopContext.player2UnitInitColIndex) {
+                    cell.setBackground(StyleConstants.RED_BACKGROUND);
+                } else {
+                    cell.setBackground(StyleConstants.LIGHTGRAY_BACKGROUND);
+                }
                 cell.setPrefSize(100, 150);
                 int finalRow = row;
                 int finalCol = col;
@@ -140,7 +149,7 @@ public class DesktopMainClass extends Application {
         cardSelectBottom.getChildren().addAll(cardSelectSureButton, cardSelectCloseButton);
         cardSelectRoot.setBottom(cardSelectBottom);
 
-        // 战斗画面
+        // 战斗界面
         BorderPane attackRoot = new BorderPane();
         attackRoot.setPadding(new Insets(10));
         attackRoot.setBackground(StyleConstants.WHITE_BACKGROUND);
