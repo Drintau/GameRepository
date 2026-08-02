@@ -2,6 +2,7 @@ package drintau.game.sanguokapai.desktop.event;
 
 import drintau.game.sanguokapai.card.UnitCard;
 import drintau.game.sanguokapai.data.PlayerData;
+import drintau.game.sanguokapai.desktop.ActionItem;
 import drintau.game.sanguokapai.desktop.DesktopContext;
 import drintau.game.sanguokapai.desktop.StyleConstants;
 import drintau.game.sanguokapai.util.RandomUtil;
@@ -11,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -38,6 +40,17 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
 
     private void aiPlayGame() {
         DesktopContext desktopContext = DesktopContext.getInstance();
+        StackPane[][] cells = desktopContext.getCells();
+
+        UnitCard randomUnit = getRandomUnit();
+        int rowIndex = RandomUtil.randomInt(3);
+
+        int aiUnitInitColIndex = desktopContext.getAiPlayer().getUnitInitColIndex();
+
+        Label label = new Label(randomUnit.getDescription());
+        label.setFont(StyleConstants.font16);
+        cells[rowIndex][aiUnitInitColIndex].getChildren().add(label);
+        desktopContext.getActionDeque().add(new ActionItem(true, rowIndex, aiUnitInitColIndex, randomUnit));
     }
 
     private void peoplePlayGame() {
