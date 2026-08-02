@@ -94,73 +94,35 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                         ActionItem targetCellActionItem = (ActionItem) cells[curRowIndex][nextColIndex].getUserData();
                         // 敌方单位
                         if (actionItem.isAiPlayer() != targetCellActionItem.isAiPlayer()) {
+                            // 清零
                             actionItem.setAddAttack(0);
                             targetCellActionItem.setAddAttack(0);
 
-                            // 属性克制
-                            CardConstants.UnitType beatUnitType1 = desktopContext.ADVANTAGE_MAP.get(actionItem.getUnitCard().getUnitType());
-                            CardConstants.UnitType beatUnitType2 = desktopContext.ADVANTAGE_MAP.get(targetCellActionItem.getUnitCard().getUnitType());
+                            // 装备加成
+                            int actionItemEqAddAttack = calcEqAddAttack(actionItem);
+                            int targetCellEqAddAttack = calcEqAddAttack(targetCellActionItem);
+                            actionItem.setAddAttack(actionItem.getAddAttack() + actionItemEqAddAttack);
+                            targetCellActionItem.setAddAttack(targetCellActionItem.getAddAttack() + targetCellEqAddAttack);
 
-                            if (beatUnitType1 == targetCellActionItem.getUnitCard().getUnitType()) {
+                            // 属性克制
+                            CardConstants.UnitType actionItemBeatUnitType = desktopContext.ADVANTAGE_MAP.get(actionItem.getUnitCard().getUnitType());
+                            CardConstants.UnitType targetCellBeatUnitType = desktopContext.ADVANTAGE_MAP.get(targetCellActionItem.getUnitCard().getUnitType());
+                            if (actionItemBeatUnitType == targetCellActionItem.getUnitCard().getUnitType()) {
                                 actionItem.setAddAttack(actionItem.getAddAttack() + 1);
                                 targetCellActionItem.setAddAttack(targetCellActionItem.getAddAttack() - 1);
                             }
-                            if (beatUnitType2 == actionItem.getUnitCard().getUnitType()) {
+                            if (targetCellBeatUnitType == actionItem.getUnitCard().getUnitType()) {
                                 actionItem.setAddAttack(actionItem.getAddAttack() - 1);
                                 targetCellActionItem.setAddAttack(targetCellActionItem.getAddAttack() + 1);
                             }
 
-                            // 装备加成
-                            int peopleEqAddAttack = 0;
-                            if (!cells[curRowIndex][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getChildren().isEmpty()) {
-                                // 玩家有装备
-                                if (cells[curRowIndex][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
-                                    if (equipmentCard.getUnitType() == CardConstants.UnitType.ALL || equipmentCard.getUnitType() == actionItem.getUnitCard().getUnitType()) {
-                                        peopleEqAddAttack = equipmentCard.getAddAttack();
-                                    }
-                                }
-                            }
-                            int aiEqAddAttack = 0;
-                            if (!cells[curRowIndex][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getChildren().isEmpty()) {
-                                // 电脑有装备
-                                if (cells[curRowIndex][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
-                                    if (equipmentCard.getUnitType() == CardConstants.UnitType.ALL || equipmentCard.getUnitType() == targetCellActionItem.getUnitCard().getUnitType()) {
-                                        aiEqAddAttack = equipmentCard.getAddAttack();
-                                    }
-                                }
-                            }
-
-                            if (!actionItem.isAiPlayer()) {
-                                // 己方是人，对方是电脑
-                                actionItem.setAddAttack(actionItem.getAddAttack() + peopleEqAddAttack);
-                                targetCellActionItem.setAddAttack(targetCellActionItem.getAddAttack() + aiEqAddAttack);
-                            } else {
-                                // 己方是电脑，对方是人
-                                actionItem.setAddAttack(actionItem.getAddAttack() + aiEqAddAttack);
-                                targetCellActionItem.setAddAttack(targetCellActionItem.getAddAttack() + peopleEqAddAttack);
-                            }
-
+                            // 最终战力
                             actionItem.setCurAttack(actionItem.getUnitCard().getBaseAttack() + actionItem.getAddAttack());
                             targetCellActionItem.setCurAttack(targetCellActionItem.getUnitCard().getBaseAttack() + targetCellActionItem.getAddAttack());
 
                             ActionItem finalActionItem = actionItem;
                             Platform.runLater(() -> {
-                                Label peoplePlayerUnit;
-                                Label aiPlayerUnit;
-                                if (finalActionItem.isAiPlayer()) {
-                                    aiPlayerUnit = new Label(finalActionItem.getAttackInfo());
-                                    peoplePlayerUnit = new Label(targetCellActionItem.getAttackInfo());
-                                } else {
-                                    peoplePlayerUnit = new Label(finalActionItem.getAttackInfo());
-                                    aiPlayerUnit = new Label(targetCellActionItem.getAttackInfo());
-                                }
-                                peoplePlayerUnit.setFont(StyleConstants.font16);
-                                peoplePlayerUnit.setBackground(StyleConstants.PLAYER_UNIT_BACKGROUND);
-                                aiPlayerUnit.setFont(StyleConstants.font16);
-                                aiPlayerUnit.setBackground(StyleConstants.RED_BACKGROUND);
-                                desktopContext.getAttackRoot().setLeft(peoplePlayerUnit);
-                                desktopContext.getAttackRoot().setRight(aiPlayerUnit);
-                                desktopContext.getRoot().getChildren().add(desktopContext.getAttackRoot());
+                                showAttackUI(finalActionItem, targetCellActionItem);
                             });
 
                             synchronized (desktopContext.getBattleLock()) {
@@ -375,6 +337,26 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                 desktopContext.getRoot().getChildren().addAll(scrim, gameOverPane);
             }
         }
+    }
+
+    private void showAttackUI(ActionItem actionItem, ActionItem targetCellActionItem) {
+        DesktopContext desktopContext = DesktopContext.getInstance();
+        Label peoplePlayerUnit;
+        Label aiPlayerUnit;
+        if (actionItem.isAiPlayer()) {
+            aiPlayerUnit = new Label(actionItem.getAttackInfo());
+            peoplePlayerUnit = new Label(targetCellActionItem.getAttackInfo());
+        } else {
+            peoplePlayerUnit = new Label(actionItem.getAttackInfo());
+            aiPlayerUnit = new Label(targetCellActionItem.getAttackInfo());
+        }
+        peoplePlayerUnit.setFont(StyleConstants.font16);
+        peoplePlayerUnit.setBackground(StyleConstants.PLAYER_UNIT_BACKGROUND);
+        aiPlayerUnit.setFont(StyleConstants.font16);
+        aiPlayerUnit.setBackground(StyleConstants.RED_BACKGROUND);
+        desktopContext.getAttackRoot().setLeft(peoplePlayerUnit);
+        desktopContext.getAttackRoot().setRight(aiPlayerUnit);
+        desktopContext.getRoot().getChildren().add(desktopContext.getAttackRoot());
     }
 
 }
