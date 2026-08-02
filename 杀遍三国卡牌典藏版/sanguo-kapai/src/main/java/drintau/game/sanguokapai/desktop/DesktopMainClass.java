@@ -144,10 +144,10 @@ public class DesktopMainClass extends Application {
         BorderPane attackRoot = new BorderPane();
         attackRoot.setPadding(new Insets(10));
         attackRoot.setBackground(StyleConstants.WHITE_BACKGROUND);
-        attackRoot.setPrefWidth(600);
-        attackRoot.setPrefHeight(300);
-        attackRoot.setMinSize(600, 300);
-        attackRoot.setMaxSize(600, 300);
+        attackRoot.setPrefWidth(300);
+        attackRoot.setPrefHeight(200);
+        attackRoot.setMinSize(300, 200);
+        attackRoot.setMaxSize(300, 200);
 
         Label attackTitle = new Label("战斗");
         attackTitle.setFont(StyleConstants.font24);
