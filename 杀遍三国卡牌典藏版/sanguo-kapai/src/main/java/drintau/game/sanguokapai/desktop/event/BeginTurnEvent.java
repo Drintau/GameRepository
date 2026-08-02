@@ -47,25 +47,27 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         DesktopContext desktopContext = DesktopContext.getInstance();
         StackPane[][] cells = desktopContext.getCells();
 
-        AbstractCard randomCard = getRandomCard();
         int rowIndex = RandomUtil.randomInt(3);
 
-        if (randomCard instanceof UnitCard randomUnit) {
-            int aiUnitInitColIndex = desktopContext.getAiPlayer().getUnitInitColIndex();
-            Label label = new Label(randomUnit.getDescription());
-            label.setBackground(StyleConstants.RED_BACKGROUND);
-            label.setFont(StyleConstants.font16);
-            cells[rowIndex][aiUnitInitColIndex].getChildren().add(label);
-            desktopContext.getActionDeque().add(new ActionItem(true, rowIndex, aiUnitInitColIndex, randomUnit));
-        } else if (randomCard instanceof EquipmentCard randomEq) {
+        // 抽装备
+        EquipmentCard randomEquipment = getRandomEquipment();
+        if (randomEquipment != null) {
             int aiEqColIndex = desktopContext.getAiPlayer().getEqColIndex();
-            Label label = new Label(randomEq.getDescription());
+            Label label = new Label(randomEquipment.getDescription());
             label.setBackground(StyleConstants.WHITE_BACKGROUND);
             label.setFont(StyleConstants.font16);
             cells[rowIndex][aiEqColIndex].getChildren().clear();
             cells[rowIndex][aiEqColIndex].getChildren().add(label);
         }
 
+        // 抽单位
+        UnitCard randomUnit = getRandomUnit();
+        int aiUnitInitColIndex = desktopContext.getAiPlayer().getUnitInitColIndex();
+        Label label = new Label(randomUnit.getDescription());
+        label.setBackground(StyleConstants.RED_BACKGROUND);
+        label.setFont(StyleConstants.font16);
+        cells[rowIndex][aiUnitInitColIndex].getChildren().add(label);
+        desktopContext.getActionDeque().add(new ActionItem(true, rowIndex, aiUnitInitColIndex, randomUnit));
     }
 
     private void peoplePlayGame() {
@@ -130,6 +132,34 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
             randomCard = soldierList.get(soldierIndex);
         }
         return randomCard;
+    }
+
+    private UnitCard getRandomUnit() {
+        UnitCard randomUnit;
+        int randomInt = RandomUtil.randomInt(10);
+        // 英雄抽取概率
+        if (randomInt < 1) {
+            List<UnitCard> heroList = DesktopContext.getInstance().getHeroList();
+            int heroIndex = RandomUtil.randomInt(heroList.size());
+            randomUnit = heroList.get(heroIndex);
+        } else {
+            List<UnitCard> soldierList = DesktopContext.getInstance().getSoldierList();
+            int soldierIndex = RandomUtil.randomInt(soldierList.size());
+            randomUnit = soldierList.get(soldierIndex);
+        }
+        return randomUnit;
+    }
+
+    private EquipmentCard getRandomEquipment() {
+        EquipmentCard randomEq = null;
+        int randomInt = RandomUtil.randomInt(10);
+        // 30% 可以抽到装备
+        if (randomInt < 3) {
+            List<EquipmentCard> equipmentList = DesktopContext.getInstance().getEquipmentList();
+            int eqIndex = RandomUtil.randomInt(equipmentList.size());
+            randomEq = equipmentList.get(eqIndex);
+        }
+        return randomEq;
     }
 
 }
