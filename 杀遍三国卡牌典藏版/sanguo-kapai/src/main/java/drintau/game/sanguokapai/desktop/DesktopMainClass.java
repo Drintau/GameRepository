@@ -206,6 +206,10 @@ public class DesktopMainClass extends Application {
                     if (!desktopContext.getPeoplePlayer().isCurTurnPutUnitCardFlag()) {
                         root.getChildren().removeAll(scrim,cardSelectRoot);
                     }
+                } else if (userData instanceof EquipmentCard) {
+                    if (!desktopContext.getPeoplePlayer().isCurTurnPutEqCardFlag()) {
+                        root.getChildren().removeAll(scrim,cardSelectRoot);
+                    }
                 }
             }
         });

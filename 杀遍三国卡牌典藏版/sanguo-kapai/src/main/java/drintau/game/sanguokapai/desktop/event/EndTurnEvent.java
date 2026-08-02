@@ -133,9 +133,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                             if (!cells[curRowIndex][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getChildren().isEmpty()) {
                                 // 玩家有装备
                                 if (cells[curRowIndex][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
-                                    if (equipmentCard.getUnitType() == null) {
-                                        peopleEqAddAttack = equipmentCard.getAddAttack();
-                                    } else if (equipmentCard.getUnitType() == actionItem.getUnitCard().getUnitType()) {
+                                    if (equipmentCard.getUnitType() == CardConstants.UnitType.ALL || equipmentCard.getUnitType() == actionItem.getUnitCard().getUnitType()) {
                                         peopleEqAddAttack = equipmentCard.getAddAttack();
                                     }
                                 }
@@ -144,9 +142,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                             if (!cells[curRowIndex][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getChildren().isEmpty()) {
                                 // 电脑有装备
                                 if (cells[curRowIndex][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
-                                    if (equipmentCard.getUnitType() == null) {
-                                        aiEqAddAttack = equipmentCard.getAddAttack();
-                                    } else if (equipmentCard.getUnitType() == targetCellActionItem.getUnitCard().getUnitType()) {
+                                    if (equipmentCard.getUnitType() == CardConstants.UnitType.ALL || equipmentCard.getUnitType() == targetCellActionItem.getUnitCard().getUnitType()) {
                                         aiEqAddAttack = equipmentCard.getAddAttack();
                                     }
                                 }

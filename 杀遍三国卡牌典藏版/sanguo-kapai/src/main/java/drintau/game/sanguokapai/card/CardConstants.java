@@ -14,7 +14,8 @@ public final class CardConstants {
         ARMOR("甲士"),       // 甲 → 术
         MAGE("术士"),      // 术 → 盾
         SHIELD("盾卫"),   // 盾 → 射
-        SHOOTER("射手");   // 射 → 枪
+        SHOOTER("射手"),   // 射 → 枪
+        ALL("全部");
 
         public final String displayName;
 
