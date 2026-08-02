@@ -11,7 +11,10 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayDeque;
@@ -61,6 +64,19 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                             desktopContext.getPeoplePlayer().getHp().set(desktopContext.getPeoplePlayer().getHp().get() - lowerHP);
                             cells[curRowIndex][preColIndex].getChildren().clear();
                             cells[curRowIndex][preColIndex].setUserData(null);
+                            if (desktopContext.getPeoplePlayer().getHp().get() <= 0) {
+                                Rectangle scrim = new Rectangle();
+                                scrim.widthProperty().bind(desktopContext.getRoot().widthProperty());
+                                scrim.heightProperty().bind(desktopContext.getRoot().heightProperty());
+                                scrim.setFill(Color.color(1, 1, 1, 1));
+
+                                BorderPane gameOverPane = new BorderPane();
+                                Label gameOverLabel = new Label("游戏结束！很遗憾输了！请关闭程序重新游玩。");
+                                gameOverLabel.setFont(StyleConstants.font24);
+                                gameOverPane.setCenter(gameOverLabel);
+
+                                desktopContext.getRoot().getChildren().addAll(scrim, gameOverPane);
+                            }
                         });
                         actionItem.setFinishFlag(true);
                         ThreadSleepUtil.sleepSeconds(1L);
@@ -71,6 +87,19 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                             desktopContext.getAiPlayer().getHp().set(desktopContext.getAiPlayer().getHp().get() - lowerHP);
                             cells[curRowIndex][preColIndex].getChildren().clear();
                             cells[curRowIndex][preColIndex].setUserData(null);
+                            if (desktopContext.getAiPlayer().getHp().get() <= 0) {
+                                Rectangle scrim = new Rectangle();
+                                scrim.widthProperty().bind(desktopContext.getRoot().widthProperty());
+                                scrim.heightProperty().bind(desktopContext.getRoot().heightProperty());
+                                scrim.setFill(Color.color(1, 1, 1, 1));
+
+                                BorderPane gameOverPane = new BorderPane();
+                                Label gameOverLabel = new Label("游戏结束！恭喜赢了！请关闭程序重新游玩。");
+                                gameOverLabel.setFont(StyleConstants.font24);
+                                gameOverPane.setCenter(gameOverLabel);
+
+                                desktopContext.getRoot().getChildren().addAll(scrim, gameOverPane);
+                            }
                         });
                         actionItem.setFinishFlag(true);
                         ThreadSleepUtil.sleepSeconds(1L);
