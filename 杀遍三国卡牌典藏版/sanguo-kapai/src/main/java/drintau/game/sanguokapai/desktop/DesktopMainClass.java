@@ -69,19 +69,25 @@ public class DesktopMainClass extends Application {
                 int finalCol = col;
                 cell.setOnMouseClicked(e -> {
                     if (desktopContext.getPeoplePlayer().getSelectCard() != null) {
+                        boolean putFlag = false;
                         ToggleButton selectCard = desktopContext.getPeoplePlayer().getSelectCard();
                         Object userData = selectCard.getUserData();
                         if (userData instanceof UnitCard unitCard) {
-                            Label label = new Label(unitCard.getDescription());
-                            label.setBackground(StyleConstants.PLAYER_UNIT_BACKGROUND);
-                            label.setFont(StyleConstants.font16);
-                            cell.getChildren().add(label);
-                            desktopContext.getActionDeque().add(new ActionItem(false, finalRow, finalCol, unitCard));
+                            if (finalCol == DesktopContext.player1UnitInitColIndex) {
+                                Label label = new Label(unitCard.getDescription());
+                                label.setBackground(StyleConstants.PLAYER_UNIT_BACKGROUND);
+                                label.setFont(StyleConstants.font16);
+                                cell.getChildren().add(label);
+                                desktopContext.getActionDeque().add(new ActionItem(false, finalRow, finalCol, unitCard));
+                                putFlag  =true;
+                            }
                         }
 
-                        desktopContext.getPeoplePlayer().setSelectCard(null);
-                        desktopContext.getCardList().remove(selectCard);
-                        desktopContext.getCardSelectCenter().getChildren().remove(selectCard);
+                        if (putFlag) {
+                            desktopContext.getPeoplePlayer().setSelectCard(null);
+                            desktopContext.getCardList().remove(selectCard);
+                            desktopContext.getCardSelectCenter().getChildren().remove(selectCard);
+                        }
                     }
                 });
                 gridPane.add(cell, col ,row);
