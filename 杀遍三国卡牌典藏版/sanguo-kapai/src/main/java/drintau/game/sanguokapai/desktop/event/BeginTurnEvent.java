@@ -60,6 +60,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
             cells[rowIndex][aiEqColIndex].getChildren().add(label);
         }
 
+        rowIndex = RandomUtil.randomInt(3);
         // 抽单位
         UnitCard randomUnit = getRandomUnit();
         int aiUnitInitColIndex = desktopContext.getAiPlayer().getUnitInitColIndex();
