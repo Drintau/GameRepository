@@ -61,8 +61,6 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
             label.setFont(StyleConstants.font16);
             cells[rowIndex][aiEqColIndex].getChildren().add(label);
             cells[rowIndex][aiEqColIndex].setUserData(randomEquipment);
-
-            ThreadSleepUtil.sleepSeconds(1L);
         }
 
         rowIndex = RandomUtil.randomInt(3);
