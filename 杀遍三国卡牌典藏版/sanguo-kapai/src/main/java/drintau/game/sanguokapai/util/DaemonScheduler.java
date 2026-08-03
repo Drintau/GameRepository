@@ -18,7 +18,7 @@ public class DaemonScheduler {
     }
 
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2, r -> {
-        Thread t = new Thread(r, "am-daemon-scheduler");
+        Thread t = new Thread(r, "daemon-scheduler");
         t.setDaemon(true);  // 设置为守护线程
         return t;
     });
