@@ -24,6 +24,7 @@ public class PlayerData {
     private ToggleButton selectCard;
     private boolean curTurnPutUnitCardFlag;
     private boolean curTurnPutEqCardFlag;
+    private boolean curTurnPutTacticCardFlag;
 
     public boolean beAttack(int colIndex) {
         if (aiFlag) {

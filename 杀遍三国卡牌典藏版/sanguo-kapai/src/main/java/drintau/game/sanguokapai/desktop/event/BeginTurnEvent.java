@@ -98,6 +98,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
                     cardInfoLabel.setBackground(StyleConstants.WHITE_BACKGROUND);
                 } else if (randomCard instanceof TacticCard) {
                     cardInfoLabel.setBackground(StyleConstants.PLAYER_TACTIC_BACKGROUND);
+                    cardInfoLabel.setWrapText(true);
                 }
                 cardInfoLabel.setFont(StyleConstants.font16);
                 cardBtn.setGraphic(cardInfoLabel);

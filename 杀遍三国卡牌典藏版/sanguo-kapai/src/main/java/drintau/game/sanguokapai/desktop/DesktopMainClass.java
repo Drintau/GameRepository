@@ -1,6 +1,7 @@
 package drintau.game.sanguokapai.desktop;
 
 import drintau.game.sanguokapai.card.EquipmentCard;
+import drintau.game.sanguokapai.card.TacticCard;
 import drintau.game.sanguokapai.card.UnitCard;
 import drintau.game.sanguokapai.desktop.event.BeginTurnEvent;
 import drintau.game.sanguokapai.desktop.event.EndTurnEvent;
@@ -61,7 +62,7 @@ public class DesktopMainClass extends Application {
                     Label label = new Label("装备区");
                     label.setFont(StyleConstants.font16);
                     cell.getChildren().add(label);
-                } else if (col == DesktopContext.peoplePlayer1UnitInitColIndex){
+                } else if (col == DesktopContext.peoplePlayerUnitInitColIndex){
                     cell.setBackground(StyleConstants.PLAYER_UNIT_BACKGROUND);
                 } else if (col == DesktopContext.aiPlayerUnitInitColIndex) {
                     cell.setBackground(StyleConstants.RED_BACKGROUND);
@@ -77,7 +78,7 @@ public class DesktopMainClass extends Application {
                         ToggleButton selectCard = desktopContext.getPeoplePlayer().getSelectCard();
                         Object userData = selectCard.getUserData();
                         if (userData instanceof UnitCard unitCard) {
-                            if (finalCol == DesktopContext.peoplePlayer1UnitInitColIndex) {
+                            if (finalCol == DesktopContext.peoplePlayerUnitInitColIndex) {
                                 cell.getChildren().clear();
                                 cell.setUserData(null);
                                 ActionItem actionItem = new ActionItem(false, finalRow, finalCol, unitCard);
@@ -101,6 +102,12 @@ public class DesktopMainClass extends Application {
                                 cell.setUserData(equipmentCard);
                                 putFlag = true;
                                 desktopContext.getPeoplePlayer().setCurTurnPutEqCardFlag(true);
+                            }
+                        } else if (userData instanceof TacticCard tacticCard) {
+                            if (finalCol == DesktopContext.peoplePlayerUnitInitColIndex) {
+                                execTacticUI(tacticCard);
+                                putFlag = true;
+                                desktopContext.getPeoplePlayer().setCurTurnPutTacticCardFlag(true);
                             }
                         }
 
@@ -218,6 +225,10 @@ public class DesktopMainClass extends Application {
                     if (!desktopContext.getPeoplePlayer().isCurTurnPutEqCardFlag()) {
                         root.getChildren().removeAll(scrim,cardSelectRoot);
                     }
+                } else if (userData instanceof TacticCard) {
+                    if (!desktopContext.getPeoplePlayer().isCurTurnPutTacticCardFlag()) {
+                        root.getChildren().removeAll(scrim,cardSelectRoot);
+                    }
                 }
             }
         });
@@ -236,6 +247,40 @@ public class DesktopMainClass extends Application {
         stage.setHeight(600);
         stage.setResizable(false);
         stage.show();
+    }
+
+    private void execTacticUI(TacticCard tacticCard) {
+        DesktopContext desktopContext = DesktopContext.getInstance();
+        // 战斗界面
+        BorderPane execTacticRoot = new BorderPane();
+        execTacticRoot.setPadding(new Insets(10));
+        execTacticRoot.setBackground(StyleConstants.WHITE_BACKGROUND);
+        execTacticRoot.setPrefWidth(300);
+        execTacticRoot.setPrefHeight(220);
+        execTacticRoot.setMinSize(300, 220);
+        execTacticRoot.setMaxSize(300, 220);
+
+        Label execTacticTitle = new Label("执行计策");
+        execTacticTitle.setFont(StyleConstants.font24);
+        execTacticRoot.setTop(execTacticTitle);
+        BorderPane.setAlignment(execTacticTitle, Pos.CENTER);
+
+        Label execTacticCenter = new Label(tacticCard.getDescription());
+        execTacticCenter.setFont(StyleConstants.font16);
+        execTacticRoot.setCenter(execTacticCenter);
+
+        HBox execTacticBottom = new HBox(10);
+        execTacticBottom.setAlignment(Pos.CENTER);
+        Button execTacticSureButton = new Button("确认");
+        execTacticSureButton.setFont(StyleConstants.font20);
+        execTacticSureButton.setOnAction(e -> {
+            tacticCard.exec(DesktopContext.getInstance().getPeoplePlayer());
+            desktopContext.getRoot().getChildren().remove(execTacticRoot);
+        });
+        execTacticBottom.getChildren().addAll(execTacticSureButton);
+        execTacticRoot.setBottom(execTacticBottom);
+
+        desktopContext.getRoot().getChildren().add(execTacticRoot);
     }
 
 }

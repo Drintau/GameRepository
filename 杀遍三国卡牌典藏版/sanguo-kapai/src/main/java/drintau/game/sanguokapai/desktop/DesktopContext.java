@@ -38,7 +38,7 @@ public class DesktopContext {
     public static final int cols = 14; // 列
     public static final int peoplePlayerEqColIndex = 0; // 玩家装备列
     public static final int aiPlayerEqColIndex = 13; // 电脑装备列
-    public static final int peoplePlayer1UnitInitColIndex = 1; // 玩家出兵列
+    public static final int peoplePlayerUnitInitColIndex = 1; // 玩家出兵列
     public static final int aiPlayerUnitInitColIndex = 12; // 电脑出兵列
     public static final int moveMinColIndex = 2; // 单位移动最小列
     public static final int moveMaxColIndex = 11; // 单位移动最大列
@@ -98,7 +98,7 @@ public class DesktopContext {
 
         peoplePlayer.setAiFlag(false);
         peoplePlayer.setEqColIndex(peoplePlayerEqColIndex);
-        peoplePlayer.setUnitInitColIndex(peoplePlayer1UnitInitColIndex);
+        peoplePlayer.setUnitInitColIndex(peoplePlayerUnitInitColIndex);
         peoplePlayerHpLabel.textProperty().bind(
                 Bindings.format("玩家 生命值：%d / %d", peoplePlayer.getHp(), peoplePlayer.getMaxHp())
         );
