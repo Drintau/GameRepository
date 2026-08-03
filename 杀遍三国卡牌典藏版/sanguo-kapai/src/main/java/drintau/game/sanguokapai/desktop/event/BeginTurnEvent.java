@@ -66,11 +66,15 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         // 抽单位
         UnitCard randomUnit = getRandomUnit();
         int aiUnitInitColIndex = desktopContext.getAiPlayer().getUnitInitColIndex();
+        ActionItem actionItem = new ActionItem(true, rowIndex, aiUnitInitColIndex, randomUnit);
+        cells[rowIndex][aiUnitInitColIndex].getChildren().clear();
+        cells[rowIndex][aiUnitInitColIndex].setUserData(null);
         Label label = new Label(randomUnit.getDescription());
         label.setBackground(StyleConstants.RED_BACKGROUND);
         label.setFont(StyleConstants.font16);
         cells[rowIndex][aiUnitInitColIndex].getChildren().add(label);
-        desktopContext.getActionDeque().add(new ActionItem(true, rowIndex, aiUnitInitColIndex, randomUnit));
+        cells[rowIndex][aiUnitInitColIndex].setUserData(actionItem);
+        desktopContext.getActionDeque().add(actionItem);
     }
 
     private void peoplePlayGame() {

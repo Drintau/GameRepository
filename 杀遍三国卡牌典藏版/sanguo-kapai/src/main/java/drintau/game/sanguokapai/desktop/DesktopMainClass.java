@@ -76,11 +76,15 @@ public class DesktopMainClass extends Application {
                         Object userData = selectCard.getUserData();
                         if (userData instanceof UnitCard unitCard) {
                             if (finalCol == DesktopContext.player1UnitInitColIndex) {
+                                cell.getChildren().clear();
+                                cell.setUserData(null);
+                                ActionItem actionItem = new ActionItem(false, finalRow, finalCol, unitCard);
                                 Label label = new Label(unitCard.getDescription());
                                 label.setBackground(StyleConstants.PLAYER_UNIT_BACKGROUND);
                                 label.setFont(StyleConstants.font16);
                                 cell.getChildren().add(label);
-                                desktopContext.getActionDeque().add(new ActionItem(false, finalRow, finalCol, unitCard));
+                                cell.setUserData(actionItem);
+                                desktopContext.getActionDeque().add(actionItem);
                                 putFlag = true;
                                 desktopContext.getPeoplePlayer().setCurTurnPutUnitCardFlag(true);
                             }
