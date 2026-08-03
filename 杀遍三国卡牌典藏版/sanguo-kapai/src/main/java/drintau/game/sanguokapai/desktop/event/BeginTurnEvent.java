@@ -101,7 +101,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
                 }, 2L, TimeUnit.SECONDS);
             });
 
-            ThreadSleepUtil.sleepSeconds(3L);
+            ThreadSleepUtil.sleepSeconds(4L);
         }
 
         int rowIndex = RandomUtil.randomInt(3);
