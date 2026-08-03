@@ -61,7 +61,10 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                         nextColIndex = nextColIndex + 1;
                     }
                     boolean moveSuccessFlag = move(actionItem, curRowIndex, nextColIndex);
-                    if (!moveSuccessFlag) {
+                    if (moveSuccessFlag) {
+                        actionItem.setCurColIndex(nextColIndex);
+                    } else {
+                        // 没有移动成功时，actionItem还在原地，不用更新 colIndex
                         i--;
                     }
                 }
@@ -156,10 +159,9 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                 synchronized (desktopContext.getBattleLock()) {
                     try {
                         desktopContext.getBattleLock().wait();
-                    } catch (InterruptedException e) {
+                    } catch (Exception e) {
                         log.error("战斗出错", e);
-                        Thread.currentThread().interrupt();
-                        return false;
+                        throw new RuntimeException(e);
                     }
                 }
                 ThreadSleepUtil.sleepSeconds(1L);
@@ -197,6 +199,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                 ThreadSleepUtil.sleepSeconds(1L);
                 return true;
             } else {
+                // 要跳过下一格再移动时，actionItem 里面的列不能变，其他情况要变
                 return false;
             }
         }
