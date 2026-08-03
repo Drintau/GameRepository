@@ -69,6 +69,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                     }
                 }
                 if (!actionItem.isDeadFlag()) {
+                    actionItem.setMoveFinishFlag(false);
                     desktopContext.getNextActionDeque().add(actionItem);
                 }
             }
