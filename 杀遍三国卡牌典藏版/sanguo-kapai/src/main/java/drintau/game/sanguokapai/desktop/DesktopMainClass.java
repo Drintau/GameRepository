@@ -39,15 +39,15 @@ public class DesktopMainClass extends Application {
         turnCountLabel.textProperty().bind(
                 Bindings.format("回合数：%d", desktopContext.getTurnCount())
         );
-        Label player1HpLabel = new Label();
-        player1HpLabel.setFont(StyleConstants.font24);
-        desktopContext.setPlayer1HpLabel(player1HpLabel);
-        Label player2HpLabel = new Label();
-        player2HpLabel.setFont(StyleConstants.font24);
-        desktopContext.setPlayer2HpLabel(player2HpLabel);
-        gameBoardPaneTop.setLeft(player1HpLabel);
+        Label peoplePlayerHpLabel = new Label();
+        peoplePlayerHpLabel.setFont(StyleConstants.font24);
+        desktopContext.setPeoplePlayerHpLabel(peoplePlayerHpLabel);
+        Label aiPlayerHpLabel = new Label();
+        aiPlayerHpLabel.setFont(StyleConstants.font24);
+        desktopContext.setAiPlayerHpLabel(aiPlayerHpLabel);
+        gameBoardPaneTop.setLeft(peoplePlayerHpLabel);
         gameBoardPaneTop.setCenter(turnCountLabel);
-        gameBoardPaneTop.setRight(player2HpLabel);
+        gameBoardPaneTop.setRight(aiPlayerHpLabel);
 
         StackPane[][] cells = new StackPane[DesktopContext.rows][DesktopContext.cols];
         desktopContext.setCells(cells);
@@ -56,12 +56,14 @@ public class DesktopMainClass extends Application {
             for (int col = 0; col < DesktopContext.cols; col++) {
                 StackPane cell = new StackPane();
                 cell.setBorder(StyleConstants.CELL_BORDER);
-                if (col == DesktopContext.player1EqColIndex || col == DesktopContext.player2EqColIndex) {
+                if (col == DesktopContext.peoplePlayerEqColIndex || col == DesktopContext.aiPlayerEqColIndex) {
                     cell.setBackground(StyleConstants.WHITE_BACKGROUND);
-                    cell.getChildren().add(new Label("装备区"));
-                } else if (col == DesktopContext.player1UnitInitColIndex){
+                    Label label = new Label("装备区");
+                    label.setFont(StyleConstants.font16);
+                    cell.getChildren().add(label);
+                } else if (col == DesktopContext.peoplePlayer1UnitInitColIndex){
                     cell.setBackground(StyleConstants.PLAYER_UNIT_BACKGROUND);
-                } else if (col == DesktopContext.player2UnitInitColIndex) {
+                } else if (col == DesktopContext.aiPlayerUnitInitColIndex) {
                     cell.setBackground(StyleConstants.RED_BACKGROUND);
                 } else {
                     cell.setBackground(StyleConstants.LIGHTGRAY_BACKGROUND);
@@ -75,7 +77,7 @@ public class DesktopMainClass extends Application {
                         ToggleButton selectCard = desktopContext.getPeoplePlayer().getSelectCard();
                         Object userData = selectCard.getUserData();
                         if (userData instanceof UnitCard unitCard) {
-                            if (finalCol == DesktopContext.player1UnitInitColIndex) {
+                            if (finalCol == DesktopContext.peoplePlayer1UnitInitColIndex) {
                                 cell.getChildren().clear();
                                 cell.setUserData(null);
                                 ActionItem actionItem = new ActionItem(false, finalRow, finalCol, unitCard);
@@ -89,7 +91,7 @@ public class DesktopMainClass extends Application {
                                 desktopContext.getPeoplePlayer().setCurTurnPutUnitCardFlag(true);
                             }
                         } else if (userData instanceof EquipmentCard equipmentCard) {
-                            if (finalCol == DesktopContext.player1EqColIndex) {
+                            if (finalCol == DesktopContext.peoplePlayerEqColIndex) {
                                 cell.getChildren().clear();
                                 cell.setUserData(null);
                                 Label label = new Label(equipmentCard.getDescription());
@@ -179,9 +181,9 @@ public class DesktopMainClass extends Application {
         attackRoot.setPadding(new Insets(10));
         attackRoot.setBackground(StyleConstants.WHITE_BACKGROUND);
         attackRoot.setPrefWidth(300);
-        attackRoot.setPrefHeight(200);
-        attackRoot.setMinSize(300, 200);
-        attackRoot.setMaxSize(300, 200);
+        attackRoot.setPrefHeight(220);
+        attackRoot.setMinSize(300, 220);
+        attackRoot.setMaxSize(300, 220);
 
         Label attackTitle = new Label("战斗");
         attackTitle.setFont(StyleConstants.font24);
@@ -234,7 +236,6 @@ public class DesktopMainClass extends Application {
         stage.setHeight(600);
         stage.setResizable(false);
         stage.show();
-
     }
 
 }

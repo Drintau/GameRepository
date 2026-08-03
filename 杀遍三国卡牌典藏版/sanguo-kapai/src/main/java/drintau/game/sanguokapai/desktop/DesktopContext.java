@@ -38,10 +38,10 @@ public class DesktopContext {
 
     public static final int rows = 3; // 行
     public static final int cols = 14; // 列
-    public static final int player1EqColIndex = 0; // 玩家1装备列
-    public static final int player2EqColIndex = 13; // 玩家2装备列
-    public static final int player1UnitInitColIndex = 1; // 玩家1出兵列
-    public static final int player2UnitInitColIndex = 12; // 玩家2出兵列
+    public static final int peoplePlayerEqColIndex = 0; // 玩家装备列
+    public static final int aiPlayerEqColIndex = 13; // 电脑装备列
+    public static final int peoplePlayer1UnitInitColIndex = 1; // 玩家出兵列
+    public static final int aiPlayerUnitInitColIndex = 12; // 电脑出兵列
     public static final int moveMinColIndex = 2; // 单位移动最小列
     public static final int moveMaxColIndex = 11; // 单位移动最大列
 
@@ -56,8 +56,9 @@ public class DesktopContext {
     // 选卡牌界面的控件
     private HBox cardSelectCenter;
     private List<ToggleButton> cardList = new ArrayList<>(5);
-    // 战斗界面需要的控件
+    // 根节点
     private StackPane root;
+    // 战斗界面需要的控件
     private BorderPane attackRoot;
     private final Object battleLock = new Object();
 
@@ -67,15 +68,15 @@ public class DesktopContext {
     private List<UnitCard> heroList = HeroData.getAllHeroes();
     private List<UnitCard> soldierList = SoldierData.getAllSoldiers();
     private List<EquipmentCard> equipmentList = EquipmentData.getAllEquipments();
-
+    // 兵种克制关系
     public EnumMap<CardConstants.UnitType, CardConstants.UnitType> ADVANTAGE_MAP = new EnumMap<>(CardConstants.UnitType.class);
 
     private ArrayDeque<PlayerData> playerDeque = new ArrayDeque<>();
     private ArrayDeque<PlayerData> nextPlayerDeque = new ArrayDeque<>();
     private PlayerData aiPlayer = new PlayerData();
     private PlayerData peoplePlayer = new PlayerData();
-    private Label player1HpLabel;
-    private Label player2HpLabel;
+    private Label peoplePlayerHpLabel;
+    private Label aiPlayerHpLabel;
 
     private boolean gameOverFlag;
 
@@ -90,16 +91,16 @@ public class DesktopContext {
 
     public void playerInit() {
         aiPlayer.setAiFlag(true);
-        aiPlayer.setEqColIndex(player2EqColIndex);
-        aiPlayer.setUnitInitColIndex(player2UnitInitColIndex);
-        player2HpLabel.textProperty().bind(
+        aiPlayer.setEqColIndex(aiPlayerEqColIndex);
+        aiPlayer.setUnitInitColIndex(aiPlayerUnitInitColIndex);
+        aiPlayerHpLabel.textProperty().bind(
                 Bindings.format("电脑 生命值：%d / %d", aiPlayer.getHp(), aiPlayer.getMaxHp())
         );
 
         peoplePlayer.setAiFlag(false);
-        peoplePlayer.setEqColIndex(player1EqColIndex);
-        peoplePlayer.setUnitInitColIndex(player1UnitInitColIndex);
-        player1HpLabel.textProperty().bind(
+        peoplePlayer.setEqColIndex(peoplePlayerEqColIndex);
+        peoplePlayer.setUnitInitColIndex(peoplePlayer1UnitInitColIndex);
+        peoplePlayerHpLabel.textProperty().bind(
                 Bindings.format("玩家 生命值：%d / %d", peoplePlayer.getHp(), peoplePlayer.getMaxHp())
         );
 
