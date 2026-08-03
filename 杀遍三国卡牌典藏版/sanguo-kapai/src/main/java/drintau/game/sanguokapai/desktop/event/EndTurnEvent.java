@@ -63,9 +63,6 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                     boolean moveSuccessFlag = move(actionItem, curRowIndex, nextColIndex);
                     if (moveSuccessFlag) {
                         actionItem.setCurColIndex(nextColIndex);
-                    } else {
-                        // 没有移动成功时，actionItem还在原地，不用更新 colIndex
-                        i--;
                     }
                 }
                 if (!actionItem.isFinishFlag()) {
@@ -85,7 +82,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
         }, 1L, TimeUnit.SECONDS);
     }
 
-    // 返回true，真实移动了；返回false，要进入下一个移动，移动消耗+1
+    // 返回true，真实移动了；返回false，要进入下一个移动
     private boolean move(ActionItem actionItem, int curRowIndex, int nextColIndex) {
         DesktopContext desktopContext = DesktopContext.getInstance();
         StackPane[][] cells = desktopContext.getCells();
