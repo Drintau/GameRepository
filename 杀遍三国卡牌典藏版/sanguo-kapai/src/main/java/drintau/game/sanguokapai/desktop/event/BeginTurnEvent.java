@@ -8,18 +8,25 @@ import drintau.game.sanguokapai.data.PlayerData;
 import drintau.game.sanguokapai.desktop.ActionItem;
 import drintau.game.sanguokapai.desktop.DesktopContext;
 import drintau.game.sanguokapai.desktop.StyleConstants;
+import drintau.game.sanguokapai.util.DaemonScheduler;
 import drintau.game.sanguokapai.util.RandomUtil;
 import drintau.game.sanguokapai.util.ThreadSleepUtil;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class BeginTurnEvent implements EventHandler<ActionEvent> {
@@ -34,20 +41,66 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
 
         desktopContext.getPeoplePlayer().setCurTurnPutUnitCardFlag(false);
         desktopContext.getPeoplePlayer().setCurTurnPutEqCardFlag(false);
+        desktopContext.getPeoplePlayer().setCurTurnPutTacticCardFlag(false);
 
         // 轮流行动
-        for (PlayerData playerData : desktopContext.getPlayerDeque()) {
-            if (playerData.isAiFlag()) {
-                aiPlayGame();
-            } else {
-                peoplePlayGame();
+        DaemonScheduler.getInstance().submitOnceDelayTask(() -> {
+            for (PlayerData playerData : desktopContext.getPlayerDeque()) {
+                if (playerData.isAiFlag()) {
+                    aiPlayGame();
+                } else {
+                    peoplePlayGame();
+                }
             }
-        }
+        }, 1L, TimeUnit.SECONDS);
     }
 
     private void aiPlayGame() {
         DesktopContext desktopContext = DesktopContext.getInstance();
         StackPane[][] cells = desktopContext.getCells();
+
+        // 抽计策
+        TacticCard randomTactic = getRandomTactic();
+        if (randomTactic != null) {
+            Platform.runLater(() -> {
+                // 计策界面
+                BorderPane execTacticRoot = new BorderPane();
+                execTacticRoot.setPadding(new Insets(10));
+                execTacticRoot.setBackground(StyleConstants.WHITE_BACKGROUND);
+                execTacticRoot.setPrefWidth(300);
+                execTacticRoot.setPrefHeight(220);
+                execTacticRoot.setMinSize(300, 220);
+                execTacticRoot.setMaxSize(300, 220);
+
+                Label execTacticTitle = new Label("电脑执行计策");
+                execTacticTitle.setFont(StyleConstants.font24);
+                execTacticRoot.setTop(execTacticTitle);
+                BorderPane.setAlignment(execTacticTitle, Pos.CENTER);
+
+                Label execTacticCenter = new Label(randomTactic.getDescription());
+                execTacticCenter.setFont(StyleConstants.font16);
+                execTacticRoot.setCenter(execTacticCenter);
+
+                HBox execTacticBottom = new HBox(10);
+                execTacticBottom.setAlignment(Pos.CENTER);
+                Button execTacticSureButton = new Button("确认");
+                execTacticSureButton.setFont(StyleConstants.font20);
+                execTacticSureButton.setOnAction(e -> {
+                    randomTactic.exec(DesktopContext.getInstance().getAiPlayer());
+                    desktopContext.getRoot().getChildren().remove(execTacticRoot);
+                });
+                execTacticBottom.getChildren().addAll(execTacticSureButton);
+                execTacticRoot.setBottom(execTacticBottom);
+
+                desktopContext.getRoot().getChildren().add(execTacticRoot);
+
+                DaemonScheduler.getInstance().submitOnceDelayTask(() -> {
+                    Platform.runLater(execTacticSureButton::fire);
+                }, 2L, TimeUnit.SECONDS);
+            });
+
+            ThreadSleepUtil.sleepSeconds(3L);
+        }
 
         int rowIndex = RandomUtil.randomInt(3);
 
@@ -55,13 +108,17 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         EquipmentCard randomEquipment = getRandomEquipment();
         if (randomEquipment != null) {
             int aiEqColIndex = desktopContext.getAiPlayer().getEqColIndex();
-            cells[rowIndex][aiEqColIndex].getChildren().clear();
-            cells[rowIndex][aiEqColIndex].setUserData(null);
-            Label label = new Label(randomEquipment.getDescription());
-            label.setBackground(StyleConstants.WHITE_BACKGROUND);
-            label.setFont(StyleConstants.font16);
-            cells[rowIndex][aiEqColIndex].getChildren().add(label);
-            cells[rowIndex][aiEqColIndex].setUserData(randomEquipment);
+            int finalRowIndex = rowIndex;
+            Platform.runLater(() -> {
+                cells[finalRowIndex][aiEqColIndex].getChildren().clear();
+                cells[finalRowIndex][aiEqColIndex].setUserData(null);
+                Label label = new Label(randomEquipment.getDescription());
+                label.setBackground(StyleConstants.WHITE_BACKGROUND);
+                label.setFont(StyleConstants.font16);
+                cells[finalRowIndex][aiEqColIndex].getChildren().add(label);
+                cells[finalRowIndex][aiEqColIndex].setUserData(randomEquipment);
+            });
+            ThreadSleepUtil.sleepSeconds(1L);
         }
 
         rowIndex = RandomUtil.randomInt(3);
@@ -69,13 +126,16 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         UnitCard randomUnit = getRandomUnit();
         int aiUnitInitColIndex = desktopContext.getAiPlayer().getUnitInitColIndex();
         ActionItem actionItem = new ActionItem(true, rowIndex, aiUnitInitColIndex, randomUnit);
-        cells[rowIndex][aiUnitInitColIndex].getChildren().clear();
-        cells[rowIndex][aiUnitInitColIndex].setUserData(null);
-        Label label = new Label(randomUnit.getDescription());
-        label.setBackground(StyleConstants.RED_BACKGROUND);
-        label.setFont(StyleConstants.font16);
-        cells[rowIndex][aiUnitInitColIndex].getChildren().add(label);
-        cells[rowIndex][aiUnitInitColIndex].setUserData(actionItem);
+        int finalRowIndex1 = rowIndex;
+        Platform.runLater(() -> {
+            cells[finalRowIndex1][aiUnitInitColIndex].getChildren().clear();
+            cells[finalRowIndex1][aiUnitInitColIndex].setUserData(null);
+            Label label = new Label(randomUnit.getDescription());
+            label.setBackground(StyleConstants.RED_BACKGROUND);
+            label.setFont(StyleConstants.font16);
+            cells[finalRowIndex1][aiUnitInitColIndex].getChildren().add(label);
+            cells[finalRowIndex1][aiUnitInitColIndex].setUserData(actionItem);
+        });
         desktopContext.getActionDeque().add(actionItem);
     }
 

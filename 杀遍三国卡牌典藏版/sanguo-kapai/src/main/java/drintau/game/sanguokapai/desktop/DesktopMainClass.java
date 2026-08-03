@@ -251,7 +251,7 @@ public class DesktopMainClass extends Application {
 
     private void execTacticUI(TacticCard tacticCard) {
         DesktopContext desktopContext = DesktopContext.getInstance();
-        // 战斗界面
+        // 计策界面
         BorderPane execTacticRoot = new BorderPane();
         execTacticRoot.setPadding(new Insets(10));
         execTacticRoot.setBackground(StyleConstants.WHITE_BACKGROUND);
