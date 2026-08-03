@@ -8,6 +8,7 @@ import java.util.List;
 public final class SoldierData {
 
     public static final UnitCard CHANG_QIANG_BING = new UnitCard("长枪兵", CardConstants.UnitType.GUNNER, 1, 2, 4);
+    public static final UnitCard CHANG_MAO_BING = new UnitCard("长矛兵", CardConstants.UnitType.GUNNER, 1, 2, 4);
 
     public static final UnitCard SHAO_JI = new UnitCard("哨骑", CardConstants.UnitType.CAVALRY, 2, 3, 4);
     public static final UnitCard XI_LIANG_YOU_QI = new UnitCard("西凉游骑", CardConstants.UnitType.CAVALRY, 3, 4, 5);
@@ -23,11 +24,12 @@ public final class SoldierData {
     public static final UnitCard ZHONG_DUN_BING = new UnitCard("重盾兵", CardConstants.UnitType.SHIELD, 2, 1, 4);
 
     public static final UnitCard GONG_JIAN_SHOU = new UnitCard("弓箭手", CardConstants.UnitType.SHOOTER, 2, 2, 3);
-    public static final UnitCard LIAN_NU_SHOU = new UnitCard("连弩手", CardConstants.UnitType.SHOOTER, 2, 1, 4);
+    public static final UnitCard LIAN_NU_SHOU = new UnitCard("连弩手", CardConstants.UnitType.SHOOTER, 2, 2, 4);
 
     public static List<UnitCard> getAllSoldiers() {
         return List.of(
                 CHANG_QIANG_BING,
+                CHANG_MAO_BING,
                 SHAO_JI,
                 XI_LIANG_YOU_QI,
                 JING_RUI_TIE_QI,

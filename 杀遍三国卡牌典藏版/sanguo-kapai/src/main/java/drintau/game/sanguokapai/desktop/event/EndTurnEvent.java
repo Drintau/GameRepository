@@ -86,7 +86,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
         }, 1L, TimeUnit.SECONDS);
     }
 
-    // 返回true，真实移动了；返回false，要进入下一个移动
+    // 返回true，当前位置有变化（即真实移动）；返回false，当前位置无变化（未移动，但对应任务可能已经完成）。返回值影响actionItem的curColIndex是否要变化
     private boolean move(ActionItem actionItem, int curRowIndex, int nextColIndex) {
         DesktopContext desktopContext = DesktopContext.getInstance();
         StackPane[][] cells = desktopContext.getCells();
@@ -108,7 +108,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                 actionItem.setDeadFlag(true);
                 actionItem.setMoveFinishFlag(true);
                 ThreadSleepUtil.sleepSeconds(1L);
-                return true;
+                return false;
             } else if (!actionItem.isAiPlayer() && desktopContext.getAiPlayer().beAttack(nextColIndex)) {
                 int eqAddAttack = calcEqAddAttack(actionItem);
                 actionItem.setAddAttack(eqAddAttack);
@@ -123,7 +123,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                 actionItem.setDeadFlag(true);
                 actionItem.setMoveFinishFlag(true);
                 ThreadSleepUtil.sleepSeconds(1L);
-                return true;
+                return false;
             }
             // 移动
             moveUI(actionItem, cell);
@@ -183,9 +183,12 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                     actionItem.setMoveFinishFlag(true);
                     // 如果该格子是敌方的本阵，则不能移入
                     if (desktopContext.getPeoplePlayer().beAttack(nextColIndex) || desktopContext.getAiPlayer().beAttack(nextColIndex)) {
-                        return true;
+                        ThreadSleepUtil.sleepSeconds(1L);
+                        return false;
                     }
                     moveUI(actionItem, cell);
+                    ThreadSleepUtil.sleepSeconds(1L);
+                    return true;
                 } else if (u1Attack < u2Attack) {
                     actionItem.setDeadFlag(true);
                     actionItem.setMoveFinishFlag(true);
@@ -194,6 +197,8 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                         cells[curRowIndex][removeColIndex].getChildren().clear();
                         cells[curRowIndex][removeColIndex].setUserData(null);
                     });
+                    ThreadSleepUtil.sleepSeconds(1L);
+                    return false;
                 } else {
                     actionItem.setDeadFlag(true);
                     actionItem.setMoveFinishFlag(true);
@@ -206,9 +211,9 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                         cells[curRowIndex][removeColIndex2].getChildren().clear();
                         cells[curRowIndex][removeColIndex2].setUserData(null);
                     });
+                    ThreadSleepUtil.sleepSeconds(1L);
+                    return false;
                 }
-                ThreadSleepUtil.sleepSeconds(1L);
-                return true;
             } else {
                 // 要跳过下一格再移动时，actionItem 里面的列不能变，其他情况要变
                 return false;
