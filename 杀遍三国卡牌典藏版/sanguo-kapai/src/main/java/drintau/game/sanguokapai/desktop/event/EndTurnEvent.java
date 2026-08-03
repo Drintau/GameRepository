@@ -173,6 +173,11 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                         cells[curRowIndex][removeColIndex].getChildren().clear();
                         cells[curRowIndex][removeColIndex].setUserData(null);
                     });
+                    // 如果该格子是敌方的本阵，则不能移入
+                    if (desktopContext.getPeoplePlayer().beAttack(nextColIndex) || desktopContext.getAiPlayer().beAttack(nextColIndex)) {
+                        actionItem.setFinishFlag(true);
+                        return true;
+                    }
                     moveUI(actionItem, cell);
                 } else if (u1Attack < u2Attack) {
                     actionItem.setFinishFlag(true);
