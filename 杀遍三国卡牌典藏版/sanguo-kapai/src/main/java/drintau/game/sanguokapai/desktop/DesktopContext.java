@@ -5,6 +5,7 @@ import drintau.game.sanguokapai.card.EquipmentCard;
 import drintau.game.sanguokapai.card.TacticCard;
 import drintau.game.sanguokapai.card.UnitCard;
 import drintau.game.sanguokapai.data.*;
+import drintau.game.sanguokapai.desktop.event.GameOverEvent;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -78,6 +79,7 @@ public class DesktopContext {
     private Label aiPlayerHpLabel;
 
     private boolean gameOverFlag;
+    private GameOverEvent gameOverEvent = new GameOverEvent();
 
     public void ruleInit() {
         ADVANTAGE_MAP.put(CardConstants.UnitType.GUNNER, CardConstants.UnitType.CAVALRY);   // 枪 → 骑

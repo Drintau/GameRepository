@@ -3,6 +3,7 @@ package drintau.game.sanguokapai.card.tacticimpl;
 import drintau.game.sanguokapai.card.TacticCard;
 import drintau.game.sanguokapai.data.PlayerData;
 import drintau.game.sanguokapai.desktop.DesktopContext;
+import javafx.application.Platform;
 
 public class XiuYangShengXi extends TacticCard {
 
@@ -10,10 +11,24 @@ public class XiuYangShengXi extends TacticCard {
     public void exec(PlayerData playerData) {
         if (playerData.isAiFlag()) {
             PlayerData aiPlayer = DesktopContext.getInstance().getAiPlayer();
-            aiPlayer.getHp().set(aiPlayer.getHp().get() + 5);
+            int nowHp = aiPlayer.getHp().get() + 5;
+            if (nowHp > aiPlayer.getMaxHp().get()) {
+                nowHp = aiPlayer.getMaxHp().get();
+            }
+            int finalNowHp = nowHp;
+            Platform.runLater(() -> {
+                aiPlayer.getHp().set(finalNowHp);
+            });
         } else {
             PlayerData peoplePlayer = DesktopContext.getInstance().getPeoplePlayer();
-            peoplePlayer.getHp().set(peoplePlayer.getHp().get() + 5);
+            int nowHp = peoplePlayer.getHp().get() + 5;
+            if (nowHp > peoplePlayer.getMaxHp().get()) {
+                nowHp = peoplePlayer.getMaxHp().get();
+            }
+            int finalNowHp = nowHp;
+            Platform.runLater(() -> {
+                peoplePlayer.getHp().set(finalNowHp);
+            });
         }
     }
 
