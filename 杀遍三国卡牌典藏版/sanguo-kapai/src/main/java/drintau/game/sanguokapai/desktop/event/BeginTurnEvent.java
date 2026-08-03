@@ -36,8 +36,6 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         DesktopContext desktopContext = DesktopContext.getInstance();
 
         desktopContext.getBeginTurn().setDisable(true);
-        desktopContext.getSelectCard().setDisable(false);
-        desktopContext.getEndTurn().setDisable(false);
 
         desktopContext.getPeoplePlayer().setCurTurnPutUnitCardFlag(false);
         desktopContext.getPeoplePlayer().setCurTurnPutEqCardFlag(false);
@@ -49,7 +47,11 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
                 if (playerData.isAiFlag()) {
                     aiPlayGame();
                 } else {
-                    peoplePlayGame();
+                    Platform.runLater(() -> {
+                        desktopContext.getSelectCard().setDisable(false);
+                        desktopContext.getEndTurn().setDisable(false);
+                        peoplePlayGame();
+                    });
                 }
             }
         }, 1L, TimeUnit.SECONDS);
