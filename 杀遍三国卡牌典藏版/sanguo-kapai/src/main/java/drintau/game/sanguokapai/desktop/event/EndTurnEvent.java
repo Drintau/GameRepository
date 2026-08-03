@@ -178,6 +178,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                         cells[curRowIndex][removeColIndex].getChildren().clear();
                         cells[curRowIndex][removeColIndex].setUserData(null);
                     });
+                    // 提前标记，后面的移动还是正常执行一次的
                     actionItem.setMoveFinishFlag(true);
                     // 如果该格子是敌方的本阵，则不能移入
                     if (desktopContext.getPeoplePlayer().beAttack(nextColIndex) || desktopContext.getAiPlayer().beAttack(nextColIndex)) {
