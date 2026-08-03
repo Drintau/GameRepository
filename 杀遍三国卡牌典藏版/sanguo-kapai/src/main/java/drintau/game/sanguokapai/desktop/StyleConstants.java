@@ -11,6 +11,7 @@ public final class StyleConstants {
     public static final Background WHITE_BACKGROUND = Background.fill(Color.web("#FFFFFF", 1.0));
     public static final Background RED_BACKGROUND = Background.fill(Color.web("#FF0000", 0.3));
     public static final Background PLAYER_UNIT_BACKGROUND = Background.fill(Color.web("#FFFF00", 0.3));
+    public static final Background PLAYER_TACTIC_BACKGROUND = Background.fill(Color.web("#00FFFF", 0.3));
 
     public static final Border CELL_BORDER = new Border(new BorderStroke(Color.BEIGE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1)));
 

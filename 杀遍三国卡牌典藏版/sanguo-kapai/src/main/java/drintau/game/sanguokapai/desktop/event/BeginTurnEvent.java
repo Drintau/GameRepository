@@ -2,6 +2,7 @@ package drintau.game.sanguokapai.desktop.event;
 
 import drintau.game.sanguokapai.card.AbstractCard;
 import drintau.game.sanguokapai.card.EquipmentCard;
+import drintau.game.sanguokapai.card.TacticCard;
 import drintau.game.sanguokapai.card.UnitCard;
 import drintau.game.sanguokapai.data.PlayerData;
 import drintau.game.sanguokapai.desktop.ActionItem;
@@ -95,6 +96,8 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
                     cardInfoLabel.setBackground(StyleConstants.PLAYER_UNIT_BACKGROUND);
                 } else if (randomCard instanceof EquipmentCard) {
                     cardInfoLabel.setBackground(StyleConstants.WHITE_BACKGROUND);
+                } else if (randomCard instanceof TacticCard) {
+                    cardInfoLabel.setBackground(StyleConstants.PLAYER_TACTIC_BACKGROUND);
                 }
                 cardInfoLabel.setFont(StyleConstants.font16);
                 cardBtn.setGraphic(cardInfoLabel);
@@ -125,16 +128,22 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         int randomInt = RandomUtil.randomInt(100);
 
         if (randomInt < 10) {
-            // 英雄抽取概率10%
-            List<UnitCard> heroList = DesktopContext.getInstance().getHeroList();
-            int heroIndex = RandomUtil.randomInt(heroList.size());
-            randomCard = heroList.get(heroIndex);
+            // 策略抽取概率
+            List<TacticCard> tacticList = DesktopContext.getInstance().getTacticList();
+            int tacticIndex = RandomUtil.randomInt(tacticList.size());
+            randomCard = tacticList.get(tacticIndex);
         } else if (randomInt < 30) {
             // 装备抽取概率
             List<EquipmentCard> equipmentList = DesktopContext.getInstance().getEquipmentList();
             int eqIndex = RandomUtil.randomInt(equipmentList.size());
             randomCard = equipmentList.get(eqIndex);
+        } else if (randomInt < 40) {
+            // 英雄抽取概率
+            List<UnitCard> heroList = DesktopContext.getInstance().getHeroList();
+            int heroIndex = RandomUtil.randomInt(heroList.size());
+            randomCard = heroList.get(heroIndex);
         } else {
+            // 基础战斗单位抽取概率
             List<UnitCard> soldierList = DesktopContext.getInstance().getSoldierList();
             int soldierIndex = RandomUtil.randomInt(soldierList.size());
             randomCard = soldierList.get(soldierIndex);
@@ -168,6 +177,17 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
             randomEq = equipmentList.get(eqIndex);
         }
         return randomEq;
+    }
+
+    private TacticCard getRandomTactic() {
+        TacticCard randomTactic = null;
+        int randomInt = RandomUtil.randomInt(10);
+        if (randomInt < 1) {
+            List<TacticCard> tacticList = DesktopContext.getInstance().getTacticList();
+            int tacticIndex = RandomUtil.randomInt(tacticList.size());
+            randomTactic = tacticList.get(tacticIndex);
+        }
+        return randomTactic;
     }
 
 }
