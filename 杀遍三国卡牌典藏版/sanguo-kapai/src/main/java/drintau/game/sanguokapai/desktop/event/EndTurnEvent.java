@@ -37,9 +37,10 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
             StackPane[][] cells = desktopContext.getCells();
 
             ArrayDeque<ActionItem> actionDeque = desktopContext.getActionDeque();
-            ActionItem actionItem;
-            while ((actionItem = actionDeque.pollFirst()) != null) {
-                if (actionItem.isFinishFlag()) {
+
+            while (!actionDeque.isEmpty()) {
+                ActionItem actionItem = actionDeque.pollFirst();
+                if (actionItem == null || actionItem.isFinishFlag()) {
                     continue;
                 }
 
@@ -120,9 +121,8 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                             actionItem.setCurAttack(actionItem.getUnitCard().getBaseAttack() + actionItem.getAddAttack());
                             targetCellActionItem.setCurAttack(targetCellActionItem.getUnitCard().getBaseAttack() + targetCellActionItem.getAddAttack());
 
-                            ActionItem finalActionItem = actionItem;
                             Platform.runLater(() -> {
-                                showAttackUI(finalActionItem, targetCellActionItem);
+                                showAttackUI(actionItem, targetCellActionItem);
                             });
 
                             synchronized (desktopContext.getBattleLock()) {
@@ -247,6 +247,62 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                 desktopContext.getEndTurn().setDisable(true);
             });
         }, 1L, TimeUnit.SECONDS);
+    }
+
+    private void move(ActionItem actionItem, int curRowIndex, int nextColIndex) {
+        DesktopContext desktopContext = DesktopContext.getInstance();
+        StackPane[][] cells = desktopContext.getCells();
+        StackPane cell = cells[curRowIndex][nextColIndex];
+
+        if (cell.getChildren().isEmpty()) {
+            // 目标格子空白：如果是敌方本阵，攻入；否则移动到该格子，移动力-1，进入下一轮判断
+            if (actionItem.isAiPlayer() && desktopContext.getPeoplePlayer().beAttack(nextColIndex)) {
+                int eqAddAttack = calcEqAddAttack(actionItem);
+                actionItem.setAddAttack(eqAddAttack);
+                actionItem.setCurAttack(actionItem.getUnitCard().getBaseAttack() + actionItem.getAddAttack());
+                int lowerHP = actionItem.getCurAttack();
+                Platform.runLater(() -> {
+                    desktopContext.getPeoplePlayer().getHp().set(desktopContext.getPeoplePlayer().getHp().get() - lowerHP);
+                    cells[curRowIndex][actionItem.getCurColIndex()].getChildren().clear();
+                    cells[curRowIndex][actionItem.getCurColIndex()].setUserData(null);
+                    testGameOver();
+                });
+                actionItem.setFinishFlag(true);
+                ThreadSleepUtil.sleepSeconds(1L);
+                return;
+            } else if (!actionItem.isAiPlayer() && desktopContext.getAiPlayer().beAttack(nextColIndex)) {
+                int eqAddAttack = calcEqAddAttack(actionItem);
+                actionItem.setAddAttack(eqAddAttack);
+                actionItem.setCurAttack(actionItem.getUnitCard().getBaseAttack() + actionItem.getAddAttack());
+                int lowerHP = actionItem.getCurAttack();
+                Platform.runLater(() -> {
+                    desktopContext.getAiPlayer().getHp().set(desktopContext.getAiPlayer().getHp().get() - lowerHP);
+                    cells[curRowIndex][actionItem.getCurColIndex()].getChildren().clear();
+                    cells[curRowIndex][actionItem.getCurColIndex()].setUserData(null);
+                    testGameOver();
+                });
+                actionItem.setFinishFlag(true);
+                ThreadSleepUtil.sleepSeconds(1L);
+                return;
+            }
+            // 移动
+            Platform.runLater(() -> {
+                cells[curRowIndex][actionItem.getCurColIndex()].getChildren().clear();
+                cells[curRowIndex][actionItem.getCurColIndex()].setUserData(null);
+                Label label = new Label(actionItem.getUnitCard().getDescription());
+                label.setFont(StyleConstants.font16);
+                if (actionItem.isAiPlayer()) {
+                    label.setBackground(StyleConstants.RED_BACKGROUND);
+                } else {
+                    label.setBackground(StyleConstants.PLAYER_UNIT_BACKGROUND);
+                }
+                cell.getChildren().addAll(label);
+                cell.setUserData(actionItem);
+            });
+        } else {
+            // 目标格子不空白：如果是敌方单位，战斗；如果是己方单位，再判断下一格，移动力消耗加1
+
+        }
     }
 
     private void move(ActionItem actionItem, int nextColIndex) {
