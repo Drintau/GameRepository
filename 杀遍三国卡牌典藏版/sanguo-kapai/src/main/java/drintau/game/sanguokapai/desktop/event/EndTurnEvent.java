@@ -286,23 +286,101 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                 return;
             }
             // 移动
-            Platform.runLater(() -> {
-                cells[curRowIndex][actionItem.getCurColIndex()].getChildren().clear();
-                cells[curRowIndex][actionItem.getCurColIndex()].setUserData(null);
-                Label label = new Label(actionItem.getUnitCard().getDescription());
-                label.setFont(StyleConstants.font16);
-                if (actionItem.isAiPlayer()) {
-                    label.setBackground(StyleConstants.RED_BACKGROUND);
-                } else {
-                    label.setBackground(StyleConstants.PLAYER_UNIT_BACKGROUND);
-                }
-                cell.getChildren().addAll(label);
-                cell.setUserData(actionItem);
-            });
+            moveUI(actionItem, cell);
+            ThreadSleepUtil.sleepSeconds(1L);
         } else {
             // 目标格子不空白：如果是敌方单位，战斗；如果是己方单位，再判断下一格，移动力消耗加1
+            ActionItem targetCellActionItem = (ActionItem) cell.getUserData();
+            if (actionItem.isAiPlayer() != targetCellActionItem.isAiPlayer()) {
+                // 加成战力归0
+                actionItem.setAddAttack(0);
+                targetCellActionItem.setAddAttack(0);
+                // 装备加成
+                int actionItemEqAddAttack = calcEqAddAttack(actionItem);
+                int targetCellEqAddAttack = calcEqAddAttack(targetCellActionItem);
+                actionItem.setAddAttack(actionItem.getAddAttack() + actionItemEqAddAttack);
+                targetCellActionItem.setAddAttack(targetCellActionItem.getAddAttack() + targetCellEqAddAttack);
+                // 属性克制
+                CardConstants.UnitType actionItemBeatUnitType = desktopContext.ADVANTAGE_MAP.get(actionItem.getUnitCard().getUnitType());
+                CardConstants.UnitType targetCellBeatUnitType = desktopContext.ADVANTAGE_MAP.get(targetCellActionItem.getUnitCard().getUnitType());
+                if (actionItemBeatUnitType == targetCellActionItem.getUnitCard().getUnitType()) {
+                    actionItem.setAddAttack(actionItem.getAddAttack() + 1);
+                    targetCellActionItem.setAddAttack(targetCellActionItem.getAddAttack() - 1);
+                }
+                if (targetCellBeatUnitType == actionItem.getUnitCard().getUnitType()) {
+                    actionItem.setAddAttack(actionItem.getAddAttack() - 1);
+                    targetCellActionItem.setAddAttack(targetCellActionItem.getAddAttack() + 1);
+                }
+                // 最终战力
+                actionItem.setCurAttack(actionItem.getUnitCard().getBaseAttack() + actionItem.getAddAttack());
+                targetCellActionItem.setCurAttack(targetCellActionItem.getUnitCard().getBaseAttack() + targetCellActionItem.getAddAttack());
+                // 战斗界面
+                Platform.runLater(() -> {
+                    showAttackUI(actionItem, targetCellActionItem);
+                });
+                synchronized (desktopContext.getBattleLock()) {
+                    try {
+                        desktopContext.getBattleLock().wait();
+                    } catch (InterruptedException e) {
+                        log.error("战斗出错", e);
+                        Thread.currentThread().interrupt();
+                        return;
+                    }
+                }
+                ThreadSleepUtil.sleepSeconds(1L);
+                // 击败判定
+                int u1Attack = actionItem.getCurAttack();
+                int u2Attack = targetCellActionItem.getCurAttack();
+                if (u1Attack > u2Attack) {
+                    // u2死了
+                    targetCellActionItem.setFinishFlag(true);
+                    int removeColIndex = targetCellActionItem.getCurColIndex();
+                    Platform.runLater(() -> {
+                        cells[curRowIndex][removeColIndex].getChildren().clear();
+                        cells[curRowIndex][removeColIndex].setUserData(null);
+                    });
+                    moveUI(actionItem, cell);
+                } else if (u1Attack < u2Attack) {
+                    actionItem.setFinishFlag(true);
+                    int removeColIndex = actionItem.getCurColIndex();
+                    Platform.runLater(() -> {
+                        cells[curRowIndex][removeColIndex].getChildren().clear();
+                        cells[curRowIndex][removeColIndex].setUserData(null);
+                    });
+                } else {
+                    actionItem.setFinishFlag(true);
+                    targetCellActionItem.setFinishFlag(true);
+                    int removeColIndex1 = actionItem.getCurColIndex();
+                    int removeColIndex2 = targetCellActionItem.getCurColIndex();
+                    Platform.runLater(() -> {
+                        cells[curRowIndex][removeColIndex1].getChildren().clear();
+                        cells[curRowIndex][removeColIndex1].setUserData(null);
+                        cells[curRowIndex][removeColIndex2].getChildren().clear();
+                        cells[curRowIndex][removeColIndex2].setUserData(null);
+                    });
+                }
+                ThreadSleepUtil.sleepSeconds(1L);
+            } else {
 
+            }
         }
+    }
+
+    private void moveUI(ActionItem actionItem, StackPane cell) {
+        StackPane[][] cells = DesktopContext.getInstance().getCells();
+        Platform.runLater(() -> {
+            cells[actionItem.getCurRowIndex()][actionItem.getCurColIndex()].getChildren().clear();
+            cells[actionItem.getCurRowIndex()][actionItem.getCurColIndex()].setUserData(null);
+            Label label = new Label(actionItem.getUnitCard().getDescription());
+            label.setFont(StyleConstants.font16);
+            if (actionItem.isAiPlayer()) {
+                label.setBackground(StyleConstants.RED_BACKGROUND);
+            } else {
+                label.setBackground(StyleConstants.PLAYER_UNIT_BACKGROUND);
+            }
+            cell.getChildren().addAll(label);
+            cell.setUserData(actionItem);
+        });
     }
 
     private void move(ActionItem actionItem, int nextColIndex) {
