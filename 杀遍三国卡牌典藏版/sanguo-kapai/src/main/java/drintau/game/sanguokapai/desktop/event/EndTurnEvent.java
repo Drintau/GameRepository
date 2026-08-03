@@ -38,7 +38,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
 
             while (!actionDeque.isEmpty()) {
                 ActionItem actionItem = actionDeque.pollFirst();
-                if (actionItem == null || actionItem.isFinishFlag()) {
+                if (actionItem == null || actionItem.isDeadFlag()) {
                     continue;
                 }
 
@@ -52,7 +52,10 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
 
                 // 移动
                 for (int i = mps; i > 0 ; i--) {
-                    if (actionItem.isFinishFlag()) {
+                    if (actionItem.isDeadFlag()) {
+                        break;
+                    }
+                    if (actionItem.isMoveFinishFlag()) {
                         break;
                     }
                     if (actionItem.isAiPlayer()) {
@@ -65,7 +68,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                         actionItem.setCurColIndex(nextColIndex);
                     }
                 }
-                if (!actionItem.isFinishFlag()) {
+                if (!actionItem.isDeadFlag()) {
                     desktopContext.getNextActionDeque().add(actionItem);
                 }
             }
@@ -101,7 +104,8 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                     cells[curRowIndex][actionItem.getCurColIndex()].setUserData(null);
                     testGameOver();
                 });
-                actionItem.setFinishFlag(true);
+                actionItem.setDeadFlag(true);
+                actionItem.setMoveFinishFlag(true);
                 ThreadSleepUtil.sleepSeconds(1L);
                 return true;
             } else if (!actionItem.isAiPlayer() && desktopContext.getAiPlayer().beAttack(nextColIndex)) {
@@ -115,7 +119,8 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                     cells[curRowIndex][actionItem.getCurColIndex()].setUserData(null);
                     testGameOver();
                 });
-                actionItem.setFinishFlag(true);
+                actionItem.setDeadFlag(true);
+                actionItem.setMoveFinishFlag(true);
                 ThreadSleepUtil.sleepSeconds(1L);
                 return true;
             }
@@ -167,7 +172,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                 int u2Attack = targetCellActionItem.getCurAttack();
                 if (u1Attack > u2Attack) {
                     // u2死了
-                    targetCellActionItem.setFinishFlag(true);
+                    targetCellActionItem.setDeadFlag(true);
                     int removeColIndex = targetCellActionItem.getCurColIndex();
                     Platform.runLater(() -> {
                         cells[curRowIndex][removeColIndex].getChildren().clear();
@@ -175,20 +180,22 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                     });
                     // 如果该格子是敌方的本阵，则不能移入
                     if (desktopContext.getPeoplePlayer().beAttack(nextColIndex) || desktopContext.getAiPlayer().beAttack(nextColIndex)) {
-                        actionItem.setFinishFlag(true);
+                        actionItem.setMoveFinishFlag(true);
                         return true;
                     }
                     moveUI(actionItem, cell);
                 } else if (u1Attack < u2Attack) {
-                    actionItem.setFinishFlag(true);
+                    actionItem.setDeadFlag(true);
+                    actionItem.setMoveFinishFlag(true);
                     int removeColIndex = actionItem.getCurColIndex();
                     Platform.runLater(() -> {
                         cells[curRowIndex][removeColIndex].getChildren().clear();
                         cells[curRowIndex][removeColIndex].setUserData(null);
                     });
                 } else {
-                    actionItem.setFinishFlag(true);
-                    targetCellActionItem.setFinishFlag(true);
+                    actionItem.setDeadFlag(true);
+                    actionItem.setMoveFinishFlag(true);
+                    targetCellActionItem.setDeadFlag(true);
                     int removeColIndex1 = actionItem.getCurColIndex();
                     int removeColIndex2 = targetCellActionItem.getCurColIndex();
                     Platform.runLater(() -> {

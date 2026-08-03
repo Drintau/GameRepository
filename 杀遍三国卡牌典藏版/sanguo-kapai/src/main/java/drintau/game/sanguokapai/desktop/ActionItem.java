@@ -11,8 +11,10 @@ public class ActionItem {
     // 归属阵营
     private boolean aiPlayer;
 
+    // 存活标记
+    private boolean deadFlag;
     // 行动完成标记
-    private boolean finishFlag;
+    private boolean moveFinishFlag;
 
     // 位置
     private int curRowIndex;
