@@ -8,6 +8,7 @@ import drintau.game.sanguokapai.desktop.ActionItem;
 import drintau.game.sanguokapai.desktop.DesktopContext;
 import drintau.game.sanguokapai.desktop.StyleConstants;
 import drintau.game.sanguokapai.util.RandomUtil;
+import drintau.game.sanguokapai.util.ThreadSleepUtil;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
@@ -61,6 +62,8 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
             cells[rowIndex][aiEqColIndex].getChildren().add(label);
             cells[rowIndex][aiEqColIndex].setUserData(randomEquipment);
         }
+
+        ThreadSleepUtil.sleepSeconds(1L);
 
         rowIndex = RandomUtil.randomInt(3);
         // 抽单位
@@ -160,8 +163,8 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
     private EquipmentCard getRandomEquipment() {
         EquipmentCard randomEq = null;
         int randomInt = RandomUtil.randomInt(10);
-        // 30% 可以抽到装备
-        if (randomInt < 3) {
+        // 抽装备概率
+        if (randomInt < 5) {
             List<EquipmentCard> equipmentList = DesktopContext.getInstance().getEquipmentList();
             int eqIndex = RandomUtil.randomInt(equipmentList.size());
             randomEq = equipmentList.get(eqIndex);
