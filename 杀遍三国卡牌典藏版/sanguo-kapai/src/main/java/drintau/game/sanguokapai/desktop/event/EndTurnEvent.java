@@ -34,8 +34,6 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
 
         // 移动单位
         DaemonScheduler.getInstance().submitOnceDelayTask(() -> {
-            StackPane[][] cells = desktopContext.getCells();
-
             ArrayDeque<ActionItem> actionDeque = desktopContext.getActionDeque();
 
             while (!actionDeque.isEmpty()) {
@@ -45,192 +43,27 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                 }
 
                 UnitCard unitCard = actionItem.getUnitCard();
+                // 移动力
+                int mps = unitCard.getSpeed();
+                // 当前行
+                int curRowIndex = actionItem.getCurRowIndex();
+                // 目标列
+                int nextColIndex = actionItem.getCurColIndex();
 
-                //前进
-                for (int i = unitCard.getSpeed(); i > 0 ; i--) {
-                    // 当前行
-                    int curRowIndex = actionItem.getCurRowIndex();
-                    // 当前列，移动后就是前一列了
-                    int preColIndex = actionItem.getCurColIndex();
-                    int nextColIndex;
+                // 移动
+                for (int i = mps; i > 0 ; i--) {
+                    if (actionItem.isFinishFlag()) {
+                        break;
+                    }
                     if (actionItem.isAiPlayer()) {
-                        nextColIndex = actionItem.getCurColIndex() - 1;
+                        nextColIndex = nextColIndex - 1;
                     } else {
-                        nextColIndex = actionItem.getCurColIndex() + 1;
+                        nextColIndex = nextColIndex + 1;
                     }
-
-                    // 到达终点
-                    if (actionItem.isAiPlayer() && desktopContext.getPeoplePlayer().beAttack(nextColIndex)) {
-                        int eqAddAttack = calcEqAddAttack(actionItem);
-                        actionItem.setAddAttack(eqAddAttack);
-                        actionItem.setCurAttack(actionItem.getUnitCard().getBaseAttack() + actionItem.getAddAttack());
-                        int lowerHP = actionItem.getCurAttack();
-                        Platform.runLater(() -> {
-                            desktopContext.getPeoplePlayer().getHp().set(desktopContext.getPeoplePlayer().getHp().get() - lowerHP);
-                            cells[curRowIndex][preColIndex].getChildren().clear();
-                            cells[curRowIndex][preColIndex].setUserData(null);
-                            testGameOver();
-                        });
-                        actionItem.setFinishFlag(true);
-                        ThreadSleepUtil.sleepSeconds(1L);
-                        break;
-                    } else if (!actionItem.isAiPlayer() && desktopContext.getAiPlayer().beAttack(nextColIndex)) {
-                        int eqAddAttack = calcEqAddAttack(actionItem);
-                        actionItem.setAddAttack(eqAddAttack);
-                        actionItem.setCurAttack(actionItem.getUnitCard().getBaseAttack() + actionItem.getAddAttack());
-                        int lowerHP = actionItem.getCurAttack();
-                        Platform.runLater(() -> {
-                            desktopContext.getAiPlayer().getHp().set(desktopContext.getAiPlayer().getHp().get() - lowerHP);
-                            cells[curRowIndex][preColIndex].getChildren().clear();
-                            cells[curRowIndex][preColIndex].setUserData(null);
-                            testGameOver();
-                        });
-                        actionItem.setFinishFlag(true);
-                        ThreadSleepUtil.sleepSeconds(1L);
-                        break;
+                    boolean moveSuccessFlag = move(actionItem, curRowIndex, nextColIndex);
+                    if (!moveSuccessFlag) {
+                        i--;
                     }
-
-                    // 碰撞
-                    if (!cells[curRowIndex][nextColIndex].getChildren().isEmpty()) {
-                        ActionItem targetCellActionItem = (ActionItem) cells[curRowIndex][nextColIndex].getUserData();
-                        // 敌方单位
-                        if (actionItem.isAiPlayer() != targetCellActionItem.isAiPlayer()) {
-                            // 清零
-                            actionItem.setAddAttack(0);
-                            targetCellActionItem.setAddAttack(0);
-
-                            // 装备加成
-                            int actionItemEqAddAttack = calcEqAddAttack(actionItem);
-                            int targetCellEqAddAttack = calcEqAddAttack(targetCellActionItem);
-                            actionItem.setAddAttack(actionItem.getAddAttack() + actionItemEqAddAttack);
-                            targetCellActionItem.setAddAttack(targetCellActionItem.getAddAttack() + targetCellEqAddAttack);
-
-                            // 属性克制
-                            CardConstants.UnitType actionItemBeatUnitType = desktopContext.ADVANTAGE_MAP.get(actionItem.getUnitCard().getUnitType());
-                            CardConstants.UnitType targetCellBeatUnitType = desktopContext.ADVANTAGE_MAP.get(targetCellActionItem.getUnitCard().getUnitType());
-                            if (actionItemBeatUnitType == targetCellActionItem.getUnitCard().getUnitType()) {
-                                actionItem.setAddAttack(actionItem.getAddAttack() + 1);
-                                targetCellActionItem.setAddAttack(targetCellActionItem.getAddAttack() - 1);
-                            }
-                            if (targetCellBeatUnitType == actionItem.getUnitCard().getUnitType()) {
-                                actionItem.setAddAttack(actionItem.getAddAttack() - 1);
-                                targetCellActionItem.setAddAttack(targetCellActionItem.getAddAttack() + 1);
-                            }
-
-                            // 最终战力
-                            actionItem.setCurAttack(actionItem.getUnitCard().getBaseAttack() + actionItem.getAddAttack());
-                            targetCellActionItem.setCurAttack(targetCellActionItem.getUnitCard().getBaseAttack() + targetCellActionItem.getAddAttack());
-
-                            Platform.runLater(() -> {
-                                showAttackUI(actionItem, targetCellActionItem);
-                            });
-
-                            synchronized (desktopContext.getBattleLock()) {
-                                try {
-                                    desktopContext.getBattleLock().wait();
-                                } catch (InterruptedException e) {
-                                    Thread.currentThread().interrupt();
-                                    break;
-                                }
-                            }
-
-                            ThreadSleepUtil.sleepSeconds(1L);
-
-                            int u1Attack = actionItem.getCurAttack();
-                            int u2Attack = targetCellActionItem.getCurAttack();
-                            if (u1Attack > u2Attack) {
-                                // u2死了
-                                targetCellActionItem.setFinishFlag(true);
-                                int removeColIndex = targetCellActionItem.getCurColIndex();
-                                Platform.runLater(() -> {
-                                    cells[curRowIndex][removeColIndex].getChildren().clear();
-                                    cells[curRowIndex][removeColIndex].setUserData(null);
-                                });
-                                move(actionItem, nextColIndex);
-                            } else if (u1Attack < u2Attack) {
-                                actionItem.setFinishFlag(true);
-                                int removeColIndex = actionItem.getCurColIndex();
-                                Platform.runLater(() -> {
-                                    cells[curRowIndex][removeColIndex].getChildren().clear();
-                                    cells[curRowIndex][removeColIndex].setUserData(null);
-                                });
-                            } else {
-                                actionItem.setFinishFlag(true);
-                                targetCellActionItem.setFinishFlag(true);
-                                int removeColIndex1 = actionItem.getCurColIndex();
-                                int removeColIndex2 = targetCellActionItem.getCurColIndex();
-                                Platform.runLater(() -> {
-                                    cells[curRowIndex][removeColIndex1].getChildren().clear();
-                                    cells[curRowIndex][removeColIndex1].setUserData(null);
-                                    cells[curRowIndex][removeColIndex2].getChildren().clear();
-                                    cells[curRowIndex][removeColIndex2].setUserData(null);
-                                });
-                            }
-                            ThreadSleepUtil.sleepSeconds(1L);
-                            break;
-                        } else {
-                            // 己方单位
-                            // 当前单位剩余移动力大于等于2，且前面第二格无归属，就超越，移动力-1；如果前面第二格是地方阵营，那就是攻入
-                            // 剩余移动力就是当前的i
-                            if (i >= 2) {
-                                int nextColIndex2;
-                                if (actionItem.isAiPlayer()) {
-                                    nextColIndex2 = nextColIndex - 1;
-                                } else {
-                                    nextColIndex2 = nextColIndex + 1;
-                                }
-                                // 到达终点
-                                if (actionItem.isAiPlayer() && desktopContext.getPeoplePlayer().beAttack(nextColIndex2)) {
-                                    int eqAddAttack = calcEqAddAttack(actionItem);
-                                    actionItem.setAddAttack(eqAddAttack);
-                                    actionItem.setCurAttack(actionItem.getUnitCard().getBaseAttack() + actionItem.getAddAttack());
-                                    int lowerHP = actionItem.getCurAttack();
-                                    Platform.runLater(() -> {
-                                        desktopContext.getPeoplePlayer().getHp().set(desktopContext.getPeoplePlayer().getHp().get() - lowerHP);
-                                        cells[curRowIndex][preColIndex].getChildren().clear();
-                                        cells[curRowIndex][preColIndex].setUserData(null);
-                                        testGameOver();
-                                    });
-                                    actionItem.setFinishFlag(true);
-                                    ThreadSleepUtil.sleepSeconds(1L);
-                                    break;
-                                } else if (!actionItem.isAiPlayer() && desktopContext.getAiPlayer().beAttack(nextColIndex2)) {
-                                    int eqAddAttack = calcEqAddAttack(actionItem);
-                                    actionItem.setAddAttack(eqAddAttack);
-                                    actionItem.setCurAttack(actionItem.getUnitCard().getBaseAttack() + actionItem.getAddAttack());
-                                    int lowerHP = actionItem.getCurAttack();
-                                    Platform.runLater(() -> {
-                                        desktopContext.getAiPlayer().getHp().set(desktopContext.getAiPlayer().getHp().get() - lowerHP);
-                                        cells[curRowIndex][preColIndex].getChildren().clear();
-                                        cells[curRowIndex][preColIndex].setUserData(null);
-                                        testGameOver();
-                                    });
-                                    actionItem.setFinishFlag(true);
-                                    ThreadSleepUtil.sleepSeconds(1L);
-                                    break;
-                                }
-                                // 前面第二格是否空白
-                                if (cells[curRowIndex][nextColIndex2].getChildren().isEmpty()) {
-                                    move(actionItem, nextColIndex2);
-                                    i--;
-                                    ThreadSleepUtil.sleepSeconds(1L);
-                                    continue;
-                                } else {
-                                    i = 0;
-                                    ThreadSleepUtil.sleepSeconds(1L);
-                                    continue;
-                                }
-                            } else {
-                                i = 0;
-                                ThreadSleepUtil.sleepSeconds(1L);
-                                continue;
-                            }
-                        }
-                    }
-
-                    // 移动
-                    move(actionItem, nextColIndex);
-                    ThreadSleepUtil.sleepSeconds(1L);
                 }
                 if (!actionItem.isFinishFlag()) {
                     desktopContext.getNextActionDeque().add(actionItem);
@@ -249,13 +82,14 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
         }, 1L, TimeUnit.SECONDS);
     }
 
-    private void move(ActionItem actionItem, int curRowIndex, int nextColIndex) {
+    // 返回true，真实移动了；返回false，要进入下一个移动，移动消耗+1
+    private boolean move(ActionItem actionItem, int curRowIndex, int nextColIndex) {
         DesktopContext desktopContext = DesktopContext.getInstance();
         StackPane[][] cells = desktopContext.getCells();
         StackPane cell = cells[curRowIndex][nextColIndex];
 
         if (cell.getChildren().isEmpty()) {
-            // 目标格子空白：如果是敌方本阵，攻入；否则移动到该格子，移动力-1，进入下一轮判断
+            // 目标格子空白：如果是敌方本阵，攻入；否则移动到该格子
             if (actionItem.isAiPlayer() && desktopContext.getPeoplePlayer().beAttack(nextColIndex)) {
                 int eqAddAttack = calcEqAddAttack(actionItem);
                 actionItem.setAddAttack(eqAddAttack);
@@ -269,7 +103,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                 });
                 actionItem.setFinishFlag(true);
                 ThreadSleepUtil.sleepSeconds(1L);
-                return;
+                return true;
             } else if (!actionItem.isAiPlayer() && desktopContext.getAiPlayer().beAttack(nextColIndex)) {
                 int eqAddAttack = calcEqAddAttack(actionItem);
                 actionItem.setAddAttack(eqAddAttack);
@@ -283,11 +117,12 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                 });
                 actionItem.setFinishFlag(true);
                 ThreadSleepUtil.sleepSeconds(1L);
-                return;
+                return true;
             }
             // 移动
             moveUI(actionItem, cell);
             ThreadSleepUtil.sleepSeconds(1L);
+            return true;
         } else {
             // 目标格子不空白：如果是敌方单位，战斗；如果是己方单位，再判断下一格，移动力消耗加1
             ActionItem targetCellActionItem = (ActionItem) cell.getUserData();
@@ -324,7 +159,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                     } catch (InterruptedException e) {
                         log.error("战斗出错", e);
                         Thread.currentThread().interrupt();
-                        return;
+                        return false;
                     }
                 }
                 ThreadSleepUtil.sleepSeconds(1L);
@@ -360,8 +195,9 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                     });
                 }
                 ThreadSleepUtil.sleepSeconds(1L);
+                return true;
             } else {
-
+                return false;
             }
         }
     }
@@ -380,27 +216,6 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
             }
             cell.getChildren().addAll(label);
             cell.setUserData(actionItem);
-        });
-    }
-
-    private void move(ActionItem actionItem, int nextColIndex) {
-        StackPane[][] cells = DesktopContext.getInstance().getCells();
-        int curRowIndex = actionItem.getCurRowIndex();
-        int preColIndex = actionItem.getCurColIndex();
-        actionItem.setCurColIndex(nextColIndex);
-        int curColIndex = actionItem.getCurColIndex();
-        Platform.runLater(() -> {
-            cells[curRowIndex][preColIndex].getChildren().clear();
-            cells[curRowIndex][preColIndex].setUserData(null);
-            Label label = new Label(actionItem.getUnitCard().getDescription());
-            if (actionItem.isAiPlayer()) {
-                label.setBackground(StyleConstants.RED_BACKGROUND);
-            } else {
-                label.setBackground(StyleConstants.PLAYER_UNIT_BACKGROUND);
-            }
-            label.setFont(StyleConstants.font16);
-            cells[curRowIndex][curColIndex].getChildren().addAll(label);
-            cells[curRowIndex][curColIndex].setUserData(actionItem);
         });
     }
 
