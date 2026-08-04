@@ -82,12 +82,13 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
             BorderPane.setAlignment(execTacticTitle, Pos.CENTER);
 
             Label execTacticCenter = new Label(randomTactic.getDescription());
+            execTacticCenter.setWrapText(true);
             execTacticCenter.setFont(StyleConstants.font16);
             execTacticRoot.setCenter(execTacticCenter);
 
             HBox execTacticBottom = new HBox(10);
             execTacticBottom.setAlignment(Pos.CENTER);
-            Button execTacticSureButton = new Button("请勿操作！电脑行动中。。。");
+            Button execTacticSureButton = new Button("请勿操作！电脑行动中");
             execTacticSureButton.setFont(StyleConstants.font20);
             execTacticSureButton.setOnAction(e -> {
                 randomTactic.exec(DesktopContext.getInstance().getAiPlayer(), randomRow);
@@ -104,7 +105,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
                 desktopContext.getRoot().getChildren().add(execTacticRoot);
                 DaemonScheduler.getInstance().submitOnceDelayTask(() -> {
                     Platform.runLater(execTacticSureButton::fire);
-                }, 2L, TimeUnit.SECONDS);
+                }, 3L, TimeUnit.SECONDS);
             });
 
             synchronized (desktopContext.getAiActionLock()){

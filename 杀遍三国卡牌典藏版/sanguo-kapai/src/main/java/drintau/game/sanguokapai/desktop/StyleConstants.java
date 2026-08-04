@@ -7,15 +7,15 @@ import javafx.scene.text.Font;
 public final class StyleConstants {
 
     // 界面背景：蓝色透明度
-    public static final Background BLUE_BACKGROUND = Background.fill(Color.web("#0000FF", 0.1));
+    public static final Background BLUE_BACKGROUND = Background.fill(Color.web("#2196F3", 0.1));
 
     // 棋盘格子背景：浅灰色透明度
     public static final Background LIGHTGRAY_BACKGROUND = Background.fill(Color.web("#D3D3D3", 0.5));
 
     // 棋盘格子默认边框：绿色透明度
-    public static final Border CELL_BORDER_DEFAULT = new Border(new BorderStroke(Color.web("#00FF00", 0.5), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(2)));
+    public static final Border CELL_BORDER_DEFAULT = new Border(new BorderStroke(Color.web("#00FF00", 0.3), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1)));
     // 棋盘格子行动时边框：电脑计策卡、电脑装备区，紫色
-    public static final Border CELL_BORDER_ACTION = new Border(new BorderStroke(Color.web("#FF00FF", 1.0), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(2)));
+    public static final Border CELL_BORDER_ACTION = new Border(new BorderStroke(Color.web("#FF00FF", 1.0), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3)));
 
     // 玩家单位、本阵：黄色透明
     public static final Background PLAYER_UNIT_BACKGROUND = Background.fill(Color.web("#FFFF00", 0.3));
