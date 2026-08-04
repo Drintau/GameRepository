@@ -64,38 +64,36 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         // 抽计策
         TacticCard randomTactic = getRandomTactic();
         if (randomTactic != null) {
+            // 计策界面
+            BorderPane execTacticRoot = new BorderPane();
+            execTacticRoot.setPadding(new Insets(10));
+            execTacticRoot.setBackground(StyleConstants.WHITE_BACKGROUND);
+            execTacticRoot.setPrefWidth(300);
+            execTacticRoot.setPrefHeight(220);
+            execTacticRoot.setMinSize(300, 220);
+            execTacticRoot.setMaxSize(300, 220);
+
+            Label execTacticTitle = new Label("电脑执行计策");
+            execTacticTitle.setFont(StyleConstants.font24);
+            execTacticRoot.setTop(execTacticTitle);
+            BorderPane.setAlignment(execTacticTitle, Pos.CENTER);
+
+            Label execTacticCenter = new Label(randomTactic.getDescription());
+            execTacticCenter.setFont(StyleConstants.font16);
+            execTacticRoot.setCenter(execTacticCenter);
+
+            HBox execTacticBottom = new HBox(10);
+            execTacticBottom.setAlignment(Pos.CENTER);
+            Button execTacticSureButton = new Button("确认");
+            execTacticSureButton.setFont(StyleConstants.font20);
+            execTacticSureButton.setOnAction(e -> {
+                randomTactic.exec(DesktopContext.getInstance().getAiPlayer());
+                desktopContext.getRoot().getChildren().remove(execTacticRoot);
+            });
+            execTacticBottom.getChildren().addAll(execTacticSureButton);
+            execTacticRoot.setBottom(execTacticBottom);
             Platform.runLater(() -> {
-                // 计策界面
-                BorderPane execTacticRoot = new BorderPane();
-                execTacticRoot.setPadding(new Insets(10));
-                execTacticRoot.setBackground(StyleConstants.WHITE_BACKGROUND);
-                execTacticRoot.setPrefWidth(300);
-                execTacticRoot.setPrefHeight(220);
-                execTacticRoot.setMinSize(300, 220);
-                execTacticRoot.setMaxSize(300, 220);
-
-                Label execTacticTitle = new Label("电脑执行计策");
-                execTacticTitle.setFont(StyleConstants.font24);
-                execTacticRoot.setTop(execTacticTitle);
-                BorderPane.setAlignment(execTacticTitle, Pos.CENTER);
-
-                Label execTacticCenter = new Label(randomTactic.getDescription());
-                execTacticCenter.setFont(StyleConstants.font16);
-                execTacticRoot.setCenter(execTacticCenter);
-
-                HBox execTacticBottom = new HBox(10);
-                execTacticBottom.setAlignment(Pos.CENTER);
-                Button execTacticSureButton = new Button("确认");
-                execTacticSureButton.setFont(StyleConstants.font20);
-                execTacticSureButton.setOnAction(e -> {
-                    randomTactic.exec(DesktopContext.getInstance().getAiPlayer());
-                    desktopContext.getRoot().getChildren().remove(execTacticRoot);
-                });
-                execTacticBottom.getChildren().addAll(execTacticSureButton);
-                execTacticRoot.setBottom(execTacticBottom);
-
                 desktopContext.getRoot().getChildren().add(execTacticRoot);
-
                 DaemonScheduler.getInstance().submitOnceDelayTask(() -> {
                     Platform.runLater(execTacticSureButton::fire);
                 }, 2L, TimeUnit.SECONDS);
@@ -105,7 +103,6 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         }
 
         int rowIndex = RandomUtil.randomInt(3);
-
         // 抽装备
         EquipmentCard randomEquipment = getRandomEquipment();
         if (randomEquipment != null) {
@@ -128,15 +125,15 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         UnitCard randomUnit = getRandomUnit();
         int aiUnitInitColIndex = desktopContext.getAiPlayer().getUnitInitColIndex();
         ActionItem actionItem = new ActionItem(true, rowIndex, aiUnitInitColIndex, randomUnit);
-        int finalRowIndex1 = rowIndex;
+        int finalRowIndex = rowIndex;
         Platform.runLater(() -> {
-            cells[finalRowIndex1][aiUnitInitColIndex].getChildren().clear();
-            cells[finalRowIndex1][aiUnitInitColIndex].setUserData(null);
+            cells[finalRowIndex][aiUnitInitColIndex].getChildren().clear();
+            cells[finalRowIndex][aiUnitInitColIndex].setUserData(null);
             Label label = new Label(randomUnit.getDescription());
             label.setBackground(StyleConstants.RED_BACKGROUND);
             label.setFont(StyleConstants.font16);
-            cells[finalRowIndex1][aiUnitInitColIndex].getChildren().add(label);
-            cells[finalRowIndex1][aiUnitInitColIndex].setUserData(actionItem);
+            cells[finalRowIndex][aiUnitInitColIndex].getChildren().add(label);
+            cells[finalRowIndex][aiUnitInitColIndex].setUserData(actionItem);
         });
         desktopContext.getActionDeque().add(actionItem);
     }
