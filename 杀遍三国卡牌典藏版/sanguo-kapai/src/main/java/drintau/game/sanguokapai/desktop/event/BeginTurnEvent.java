@@ -91,7 +91,17 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
             Button execTacticSureButton = new Button("请勿操作！电脑行动中");
             execTacticSureButton.setFont(StyleConstants.font20);
             execTacticSureButton.setOnAction(e -> {
-                randomTactic.exec(DesktopContext.getInstance().getAiPlayer(), randomRow);
+                boolean aiTacticLockFlag = randomTactic.exec(DesktopContext.getInstance().getAiPlayer(), randomRow);
+                if (aiTacticLockFlag) {
+                    synchronized (desktopContext.getAiTacticLock()){
+                        try {
+                            desktopContext.getAiTacticLock().wait();
+                        } catch (InterruptedException ex) {
+                            log.error("电脑执行计策出错", ex);
+                            throw new RuntimeException(ex);
+                        }
+                    }
+                }
                 desktopContext.getRoot().getChildren().remove(execTacticRoot);
                 cells[randomRow][DesktopContext.aiPlayerUnitInitColIndex].setBorder(StyleConstants.CELL_BORDER_DEFAULT);
                 synchronized (desktopContext.getAiActionLock()) {
@@ -116,7 +126,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
                     throw new RuntimeException(e);
                 }
             }
-            ThreadSleepUtil.sleepSeconds(2L);
+            ThreadSleepUtil.sleepSeconds(1L);
         }
 
         int rowIndex = RandomUtil.randomInt(DesktopContext.rows);
@@ -139,6 +149,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
             Platform.runLater(() -> {
                 cells[finalRowIndex][aiEqColIndex].setBorder(StyleConstants.CELL_BORDER_DEFAULT);
             });
+            ThreadSleepUtil.sleepSeconds(1L);
         }
 
         rowIndex = RandomUtil.randomInt(DesktopContext.rows);
@@ -257,7 +268,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         EquipmentCard randomEq = null;
         int randomInt = RandomUtil.randomInt(rate100);
         // 抽装备概率
-        if (randomInt < rate50) {
+        if (randomInt < rate100) {
             List<EquipmentCard> equipmentList = DesktopContext.getInstance().getEquipmentList();
             int eqIndex = RandomUtil.randomInt(equipmentList.size());
             randomEq = equipmentList.get(eqIndex);
@@ -268,7 +279,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
     private TacticCard getRandomTactic() {
         TacticCard randomTactic = null;
         int randomInt = RandomUtil.randomInt(rate100);
-        if (randomInt < rate0) {
+        if (randomInt < rate100) {
             List<TacticCard> tacticList = DesktopContext.getInstance().getTacticList();
             int tacticIndex = RandomUtil.randomInt(tacticList.size());
             randomTactic = tacticList.get(tacticIndex);

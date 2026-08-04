@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class HuoGong extends TacticCard {
 
     @Override
-    public void exec(PlayerData playerData, int rowIndex) {
+    public boolean exec(PlayerData playerData, int rowIndex) {
         DesktopContext.getInstance().getSelectCard().setDisable(true);
         DaemonScheduler.getInstance().submitOnceDelayTask(() -> {
             StackPane[][] cells = DesktopContext.getInstance().getCells();
@@ -45,8 +45,13 @@ public class HuoGong extends TacticCard {
                 Platform.runLater(() -> {
                     DesktopContext.getInstance().getSelectCard().setDisable(false);
                 });
+            } else {
+                synchronized (DesktopContext.getInstance().getAiTacticLock()) {
+                    DesktopContext.getInstance().getAiTacticLock().notify();
+                }
             }
         }, 1L, TimeUnit.SECONDS);
+        return playerData.isAiFlag();
     }
 
     @Override

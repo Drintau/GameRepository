@@ -7,6 +7,7 @@ import drintau.game.sanguokapai.data.PlayerData;
  */
 public abstract class TacticCard extends AbstractCard {
 
-    public abstract void exec(PlayerData playerData, int rowIndex);
+    // 返回是否需要等待 tactic 锁，只对电脑有用
+    public abstract boolean exec(PlayerData playerData, int rowIndex);
 
 }

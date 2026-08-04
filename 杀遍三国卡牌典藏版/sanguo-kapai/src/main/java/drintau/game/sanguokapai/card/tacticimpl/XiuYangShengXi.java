@@ -8,7 +8,7 @@ import javafx.application.Platform;
 public class XiuYangShengXi extends TacticCard {
 
     @Override
-    public void exec(PlayerData playerData, int rowIndex) {
+    public boolean exec(PlayerData playerData, int rowIndex) {
         if (playerData.isAiFlag()) {
             PlayerData aiPlayer = DesktopContext.getInstance().getAiPlayer();
             int nowHp = aiPlayer.getHp().get() + 5;
@@ -30,6 +30,7 @@ public class XiuYangShengXi extends TacticCard {
                 peoplePlayer.getHp().set(finalNowHp);
             });
         }
+        return false;
     }
 
     @Override

@@ -61,6 +61,7 @@ public class DesktopContext {
     private BorderPane attackRoot;
     private final Object battleLock = new Object();
     private final Object aiActionLock = new Object();
+    private final Object aiTacticLock = new Object();
 
     private ArrayDeque<ActionItem> actionDeque = new ArrayDeque<>();
     private ArrayDeque<ActionItem> nextActionDeque = new ArrayDeque<>();
