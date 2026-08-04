@@ -93,6 +93,9 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
                 randomTactic.exec(DesktopContext.getInstance().getAiPlayer(), randomRow);
                 desktopContext.getRoot().getChildren().remove(execTacticRoot);
                 cells[randomRow][DesktopContext.aiPlayerUnitInitColIndex].setBorder(StyleConstants.CELL_BORDER_DEFAULT);
+                synchronized (desktopContext.getAiActionLock()) {
+                    desktopContext.getAiActionLock().notify();
+                }
             });
             execTacticBottom.getChildren().addAll(execTacticSureButton);
             execTacticRoot.setBottom(execTacticBottom);
@@ -104,7 +107,14 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
                 }, 2L, TimeUnit.SECONDS);
             });
 
-            ThreadSleepUtil.sleepSeconds(4L);
+            synchronized (desktopContext.getAiActionLock()){
+                try {
+                    desktopContext.getAiActionLock().wait();
+                } catch (InterruptedException e) {
+                    log.error("电脑执行计策出错", e);
+                    throw new RuntimeException(e);
+                }
+            }
         }
 
         int rowIndex = RandomUtil.randomInt(DesktopContext.rows);

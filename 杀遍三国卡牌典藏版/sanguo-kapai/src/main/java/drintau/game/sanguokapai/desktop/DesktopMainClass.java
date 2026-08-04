@@ -203,9 +203,8 @@ public class DesktopMainClass extends Application {
         attackSureButton.setFont(StyleConstants.font20);
         attackSureButton.setOnAction(e -> {
             desktopContext.getRoot().getChildren().remove(desktopContext.getAttackRoot());
-            Object battleLock = desktopContext.getBattleLock();
-            synchronized (battleLock) {
-                battleLock.notify();
+            synchronized (desktopContext.getBattleLock()) {
+                desktopContext.getBattleLock().notify();
             }
         });
         attackBottom.getChildren().addAll(attackSureButton);

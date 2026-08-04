@@ -60,6 +60,7 @@ public class DesktopContext {
     // 战斗界面需要的控件
     private BorderPane attackRoot;
     private final Object battleLock = new Object();
+    private final Object aiActionLock = new Object();
 
     private ArrayDeque<ActionItem> actionDeque = new ArrayDeque<>();
     private ArrayDeque<ActionItem> nextActionDeque = new ArrayDeque<>();
