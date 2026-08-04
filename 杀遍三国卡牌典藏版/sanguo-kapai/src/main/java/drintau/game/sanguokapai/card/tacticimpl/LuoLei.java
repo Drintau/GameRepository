@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class LuoLei extends TacticCard {
 
     @Override
-    public boolean exec(PlayerData playerData, int rowIndex) {
+    public void exec(PlayerData playerData, int rowIndex) {
         DesktopContext.getInstance().getSelectCard().setDisable(true);
         DaemonScheduler.getInstance().submitOnceDelayTask(() -> {
             StackPane[][] cells = DesktopContext.getInstance().getCells();
@@ -52,12 +52,11 @@ public class LuoLei extends TacticCard {
                     DesktopContext.getInstance().getSelectCard().setDisable(false);
                 });
             } else {
-                synchronized (DesktopContext.getInstance().getAiTacticLock()) {
-                    DesktopContext.getInstance().getAiTacticLock().notify();
+                synchronized (DesktopContext.getInstance().getAiActionLock()) {
+                    DesktopContext.getInstance().getAiActionLock().notify();
                 }
             }
         }, 1L, TimeUnit.SECONDS);
-        return playerData.isAiFlag();
     }
 
     @Override

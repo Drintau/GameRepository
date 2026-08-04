@@ -88,35 +88,17 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
 
             HBox execTacticBottom = new HBox(10);
             execTacticBottom.setAlignment(Pos.CENTER);
-            Button execTacticSureButton = new Button("请勿操作！电脑行动中");
-            execTacticSureButton.setFont(StyleConstants.font20);
-            execTacticSureButton.setOnAction(e -> {
-                boolean aiTacticLockFlag = randomTactic.exec(DesktopContext.getInstance().getAiPlayer(), randomRow);
-                if (aiTacticLockFlag) {
-                    synchronized (desktopContext.getAiTacticLock()){
-                        try {
-                            desktopContext.getAiTacticLock().wait();
-                        } catch (InterruptedException ex) {
-                            log.error("电脑执行计策出错", ex);
-                            throw new RuntimeException(ex);
-                        }
-                    }
-                }
-                desktopContext.getRoot().getChildren().remove(execTacticRoot);
-                cells[randomRow][DesktopContext.aiPlayerUnitInitColIndex].setBorder(StyleConstants.CELL_BORDER_DEFAULT);
-                synchronized (desktopContext.getAiActionLock()) {
-                    desktopContext.getAiActionLock().notify();
-                }
-            });
-            execTacticBottom.getChildren().addAll(execTacticSureButton);
+            Label aiExecTacticLabel = new Label("请勿操作！电脑行动中");
+            aiExecTacticLabel.setFont(StyleConstants.font20);
+            execTacticBottom.getChildren().addAll(aiExecTacticLabel);
             execTacticRoot.setBottom(execTacticBottom);
             Platform.runLater(() -> {
                 cells[randomRow][DesktopContext.aiPlayerUnitInitColIndex].setBorder(StyleConstants.CELL_BORDER_ACTION);
                 desktopContext.getRoot().getChildren().add(execTacticRoot);
-                DaemonScheduler.getInstance().submitOnceDelayTask(() -> {
-                    Platform.runLater(execTacticSureButton::fire);
-                }, 3L, TimeUnit.SECONDS);
             });
+            ThreadSleepUtil.sleepSeconds(3L);
+
+            randomTactic.exec(DesktopContext.getInstance().getAiPlayer(), randomRow);
 
             synchronized (desktopContext.getAiActionLock()){
                 try {
@@ -127,6 +109,10 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
                 }
             }
             ThreadSleepUtil.sleepSeconds(1L);
+            Platform.runLater(() -> {
+                desktopContext.getRoot().getChildren().remove(execTacticRoot);
+                cells[randomRow][DesktopContext.aiPlayerUnitInitColIndex].setBorder(StyleConstants.CELL_BORDER_DEFAULT);
+            });
         }
 
         int rowIndex = RandomUtil.randomInt(DesktopContext.rows);
@@ -268,7 +254,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         EquipmentCard randomEq = null;
         int randomInt = RandomUtil.randomInt(rate100);
         // 抽装备概率
-        if (randomInt < rate100) {
+        if (randomInt < rate50) {
             List<EquipmentCard> equipmentList = DesktopContext.getInstance().getEquipmentList();
             int eqIndex = RandomUtil.randomInt(equipmentList.size());
             randomEq = equipmentList.get(eqIndex);
@@ -279,7 +265,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
     private TacticCard getRandomTactic() {
         TacticCard randomTactic = null;
         int randomInt = RandomUtil.randomInt(rate100);
-        if (randomInt < rate100) {
+        if (randomInt < rate10) {
             List<TacticCard> tacticList = DesktopContext.getInstance().getTacticList();
             int tacticIndex = RandomUtil.randomInt(tacticList.size());
             randomTactic = tacticList.get(tacticIndex);

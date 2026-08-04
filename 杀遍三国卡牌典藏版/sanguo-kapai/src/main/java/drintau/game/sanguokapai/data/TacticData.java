@@ -17,9 +17,9 @@ public final class TacticData {
 
     public static List<TacticCard> getAllTactics() {
         return List.of(
-//                XIU_YANG_SHENG_XI,
-//                AN_JIAN_SHANG_REN,
-//                HUO_GONG,
+                XIU_YANG_SHENG_XI,
+                AN_JIAN_SHANG_REN,
+                HUO_GONG,
                 LUO_LEI
         );
     }

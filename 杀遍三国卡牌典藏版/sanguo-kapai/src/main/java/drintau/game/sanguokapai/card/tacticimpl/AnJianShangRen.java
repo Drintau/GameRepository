@@ -8,7 +8,7 @@ import javafx.application.Platform;
 public class AnJianShangRen extends TacticCard {
 
     @Override
-    public boolean exec(PlayerData playerData, int rowIndex) {
+    public void exec(PlayerData playerData, int rowIndex) {
         Platform.runLater(() -> {
             if (playerData.isAiFlag()) {
                 PlayerData peoplePlayer = DesktopContext.getInstance().getPeoplePlayer();
@@ -19,7 +19,6 @@ public class AnJianShangRen extends TacticCard {
             }
             DesktopContext.getInstance().getGameOverEvent().testGameOver();
         });
-        return false;
     }
 
     @Override
