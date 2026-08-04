@@ -31,6 +31,12 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class BeginTurnEvent implements EventHandler<ActionEvent> {
 
+    private final int rate100 = 100;
+    private final int rate50 = 50;
+    private final int rate30 = 30;
+    private final int rate10 = 10;
+    private final int rate0 = 0;
+
     @Override
     public void handle(ActionEvent event) {
         DesktopContext desktopContext = DesktopContext.getInstance();
@@ -98,7 +104,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
             ThreadSleepUtil.sleepSeconds(4L);
         }
 
-        int rowIndex = RandomUtil.randomInt(3);
+        int rowIndex = RandomUtil.randomInt(DesktopContext.rows);
         // 抽装备
         EquipmentCard randomEquipment = getRandomEquipment();
         if (randomEquipment != null) {
@@ -116,7 +122,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
             ThreadSleepUtil.sleepSeconds(1L);
         }
 
-        rowIndex = RandomUtil.randomInt(3);
+        rowIndex = RandomUtil.randomInt(DesktopContext.rows);
         // 抽单位
         UnitCard randomUnit = getRandomUnit();
         int aiUnitInitColIndex = desktopContext.getAiPlayer().getUnitInitColIndex();
@@ -186,7 +192,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
 
     private AbstractCard getRandomCard() {
         AbstractCard randomCard;
-        int randomInt = RandomUtil.randomInt(100);
+        int randomInt = RandomUtil.randomInt(rate100);
 
         if (randomInt < 10) {
             // 策略抽取概率
@@ -214,9 +220,9 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
 
     private UnitCard getRandomUnit() {
         UnitCard randomUnit;
-        int randomInt = RandomUtil.randomInt(10);
+        int randomInt = RandomUtil.randomInt(rate100);
         // 英雄抽取概率
-        if (randomInt < 1) {
+        if (randomInt < rate10) {
             List<UnitCard> heroList = DesktopContext.getInstance().getHeroList();
             int heroIndex = RandomUtil.randomInt(heroList.size());
             randomUnit = heroList.get(heroIndex);
@@ -230,9 +236,9 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
 
     private EquipmentCard getRandomEquipment() {
         EquipmentCard randomEq = null;
-        int randomInt = RandomUtil.randomInt(10);
+        int randomInt = RandomUtil.randomInt(rate100);
         // 抽装备概率
-        if (randomInt < 5) {
+        if (randomInt < rate50) {
             List<EquipmentCard> equipmentList = DesktopContext.getInstance().getEquipmentList();
             int eqIndex = RandomUtil.randomInt(equipmentList.size());
             randomEq = equipmentList.get(eqIndex);
@@ -242,8 +248,8 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
 
     private TacticCard getRandomTactic() {
         TacticCard randomTactic = null;
-        int randomInt = RandomUtil.randomInt(10);
-        if (randomInt < 1) {
+        int randomInt = RandomUtil.randomInt(rate100);
+        if (randomInt < rate10) {
             List<TacticCard> tacticList = DesktopContext.getInstance().getTacticList();
             int tacticIndex = RandomUtil.randomInt(tacticList.size());
             randomTactic = tacticList.get(tacticIndex);
