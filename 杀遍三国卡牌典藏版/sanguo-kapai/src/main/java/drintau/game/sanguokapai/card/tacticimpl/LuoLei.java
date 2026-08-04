@@ -36,10 +36,12 @@ public class LuoLei extends TacticCard {
                     }
                 }
             }
-            ThreadSleepUtil.sleepSeconds(1L);
-            Platform.runLater(() -> {
-                DesktopContext.getInstance().getSelectCard().setDisable(false);
-            });
+            if (!playerData.isAiFlag()) {
+                ThreadSleepUtil.sleepSeconds(1L);
+                Platform.runLater(() -> {
+                    DesktopContext.getInstance().getSelectCard().setDisable(false);
+                });
+            }
         }, 1L, TimeUnit.SECONDS);
     }
 

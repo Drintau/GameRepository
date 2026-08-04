@@ -34,16 +34,18 @@ public class HuoGong extends TacticCard {
                     }
                 }
             }
-            ThreadSleepUtil.sleepSeconds(1L);
-            Platform.runLater(() -> {
-                DesktopContext.getInstance().getSelectCard().setDisable(false);
-            });
+            if (!playerData.isAiFlag()) {
+                ThreadSleepUtil.sleepSeconds(1L);
+                Platform.runLater(() -> {
+                    DesktopContext.getInstance().getSelectCard().setDisable(false);
+                });
+            }
         }, 1L, TimeUnit.SECONDS);
     }
 
     @Override
     public String getDescription() {
-        return "火攻：消灭敌方一行等级小于3（1、2）的单位";
+        return "火攻：消灭敌方一行等级小于3的单位（等级1和等级2）";
     }
 
 }

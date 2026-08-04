@@ -266,6 +266,7 @@ public class DesktopMainClass extends Application {
         BorderPane.setAlignment(execTacticTitle, Pos.CENTER);
 
         Label execTacticCenter = new Label(tacticCard.getDescription());
+        execTacticCenter.setWrapText(true);
         execTacticCenter.setFont(StyleConstants.font16);
         execTacticRoot.setCenter(execTacticCenter);
 
