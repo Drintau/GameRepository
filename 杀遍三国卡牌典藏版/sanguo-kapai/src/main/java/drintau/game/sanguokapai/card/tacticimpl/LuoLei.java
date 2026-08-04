@@ -5,13 +5,14 @@ import drintau.game.sanguokapai.data.PlayerData;
 import drintau.game.sanguokapai.desktop.ActionItem;
 import drintau.game.sanguokapai.desktop.DesktopContext;
 import drintau.game.sanguokapai.util.DaemonScheduler;
+import drintau.game.sanguokapai.util.RandomUtil;
 import drintau.game.sanguokapai.util.ThreadSleepUtil;
 import javafx.application.Platform;
 import javafx.scene.layout.StackPane;
 
 import java.util.concurrent.TimeUnit;
 
-public class HuoGong extends TacticCard {
+public class LuoLei extends TacticCard {
 
     @Override
     public void exec(PlayerData playerData, int rowIndex) {
@@ -23,7 +24,8 @@ public class HuoGong extends TacticCard {
                 if (!cell.getChildren().isEmpty()) {
                     ActionItem targetCellActionItem = (ActionItem) cell.getUserData();
                     if (playerData.isAiFlag() != targetCellActionItem.isAiPlayer()) {
-                        if (targetCellActionItem.getUnitCard().getLevel() < 3) {
+                        int randomInt = RandomUtil.randomInt(2);
+                        if (randomInt < 1) {
                             targetCellActionItem.setDeadFlag(true);
                             Platform.runLater(() -> {
                                 cell.getChildren().clear();
@@ -43,7 +45,7 @@ public class HuoGong extends TacticCard {
 
     @Override
     public String getDescription() {
-        return "火攻：消灭敌方一行等级小于3（1、2）的单位";
+        return "落雷：敌方一行的每个单位有50%概率被消灭";
     }
 
 }
