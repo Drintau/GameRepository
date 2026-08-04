@@ -35,7 +35,7 @@ public class HuoGong extends TacticCard {
                                 cell.setUserData(null);
                                 cell.setBorder(StyleConstants.CELL_BORDER_DEFAULT);
                             });
-
+                            ThreadSleepUtil.sleepSeconds(1L);
                         }
                     }
                 }

@@ -116,6 +116,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
                     throw new RuntimeException(e);
                 }
             }
+            ThreadSleepUtil.sleepSeconds(2L);
         }
 
         int rowIndex = RandomUtil.randomInt(DesktopContext.rows);
@@ -212,7 +213,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         AbstractCard randomCard;
         int randomInt = RandomUtil.randomInt(rate100);
 
-        if (randomInt < 10) {
+        if (randomInt < 50) {
             // 策略抽取概率
             List<TacticCard> tacticList = DesktopContext.getInstance().getTacticList();
             int tacticIndex = RandomUtil.randomInt(tacticList.size());
@@ -267,7 +268,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
     private TacticCard getRandomTactic() {
         TacticCard randomTactic = null;
         int randomInt = RandomUtil.randomInt(rate100);
-        if (randomInt < rate10) {
+        if (randomInt < rate0) {
             List<TacticCard> tacticList = DesktopContext.getInstance().getTacticList();
             int tacticIndex = RandomUtil.randomInt(tacticList.size());
             randomTactic = tacticList.get(tacticIndex);
