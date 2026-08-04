@@ -7,6 +7,6 @@ import drintau.game.sanguokapai.data.PlayerData;
  */
 public abstract class TacticCard extends AbstractCard {
 
-    public abstract void exec(PlayerData playerData);
+    public abstract void exec(PlayerData playerData, int rowIndex);
 
 }

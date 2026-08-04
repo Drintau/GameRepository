@@ -105,7 +105,7 @@ public class DesktopMainClass extends Application {
                             }
                         } else if (userData instanceof TacticCard tacticCard) {
                             if (finalCol == DesktopContext.peoplePlayerUnitInitColIndex) {
-                                execTacticUI(tacticCard);
+                                execTacticUI(tacticCard, finalRow);
                                 putFlag = true;
                                 desktopContext.getPeoplePlayer().setCurTurnPutTacticCardFlag(true);
                             }
@@ -249,7 +249,7 @@ public class DesktopMainClass extends Application {
         stage.show();
     }
 
-    private void execTacticUI(TacticCard tacticCard) {
+    private void execTacticUI(TacticCard tacticCard, int rowIndex) {
         DesktopContext desktopContext = DesktopContext.getInstance();
         // 计策界面
         BorderPane execTacticRoot = new BorderPane();
@@ -274,7 +274,7 @@ public class DesktopMainClass extends Application {
         Button execTacticSureButton = new Button("确认");
         execTacticSureButton.setFont(StyleConstants.font20);
         execTacticSureButton.setOnAction(e -> {
-            tacticCard.exec(DesktopContext.getInstance().getPeoplePlayer());
+            tacticCard.exec(DesktopContext.getInstance().getPeoplePlayer(), rowIndex);
             desktopContext.getRoot().getChildren().remove(execTacticRoot);
         });
         execTacticBottom.getChildren().addAll(execTacticSureButton);

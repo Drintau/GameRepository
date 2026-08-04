@@ -83,7 +83,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
             Button execTacticSureButton = new Button("确认");
             execTacticSureButton.setFont(StyleConstants.font20);
             execTacticSureButton.setOnAction(e -> {
-                randomTactic.exec(DesktopContext.getInstance().getAiPlayer());
+                randomTactic.exec(DesktopContext.getInstance().getAiPlayer(), RandomUtil.randomInt(3));
                 desktopContext.getRoot().getChildren().remove(execTacticRoot);
             });
             execTacticBottom.getChildren().addAll(execTacticSureButton);

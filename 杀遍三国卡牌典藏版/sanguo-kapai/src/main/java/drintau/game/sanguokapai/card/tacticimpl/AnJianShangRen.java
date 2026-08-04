@@ -5,13 +5,10 @@ import drintau.game.sanguokapai.data.PlayerData;
 import drintau.game.sanguokapai.desktop.DesktopContext;
 import javafx.application.Platform;
 
-/**
- * 暗箭伤人：减少敌方5点生命值
- */
 public class AnJianShangRen extends TacticCard {
 
     @Override
-    public void exec(PlayerData playerData) {
+    public void exec(PlayerData playerData, int rowIndex) {
         Platform.runLater(() -> {
             if (playerData.isAiFlag()) {
                 PlayerData peoplePlayer = DesktopContext.getInstance().getPeoplePlayer();
