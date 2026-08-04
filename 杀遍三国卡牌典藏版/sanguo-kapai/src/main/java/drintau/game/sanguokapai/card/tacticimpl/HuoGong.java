@@ -4,6 +4,7 @@ import drintau.game.sanguokapai.card.TacticCard;
 import drintau.game.sanguokapai.data.PlayerData;
 import drintau.game.sanguokapai.desktop.ActionItem;
 import drintau.game.sanguokapai.desktop.DesktopContext;
+import drintau.game.sanguokapai.desktop.StyleConstants;
 import drintau.game.sanguokapai.util.DaemonScheduler;
 import drintau.game.sanguokapai.util.ThreadSleepUtil;
 import javafx.application.Platform;
@@ -26,10 +27,15 @@ public class HuoGong extends TacticCard {
                         if (targetCellActionItem.getUnitCard().getLevel() < 3) {
                             targetCellActionItem.setDeadFlag(true);
                             Platform.runLater(() -> {
-                                cell.getChildren().clear();
-                                cell.setUserData(null);
+                                cell.setBorder(StyleConstants.CELL_BORDER_ACTION);
                             });
                             ThreadSleepUtil.sleepSeconds(1L);
+                            Platform.runLater(() -> {
+                                cell.getChildren().clear();
+                                cell.setUserData(null);
+                                cell.setBorder(StyleConstants.CELL_BORDER_DEFAULT);
+                            });
+
                         }
                     }
                 }

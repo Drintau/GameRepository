@@ -4,6 +4,7 @@ import drintau.game.sanguokapai.card.TacticCard;
 import drintau.game.sanguokapai.data.PlayerData;
 import drintau.game.sanguokapai.desktop.ActionItem;
 import drintau.game.sanguokapai.desktop.DesktopContext;
+import drintau.game.sanguokapai.desktop.StyleConstants;
 import drintau.game.sanguokapai.util.DaemonScheduler;
 import drintau.game.sanguokapai.util.RandomUtil;
 import drintau.game.sanguokapai.util.ThreadSleepUtil;
@@ -24,14 +25,22 @@ public class LuoLei extends TacticCard {
                 if (!cell.getChildren().isEmpty()) {
                     ActionItem targetCellActionItem = (ActionItem) cell.getUserData();
                     if (playerData.isAiFlag() != targetCellActionItem.isAiPlayer()) {
+                        Platform.runLater(() -> {
+                            cell.setBorder(StyleConstants.CELL_BORDER_ACTION);
+                        });
+                        ThreadSleepUtil.sleepSeconds(1L);
                         int randomInt = RandomUtil.randomInt(2);
                         if (randomInt < 1) {
                             targetCellActionItem.setDeadFlag(true);
                             Platform.runLater(() -> {
                                 cell.getChildren().clear();
                                 cell.setUserData(null);
+                                cell.setBorder(StyleConstants.CELL_BORDER_DEFAULT);
                             });
-                            ThreadSleepUtil.sleepSeconds(1L);
+                        } else {
+                            Platform.runLater(() -> {
+                                cell.setBorder(StyleConstants.CELL_BORDER_DEFAULT);
+                            });
                         }
                     }
                 }
