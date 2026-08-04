@@ -47,11 +47,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
                 if (playerData.isAiFlag()) {
                     aiPlayGame();
                 } else {
-                    Platform.runLater(() -> {
-                        desktopContext.getSelectCard().setDisable(false);
-                        desktopContext.getEndTurn().setDisable(false);
-                        peoplePlayGame();
-                    });
+                    peoplePlayGame();
                 }
             }
         }, 1L, TimeUnit.SECONDS);
@@ -166,20 +162,25 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
             }
         }
 
-        cardSelectCenter.getChildren().clear();
-        ToggleGroup cardSelectGroup = new ToggleGroup();
-        for (int i = 0; i < desktopContext.getCardList().size(); i++) {
-            ToggleButton cardBtn = desktopContext.getCardList().get(i);
-            cardBtn.setToggleGroup(cardSelectGroup);
-            cardSelectCenter.getChildren().add(cardBtn);
-        }
-        cardSelectGroup.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != null) {
-                ToggleButton selected = (ToggleButton) newVal;
-                desktopContext.getPeoplePlayer().setSelectCard(selected);
-            } else {
-                desktopContext.getPeoplePlayer().setSelectCard(null);
+        Platform.runLater(() -> {
+            cardSelectCenter.getChildren().clear();
+            ToggleGroup cardSelectGroup = new ToggleGroup();
+            for (int i = 0; i < desktopContext.getCardList().size(); i++) {
+                ToggleButton cardBtn = desktopContext.getCardList().get(i);
+                cardBtn.setToggleGroup(cardSelectGroup);
+                cardSelectCenter.getChildren().add(cardBtn);
             }
+            cardSelectGroup.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal != null) {
+                    ToggleButton selected = (ToggleButton) newVal;
+                    desktopContext.getPeoplePlayer().setSelectCard(selected);
+                } else {
+                    desktopContext.getPeoplePlayer().setSelectCard(null);
+                }
+            });
+
+            desktopContext.getSelectCard().setDisable(false);
+            desktopContext.getEndTurn().setDisable(false);
         });
     }
 
