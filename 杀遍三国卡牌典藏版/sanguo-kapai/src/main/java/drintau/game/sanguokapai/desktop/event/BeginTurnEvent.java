@@ -66,6 +66,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         // 抽计策
         TacticCard randomTactic = getRandomTactic();
         if (randomTactic != null) {
+            int randomRow = RandomUtil.randomInt(DesktopContext.rows);
             // 计策界面
             BorderPane execTacticRoot = new BorderPane();
             execTacticRoot.setPadding(new Insets(10));
@@ -86,15 +87,17 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
 
             HBox execTacticBottom = new HBox(10);
             execTacticBottom.setAlignment(Pos.CENTER);
-            Button execTacticSureButton = new Button("确认");
+            Button execTacticSureButton = new Button("请勿操作！电脑行动中。。。");
             execTacticSureButton.setFont(StyleConstants.font20);
             execTacticSureButton.setOnAction(e -> {
-                randomTactic.exec(DesktopContext.getInstance().getAiPlayer(), RandomUtil.randomInt(3));
+                randomTactic.exec(DesktopContext.getInstance().getAiPlayer(), randomRow);
                 desktopContext.getRoot().getChildren().remove(execTacticRoot);
+                cells[randomRow][DesktopContext.aiPlayerUnitInitColIndex].setBorder(StyleConstants.CELL_BORDER_DEFAULT);
             });
             execTacticBottom.getChildren().addAll(execTacticSureButton);
             execTacticRoot.setBottom(execTacticBottom);
             Platform.runLater(() -> {
+                cells[randomRow][DesktopContext.aiPlayerUnitInitColIndex].setBorder(StyleConstants.CELL_BORDER_ACTION);
                 desktopContext.getRoot().getChildren().add(execTacticRoot);
                 DaemonScheduler.getInstance().submitOnceDelayTask(() -> {
                     Platform.runLater(execTacticSureButton::fire);
@@ -111,6 +114,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
             int aiEqColIndex = desktopContext.getAiPlayer().getEqColIndex();
             int finalRowIndex = rowIndex;
             Platform.runLater(() -> {
+                cells[finalRowIndex][aiEqColIndex].setBorder(StyleConstants.CELL_BORDER_ACTION);
                 cells[finalRowIndex][aiEqColIndex].getChildren().clear();
                 cells[finalRowIndex][aiEqColIndex].setUserData(null);
                 Label label = new Label(randomEquipment.getDescription());
@@ -119,7 +123,10 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
                 cells[finalRowIndex][aiEqColIndex].getChildren().add(label);
                 cells[finalRowIndex][aiEqColIndex].setUserData(randomEquipment);
             });
-            ThreadSleepUtil.sleepSeconds(1L);
+            ThreadSleepUtil.sleepSeconds(2L);
+            Platform.runLater(() -> {
+                cells[finalRowIndex][aiEqColIndex].setBorder(StyleConstants.CELL_BORDER_DEFAULT);
+            });
         }
 
         rowIndex = RandomUtil.randomInt(DesktopContext.rows);

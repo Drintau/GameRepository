@@ -56,7 +56,7 @@ public class DesktopMainClass extends Application {
         for (int row = 0; row < DesktopContext.rows; row++) {
             for (int col = 0; col < DesktopContext.cols; col++) {
                 StackPane cell = new StackPane();
-                cell.setBorder(StyleConstants.CELL_BORDER);
+                cell.setBorder(StyleConstants.CELL_BORDER_DEFAULT);
                 if (col == DesktopContext.peoplePlayerEqColIndex || col == DesktopContext.aiPlayerEqColIndex) {
                     cell.setBackground(StyleConstants.WHITE_BACKGROUND);
                     Label label = new Label("装备区");
