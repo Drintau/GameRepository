@@ -36,11 +36,16 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
         DaemonScheduler.getInstance().submitOnceDelayTask(() -> {
             ArrayDeque<ActionItem> actionDeque = desktopContext.getActionDeque();
 
+            // 冲锋模式
+            boolean chargeMode = false;
+
             while (!actionDeque.isEmpty()) {
                 ActionItem actionItem = actionDeque.pollFirst();
                 if (actionItem == null || actionItem.isDeadFlag()) {
                     continue;
                 }
+
+                chargeMode = checkChargeMode(chargeMode, actionItem);
 
                 UnitCard unitCard = actionItem.getUnitCard();
                 // 移动力
@@ -57,6 +62,9 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                     }
                     if (actionItem.isMoveFinishFlag()) {
                         break;
+                    }
+                    if (chargeMode) {
+                        i = DesktopContext.cols;
                     }
                     if (actionItem.isAiPlayer()) {
                         nextColIndex = nextColIndex - 1;
@@ -280,6 +288,27 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
         desktopContext.getAttackRoot().setLeft(peoplePlayerUnit);
         desktopContext.getAttackRoot().setRight(aiPlayerUnit);
         desktopContext.getRoot().getChildren().add(desktopContext.getAttackRoot());
+    }
+
+    // 判断是否开启冲锋模式
+    private boolean checkChargeMode(boolean lastChargeMode, ActionItem actionItem) {
+        if (lastChargeMode) {
+            return true;
+        } else {
+            StackPane[][] cells = DesktopContext.getInstance().getCells();
+            for (int rowIndex = 0; rowIndex < DesktopContext.rows; rowIndex++) {
+                for (int colIndex = DesktopContext.peoplePlayerUnitInitColIndex; colIndex <= DesktopContext.aiPlayerUnitInitColIndex; colIndex++) {
+                    StackPane cell = cells[rowIndex][colIndex];
+                    if (!cell.getChildren().isEmpty()) {
+                        ActionItem targetCellActionItem = (ActionItem) cell.getUserData();
+                        if (actionItem.isAiPlayer() != targetCellActionItem.isAiPlayer()) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
     }
 
 }
