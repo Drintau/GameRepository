@@ -24,19 +24,23 @@ public class HuoGong extends TacticCard {
                 if (!cell.getChildren().isEmpty()) {
                     ActionItem targetCellActionItem = (ActionItem) cell.getUserData();
                     if (playerData.isAiFlag() != targetCellActionItem.isAiPlayer()) {
+                        Platform.runLater(() -> {
+                            cell.setBorder(StyleConstants.CELL_BORDER_ACTION);
+                        });
+                        ThreadSleepUtil.sleepSeconds(1L);
                         if (targetCellActionItem.getUnitCard().getLevel() < 3) {
                             targetCellActionItem.setDeadFlag(true);
-                            Platform.runLater(() -> {
-                                cell.setBorder(StyleConstants.CELL_BORDER_ACTION);
-                            });
-                            ThreadSleepUtil.sleepSeconds(1L);
                             Platform.runLater(() -> {
                                 cell.getChildren().clear();
                                 cell.setUserData(null);
                                 cell.setBorder(StyleConstants.CELL_BORDER_DEFAULT);
                             });
-                            ThreadSleepUtil.sleepSeconds(1L);
+                        } else {
+                            Platform.runLater(() -> {
+                                cell.setBorder(StyleConstants.CELL_BORDER_DEFAULT);
+                            });
                         }
+                        ThreadSleepUtil.sleepSeconds(1L);
                     }
                 }
             }
