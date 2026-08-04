@@ -96,7 +96,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
                 cells[randomRow][DesktopContext.aiPlayerUnitInitColIndex].setBorder(StyleConstants.CELL_BORDER_ACTION);
                 desktopContext.getRoot().getChildren().add(execTacticRoot);
             });
-            ThreadSleepUtil.sleepSeconds(3L);
+            ThreadSleepUtil.sleepSeconds(2L);
 
             randomTactic.exec(DesktopContext.getInstance().getAiPlayer(), randomRow);
 
@@ -108,11 +108,11 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
                     throw new RuntimeException(e);
                 }
             }
-            ThreadSleepUtil.sleepSeconds(1L);
             Platform.runLater(() -> {
                 desktopContext.getRoot().getChildren().remove(execTacticRoot);
                 cells[randomRow][DesktopContext.aiPlayerUnitInitColIndex].setBorder(StyleConstants.CELL_BORDER_DEFAULT);
             });
+            ThreadSleepUtil.sleepSeconds(1L);
         }
 
         int rowIndex = RandomUtil.randomInt(DesktopContext.rows);
@@ -210,7 +210,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         AbstractCard randomCard;
         int randomInt = RandomUtil.randomInt(rate100);
 
-        if (randomInt < 50) {
+        if (randomInt < 10) {
             // 策略抽取概率
             List<TacticCard> tacticList = DesktopContext.getInstance().getTacticList();
             int tacticIndex = RandomUtil.randomInt(tacticList.size());

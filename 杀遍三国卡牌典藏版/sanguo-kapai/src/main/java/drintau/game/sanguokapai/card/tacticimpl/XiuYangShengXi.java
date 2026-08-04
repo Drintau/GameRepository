@@ -3,7 +3,10 @@ package drintau.game.sanguokapai.card.tacticimpl;
 import drintau.game.sanguokapai.card.TacticCard;
 import drintau.game.sanguokapai.data.PlayerData;
 import drintau.game.sanguokapai.desktop.DesktopContext;
+import drintau.game.sanguokapai.util.DaemonScheduler;
 import javafx.application.Platform;
+
+import java.util.concurrent.TimeUnit;
 
 public class XiuYangShengXi extends TacticCard {
 
@@ -29,6 +32,13 @@ public class XiuYangShengXi extends TacticCard {
             Platform.runLater(() -> {
                 peoplePlayer.getHp().set(finalNowHp);
             });
+        }
+        if (playerData.isAiFlag()) {
+            DaemonScheduler.getInstance().submitOnceDelayTask(() -> {
+                synchronized (DesktopContext.getInstance().getAiActionLock()) {
+                    DesktopContext.getInstance().getAiActionLock().notify();
+                }
+            }, 1L, TimeUnit.SECONDS);
         }
     }
 

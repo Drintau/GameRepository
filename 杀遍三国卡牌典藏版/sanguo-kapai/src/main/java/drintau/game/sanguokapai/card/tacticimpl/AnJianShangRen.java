@@ -3,7 +3,10 @@ package drintau.game.sanguokapai.card.tacticimpl;
 import drintau.game.sanguokapai.card.TacticCard;
 import drintau.game.sanguokapai.data.PlayerData;
 import drintau.game.sanguokapai.desktop.DesktopContext;
+import drintau.game.sanguokapai.util.DaemonScheduler;
 import javafx.application.Platform;
+
+import java.util.concurrent.TimeUnit;
 
 public class AnJianShangRen extends TacticCard {
 
@@ -19,6 +22,13 @@ public class AnJianShangRen extends TacticCard {
             }
             DesktopContext.getInstance().getGameOverEvent().testGameOver();
         });
+        if (playerData.isAiFlag()) {
+            DaemonScheduler.getInstance().submitOnceDelayTask(() -> {
+                synchronized (DesktopContext.getInstance().getAiActionLock()) {
+                    DesktopContext.getInstance().getAiActionLock().notify();
+                }
+            }, 1L, TimeUnit.SECONDS);
+        }
     }
 
     @Override
