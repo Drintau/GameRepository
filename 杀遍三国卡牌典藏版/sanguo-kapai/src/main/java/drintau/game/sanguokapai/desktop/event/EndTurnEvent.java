@@ -292,9 +292,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
 
     // 判断是否开启冲锋模式
     private boolean checkChargeMode(boolean lastChargeMode, ActionItem actionItem) {
-        if (lastChargeMode) {
-            return true;
-        } else {
+        if (!lastChargeMode) {
             StackPane[][] cells = DesktopContext.getInstance().getCells();
             for (int rowIndex = 0; rowIndex < DesktopContext.rows; rowIndex++) {
                 for (int colIndex = DesktopContext.peoplePlayerUnitInitColIndex; colIndex <= DesktopContext.aiPlayerUnitInitColIndex; colIndex++) {
@@ -302,13 +300,13 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                     if (!cell.getChildren().isEmpty()) {
                         ActionItem targetCellActionItem = (ActionItem) cell.getUserData();
                         if (actionItem.isAiPlayer() != targetCellActionItem.isAiPlayer()) {
-                            return true;
+                            return false;
                         }
                     }
                 }
             }
-            return false;
         }
+        return true;
     }
 
 }
