@@ -20,48 +20,78 @@ public class LuoLei extends TacticCard {
         DesktopContext.getInstance().getSelectCard().setDisable(true);
         DaemonScheduler.getInstance().submitOnceDelayTask(() -> {
             StackPane[][] cells = DesktopContext.getInstance().getCells();
-            for (int i = DesktopContext.peoplePlayerUnitInitColIndex; i <= DesktopContext.aiPlayerUnitInitColIndex; i++) {
-                StackPane cell = cells[rowIndex][i];
-                if (!cell.getChildren().isEmpty()) {
-                    ActionItem targetCellActionItem = (ActionItem) cell.getUserData();
-                    if (playerData.isAiFlag() != targetCellActionItem.isAiPlayer()) {
-                        Platform.runLater(() -> {
-                            cell.setBorder(StyleConstants.CELL_BORDER_ACTION);
-                        });
-                        ThreadSleepUtil.sleepSeconds(1L);
-                        int randomInt = RandomUtil.randomInt(2);
-                        if (randomInt < 1) {
-                            targetCellActionItem.setDeadFlag(true);
+            if (playerData.isAiFlag()) {
+                // 电脑执行，从右到左
+                for (int i = DesktopContext.aiPlayerUnitInitColIndex; i >= DesktopContext.peoplePlayerUnitInitColIndex; i--) {
+                    StackPane cell = cells[rowIndex][i];
+                    if (!cell.getChildren().isEmpty()) {
+                        ActionItem targetCellActionItem = (ActionItem) cell.getUserData();
+                        if (playerData.isAiFlag() != targetCellActionItem.isAiPlayer()) {
                             Platform.runLater(() -> {
-                                cell.getChildren().clear();
-                                cell.setUserData(null);
-                                cell.setBorder(StyleConstants.CELL_BORDER_DEFAULT);
+                                cell.setBorder(StyleConstants.CELL_BORDER_ACTION);
                             });
-                        } else {
-                            Platform.runLater(() -> {
-                                cell.setBorder(StyleConstants.CELL_BORDER_DEFAULT);
-                            });
+                            ThreadSleepUtil.sleepSeconds(1L);
+                            int randomInt = RandomUtil.randomInt(2);
+                            if (randomInt < 1) {
+                                targetCellActionItem.setDeadFlag(true);
+                                Platform.runLater(() -> {
+                                    cell.getChildren().clear();
+                                    cell.setUserData(null);
+                                    cell.setBorder(StyleConstants.CELL_BORDER_DEFAULT);
+                                });
+                            } else {
+                                Platform.runLater(() -> {
+                                    cell.setBorder(StyleConstants.CELL_BORDER_DEFAULT);
+                                });
+                            }
+                            ThreadSleepUtil.sleepSeconds(1L);
                         }
-                        ThreadSleepUtil.sleepSeconds(1L);
                     }
                 }
-            }
-            if (!playerData.isAiFlag()) {
+                // 唤醒电脑行动线程
+                synchronized (DesktopContext.getInstance().getAiActionLock()) {
+                    DesktopContext.getInstance().getAiActionLock().notify();
+                }
+            } else {
+                // 玩家执行，从左到右
+                for (int i = DesktopContext.peoplePlayerUnitInitColIndex; i <= DesktopContext.aiPlayerUnitInitColIndex; i++) {
+                    StackPane cell = cells[rowIndex][i];
+                    if (!cell.getChildren().isEmpty()) {
+                        ActionItem targetCellActionItem = (ActionItem) cell.getUserData();
+                        if (playerData.isAiFlag() != targetCellActionItem.isAiPlayer()) {
+                            Platform.runLater(() -> {
+                                cell.setBorder(StyleConstants.CELL_BORDER_ACTION);
+                            });
+                            ThreadSleepUtil.sleepSeconds(1L);
+                            int randomInt = RandomUtil.randomInt(2);
+                            if (randomInt < 1) {
+                                targetCellActionItem.setDeadFlag(true);
+                                Platform.runLater(() -> {
+                                    cell.getChildren().clear();
+                                    cell.setUserData(null);
+                                    cell.setBorder(StyleConstants.CELL_BORDER_DEFAULT);
+                                });
+                            } else {
+                                Platform.runLater(() -> {
+                                    cell.setBorder(StyleConstants.CELL_BORDER_DEFAULT);
+                                });
+                            }
+                            ThreadSleepUtil.sleepSeconds(1L);
+                        }
+                    }
+                }
+                // 玩家继续选择卡牌
                 ThreadSleepUtil.sleepSeconds(1L);
                 Platform.runLater(() -> {
                     DesktopContext.getInstance().getSelectCard().setDisable(false);
                 });
-            } else {
-                synchronized (DesktopContext.getInstance().getAiActionLock()) {
-                    DesktopContext.getInstance().getAiActionLock().notify();
-                }
             }
         }, 1L, TimeUnit.SECONDS);
     }
 
     @Override
     public String getDescription() {
-        return "落雷：敌方一行的每个单位有50%概率被消灭";
+        return "落雷：一行范围内，敌方每个单位有50%概率会被消灭";
     }
 
 }

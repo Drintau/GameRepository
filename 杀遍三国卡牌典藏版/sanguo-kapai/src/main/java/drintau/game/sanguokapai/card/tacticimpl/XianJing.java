@@ -12,7 +12,7 @@ import javafx.scene.layout.StackPane;
 
 import java.util.concurrent.TimeUnit;
 
-public class HuoGong extends TacticCard {
+public class XianJing extends TacticCard {
 
     @Override
     public void exec(PlayerData playerData, int rowIndex) {
@@ -30,19 +30,13 @@ public class HuoGong extends TacticCard {
                                 cell.setBorder(StyleConstants.CELL_BORDER_ACTION);
                             });
                             ThreadSleepUtil.sleepSeconds(1L);
-                            if (targetCellActionItem.getUnitCard().getLevel() < 3) {
-                                targetCellActionItem.setDeadFlag(true);
-                                Platform.runLater(() -> {
-                                    cell.getChildren().clear();
-                                    cell.setUserData(null);
-                                    cell.setBorder(StyleConstants.CELL_BORDER_DEFAULT);
-                                });
-                            } else {
-                                Platform.runLater(() -> {
-                                    cell.setBorder(StyleConstants.CELL_BORDER_DEFAULT);
-                                });
-                            }
+                            Platform.runLater(() -> {
+                                cell.getChildren().clear();
+                                cell.setUserData(null);
+                                cell.setBorder(StyleConstants.CELL_BORDER_DEFAULT);
+                            });
                             ThreadSleepUtil.sleepSeconds(1L);
+                            break;
                         }
                     }
                 }
@@ -61,19 +55,13 @@ public class HuoGong extends TacticCard {
                                 cell.setBorder(StyleConstants.CELL_BORDER_ACTION);
                             });
                             ThreadSleepUtil.sleepSeconds(1L);
-                            if (targetCellActionItem.getUnitCard().getLevel() < 3) {
-                                targetCellActionItem.setDeadFlag(true);
-                                Platform.runLater(() -> {
-                                    cell.getChildren().clear();
-                                    cell.setUserData(null);
-                                    cell.setBorder(StyleConstants.CELL_BORDER_DEFAULT);
-                                });
-                            } else {
-                                Platform.runLater(() -> {
-                                    cell.setBorder(StyleConstants.CELL_BORDER_DEFAULT);
-                                });
-                            }
+                            Platform.runLater(() -> {
+                                cell.getChildren().clear();
+                                cell.setUserData(null);
+                                cell.setBorder(StyleConstants.CELL_BORDER_DEFAULT);
+                            });
                             ThreadSleepUtil.sleepSeconds(1L);
+                            break;
                         }
                     }
                 }
@@ -88,7 +76,6 @@ public class HuoGong extends TacticCard {
 
     @Override
     public String getDescription() {
-        return "火攻：一行范围内，敌方等级小于3（等级1和等级2）的单位会被消灭";
+        return "陷阱：一行范围内，敌方最前面的一个单位会被消灭";
     }
-
 }
