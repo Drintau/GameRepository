@@ -47,17 +47,17 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
 
                 chargeMode = checkChargeMode(chargeMode, actionItem);
 
-                UnitCard unitCard = actionItem.getUnitCard();
                 // 移动力
                 int addSpeed = calcEqAddSpeed(actionItem);
-                int mps = unitCard.getSpeed() + addSpeed;
+                actionItem.setAddSpeed(addSpeed);
+                actionItem.setCurSpeed(actionItem.getUnitCard().getSpeed() + actionItem.getAddSpeed());
                 // 当前行
                 int curRowIndex = actionItem.getCurRowIndex();
                 // 目标列
                 int nextColIndex = actionItem.getCurColIndex();
 
                 // 移动
-                for (int i = mps; i > 0 ; i--) {
+                for (int i = actionItem.getCurSpeed(); i > 0 ; i--) {
                     if (actionItem.isDeadFlag()) {
                         break;
                     }
@@ -65,7 +65,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                         break;
                     }
                     if (chargeMode) {
-                        i = mps;
+                        i = actionItem.getCurSpeed();
                     }
                     if (actionItem.isAiPlayer()) {
                         nextColIndex = nextColIndex - 1;
