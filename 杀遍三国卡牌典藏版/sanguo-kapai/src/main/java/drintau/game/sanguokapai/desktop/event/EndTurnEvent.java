@@ -49,7 +49,8 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
 
                 UnitCard unitCard = actionItem.getUnitCard();
                 // 移动力
-                int mps = unitCard.getSpeed();
+                int addSpeed = calcEqAddSpeed(actionItem);
+                int mps = unitCard.getSpeed() + addSpeed;
                 // 当前行
                 int curRowIndex = actionItem.getCurRowIndex();
                 // 目标列
@@ -64,7 +65,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                         break;
                     }
                     if (chargeMode) {
-                        i = DesktopContext.cols;
+                        i = mps;
                     }
                     if (actionItem.isAiPlayer()) {
                         nextColIndex = nextColIndex - 1;
@@ -263,6 +264,30 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                 if (cells[actionItem.getCurRowIndex()][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
                     if (equipmentCard.getUnitType() == CardConstants.UnitType.ALL || equipmentCard.getUnitType() == actionItem.getUnitCard().getUnitType()) {
                         return equipmentCard.getAddAttack();
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
+    private int calcEqAddSpeed(ActionItem actionItem) {
+        DesktopContext desktopContext = DesktopContext.getInstance();
+        StackPane[][] cells = desktopContext.getCells();
+
+        if (actionItem.isAiPlayer()) {
+            if (!cells[actionItem.getCurRowIndex()][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getChildren().isEmpty()) {
+                if (cells[actionItem.getCurRowIndex()][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
+                    if (equipmentCard.getUnitType() == CardConstants.UnitType.ALL) {
+                        return equipmentCard.getAddSpeed();
+                    }
+                }
+            }
+        } else {
+            if (!cells[actionItem.getCurRowIndex()][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getChildren().isEmpty()) {
+                if (cells[actionItem.getCurRowIndex()][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
+                    if (equipmentCard.getUnitType() == CardConstants.UnitType.ALL) {
+                        return equipmentCard.getAddSpeed();
                     }
                 }
             }
