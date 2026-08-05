@@ -234,7 +234,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
     }
 
     private UnitCard getRandomUnit() {
-        log.info("电脑抽单位卡");
+        log.info("电脑抽单位卡，概率阈值指英雄概率");
         UnitCard randomUnit;
         if (RandomUtil.roll(RandomUtil.rate20)) {
             // 抽取英雄
