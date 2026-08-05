@@ -232,7 +232,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
     private UnitCard getRandomUnit() {
         log.info("电脑抽单位");
         UnitCard randomUnit;
-        if (RandomUtil.roll(RandomUtil.rate40)) {
+        if (RandomUtil.roll(RandomUtil.rate20)) {
             // 抽取英雄
             List<UnitCard> heroList = DesktopContext.getInstance().getHeroList();
             int heroIndex = RandomUtil.randomInt(heroList.size());

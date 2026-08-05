@@ -29,6 +29,7 @@ public class XianJing extends TacticCard {
                             Platform.runLater(() -> {
                                 cell.setBorder(StyleConstants.CELL_BORDER_ACTION);
                             });
+                            targetCellActionItem.setDeadFlag(true);
                             ThreadSleepUtil.sleepSeconds(1L);
                             Platform.runLater(() -> {
                                 cell.getChildren().clear();
@@ -54,6 +55,7 @@ public class XianJing extends TacticCard {
                             Platform.runLater(() -> {
                                 cell.setBorder(StyleConstants.CELL_BORDER_ACTION);
                             });
+                            targetCellActionItem.setDeadFlag(true);
                             ThreadSleepUtil.sleepSeconds(1L);
                             Platform.runLater(() -> {
                                 cell.getChildren().clear();
