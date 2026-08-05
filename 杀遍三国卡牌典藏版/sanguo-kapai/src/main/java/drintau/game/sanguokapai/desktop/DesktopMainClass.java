@@ -49,6 +49,10 @@ public class DesktopMainClass extends Application {
         gameBoardPaneTop.setLeft(peoplePlayerHpLabel);
         gameBoardPaneTop.setCenter(turnCountLabel);
         gameBoardPaneTop.setRight(aiPlayerHpLabel);
+        Label helpTextLabel = new Label("克制关系：枪->骑->甲->术->盾->射->枪，器械无克制关系");
+        helpTextLabel.setFont(StyleConstants.font24);
+        gameBoardPaneTop.setTop(helpTextLabel);
+        BorderPane.setAlignment(helpTextLabel, Pos.CENTER);
 
         StackPane[][] cells = new StackPane[DesktopContext.rows][DesktopContext.cols];
         desktopContext.setCells(cells);
@@ -243,7 +247,7 @@ public class DesktopMainClass extends Application {
         stage.setScene(scene);
         stage.setTitle("杀遍三国卡牌典藏版");
         stage.setWidth(1400);
-        stage.setHeight(600);
+        stage.setHeight(650);
         stage.setResizable(false);
         stage.show();
     }
