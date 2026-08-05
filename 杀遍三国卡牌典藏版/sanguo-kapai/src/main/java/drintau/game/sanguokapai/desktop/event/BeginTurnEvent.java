@@ -230,7 +230,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
     }
 
     private UnitCard getRandomUnit() {
-        log.info("电脑抽单位");
+        log.info("电脑抽单位卡");
         UnitCard randomUnit;
         if (RandomUtil.roll(RandomUtil.rate20)) {
             // 抽取英雄
@@ -263,7 +263,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         // 每5回合，电脑必出一张计策卡
         if (DesktopContext.getInstance().getTurnCount().get() % 5 == 0) {
             rollFlag = true;
-            log.info("回合数整除5，必出计策卡");
+            log.info("回合数整除5，强制出计策卡");
         }
         if (rollFlag) {
             List<TacticCard> tacticList = DesktopContext.getInstance().getTacticList();

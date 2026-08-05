@@ -10,9 +10,11 @@ import drintau.game.sanguokapai.util.RandomUtil;
 import drintau.game.sanguokapai.util.ThreadSleepUtil;
 import javafx.application.Platform;
 import javafx.scene.layout.StackPane;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 public class LuoLei extends TacticCard {
 
     @Override
@@ -31,6 +33,7 @@ public class LuoLei extends TacticCard {
                                 cell.setBorder(StyleConstants.CELL_BORDER_ACTION);
                             });
                             ThreadSleepUtil.sleepSeconds(1L);
+                            log.info("落雷计策卡");
                             if (RandomUtil.roll(RandomUtil.rate50)) {
                                 targetCellActionItem.setDeadFlag(true);
                                 Platform.runLater(() -> {
@@ -62,6 +65,7 @@ public class LuoLei extends TacticCard {
                                 cell.setBorder(StyleConstants.CELL_BORDER_ACTION);
                             });
                             ThreadSleepUtil.sleepSeconds(1L);
+                            log.info("落雷计策卡");
                             if (RandomUtil.roll(RandomUtil.rate50)) {
                                 targetCellActionItem.setDeadFlag(true);
                                 Platform.runLater(() -> {

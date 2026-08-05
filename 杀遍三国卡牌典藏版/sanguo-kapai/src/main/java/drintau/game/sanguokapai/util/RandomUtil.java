@@ -23,7 +23,7 @@ public class RandomUtil {
 
     public static boolean roll(int successRate) {
         int randomInt = randomInt(rate100);
-        log.info("随机数是：{}", randomInt);
+        log.info("概率阈值（不包含）：{}，随机数是：{}", successRate, randomInt);
         return randomInt < successRate;
     }
 
