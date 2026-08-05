@@ -31,6 +31,10 @@ public final class SoldierData {
     public static final UnitCard NU_SHOU = new UnitCard("弩手", CardConstants.UnitType.SHOOTER, 2, 2, 3);
     public static final UnitCard HUO_JIAN_SHE_SHOU = new UnitCard("火箭射手", CardConstants.UnitType.SHOOTER, 3, 2, 4);
 
+    public static final UnitCard YUN_TI = new UnitCard("云梯", CardConstants.UnitType.SIEGE, 3, 2, 5);
+    public static final UnitCard CHONG_CHE = new UnitCard("冲车", CardConstants.UnitType.SIEGE, 3, 3, 5);
+    public static final UnitCard TOU_SHI_CHE = new UnitCard("投石车", CardConstants.UnitType.SIEGE, 3, 1, 6);
+
     public static List<UnitCard> getAllSoldiers() {
         return List.of(
                 CHANG_QIANG_BING,
@@ -55,7 +59,11 @@ public final class SoldierData {
 
                 GONG_JIAN_SHOU,
                 NU_SHOU,
-                HUO_JIAN_SHE_SHOU
+                HUO_JIAN_SHE_SHOU,
+
+                YUN_TI,
+                CHONG_CHE,
+                TOU_SHI_CHE
         );
     }
 
