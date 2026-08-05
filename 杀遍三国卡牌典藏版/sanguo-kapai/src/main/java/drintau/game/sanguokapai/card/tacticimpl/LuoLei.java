@@ -31,8 +31,7 @@ public class LuoLei extends TacticCard {
                                 cell.setBorder(StyleConstants.CELL_BORDER_ACTION);
                             });
                             ThreadSleepUtil.sleepSeconds(1L);
-                            int randomInt = RandomUtil.randomInt(2);
-                            if (randomInt < 1) {
+                            if (RandomUtil.roll(RandomUtil.rate50)) {
                                 targetCellActionItem.setDeadFlag(true);
                                 Platform.runLater(() -> {
                                     cell.getChildren().clear();

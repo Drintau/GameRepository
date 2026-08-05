@@ -1,13 +1,28 @@
 package drintau.game.sanguokapai.util;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.security.SecureRandom;
 
+@Slf4j
 public class RandomUtil {
+
+    public static final int rate100 = 100;
+    public static final int rate50 = 50;
+    public static final int rate20 = 20;
+    public static final int rate10 = 10;
+    public static final int rate0 = 0;
 
     private static final SecureRandom secureRandom = new SecureRandom();
 
     private RandomUtil() {
         throw new UnsupportedOperationException("禁止实例化");
+    }
+
+    public static boolean roll(int successRate) {
+        int randomInt = randomInt(rate100);
+        log.info("随机数是：{}", randomInt);
+        return randomInt < successRate;
     }
 
     /**

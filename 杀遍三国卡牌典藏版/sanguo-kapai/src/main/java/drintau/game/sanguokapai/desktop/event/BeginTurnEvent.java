@@ -31,12 +31,6 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class BeginTurnEvent implements EventHandler<ActionEvent> {
 
-    private final int rate100 = 100;
-    private final int rate50 = 50;
-    private final int rate20 = 20;
-    private final int rate10 = 10;
-    private final int rate0 = 0;
-
     @Override
     public void handle(ActionEvent event) {
         DesktopContext desktopContext = DesktopContext.getInstance();
@@ -208,8 +202,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
 
     private AbstractCard getRandomCard() {
         AbstractCard randomCard;
-        int randomInt = RandomUtil.randomInt(rate100);
-
+        int randomInt = RandomUtil.randomInt(RandomUtil.rate100);
         if (randomInt < 20) {
             // 策略抽取概率
             List<TacticCard> tacticList = DesktopContext.getInstance().getTacticList();
@@ -236,9 +229,8 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
 
     private UnitCard getRandomUnit() {
         UnitCard randomUnit;
-        int randomInt = RandomUtil.randomInt(rate100);
-        // 英雄抽取概率
-        if (randomInt < rate10) {
+        if (RandomUtil.roll(RandomUtil.rate10)) {
+            // 抽取英雄
             List<UnitCard> heroList = DesktopContext.getInstance().getHeroList();
             int heroIndex = RandomUtil.randomInt(heroList.size());
             randomUnit = heroList.get(heroIndex);
@@ -252,9 +244,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
 
     private EquipmentCard getRandomEquipment() {
         EquipmentCard randomEq = null;
-        int randomInt = RandomUtil.randomInt(rate100);
-        // 抽装备概率
-        if (randomInt < rate50) {
+        if (RandomUtil.roll(RandomUtil.rate50)) {
             List<EquipmentCard> equipmentList = DesktopContext.getInstance().getEquipmentList();
             int eqIndex = RandomUtil.randomInt(equipmentList.size());
             randomEq = equipmentList.get(eqIndex);
@@ -264,8 +254,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
 
     private TacticCard getRandomTactic() {
         TacticCard randomTactic = null;
-        int randomInt = RandomUtil.randomInt(rate100);
-        if (randomInt < rate20) {
+        if (RandomUtil.roll(RandomUtil.rate20)) {
             List<TacticCard> tacticList = DesktopContext.getInstance().getTacticList();
             int tacticIndex = RandomUtil.randomInt(tacticList.size());
             randomTactic = tacticList.get(tacticIndex);
