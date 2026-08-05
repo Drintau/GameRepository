@@ -31,6 +31,10 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class BeginTurnEvent implements EventHandler<ActionEvent> {
 
+    private final int range1 = 20;
+    private final int range2 = 40;
+    private final int range3 = 60;
+
     @Override
     public void handle(ActionEvent event) {
         DesktopContext desktopContext = DesktopContext.getInstance();
@@ -204,18 +208,18 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
     private AbstractCard getRandomCard() {
         AbstractCard randomCard;
         int randomInt = RandomUtil.randomInt(RandomUtil.rate100);
-        log.info("随机数是：{}", randomInt);
-        if (randomInt < 20) {
+        log.info("0<=策略卡<{}<=装备卡<{}<=英雄<{}<=士兵<{}，随机数是：{}", range1, range2, range3, RandomUtil.rate100, randomInt);
+        if (randomInt < range1) {
             // 策略抽取概率
             List<TacticCard> tacticList = DesktopContext.getInstance().getTacticList();
             int tacticIndex = RandomUtil.randomInt(tacticList.size());
             randomCard = tacticList.get(tacticIndex);
-        } else if (randomInt < 40) {
+        } else if (randomInt < range2) {
             // 装备抽取概率
             List<EquipmentCard> equipmentList = DesktopContext.getInstance().getEquipmentList();
             int eqIndex = RandomUtil.randomInt(equipmentList.size());
             randomCard = equipmentList.get(eqIndex);
-        } else if (randomInt < 60) {
+        } else if (randomInt < range3) {
             // 英雄抽取概率
             List<UnitCard> heroList = DesktopContext.getInstance().getHeroList();
             int heroIndex = RandomUtil.randomInt(heroList.size());
