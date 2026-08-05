@@ -9,6 +9,8 @@ public class RandomUtil {
 
     public static final int rate100 = 100;
     public static final int rate50 = 50;
+    public static final int rate40 = 50;
+    public static final int rate30 = 30;
     public static final int rate20 = 20;
     public static final int rate10 = 10;
     public static final int rate0 = 0;

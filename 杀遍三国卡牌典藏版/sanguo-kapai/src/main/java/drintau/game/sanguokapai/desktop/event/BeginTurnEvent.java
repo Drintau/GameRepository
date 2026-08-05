@@ -155,6 +155,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         // 抽取卡牌，重新生成卡牌选项
         HBox cardSelectCenter = desktopContext.getCardSelectCenter();
         if (desktopContext.getCardList().size() < 5) {
+            log.info("玩家抽卡");
             int createNum = 5 - desktopContext.getCardList().size();
             for (int i = 0; i < createNum; i++) {
                 AbstractCard randomCard = getRandomCard();
@@ -213,7 +214,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
             List<EquipmentCard> equipmentList = DesktopContext.getInstance().getEquipmentList();
             int eqIndex = RandomUtil.randomInt(equipmentList.size());
             randomCard = equipmentList.get(eqIndex);
-        } else if (randomInt < 50) {
+        } else if (randomInt < 60) {
             // 英雄抽取概率
             List<UnitCard> heroList = DesktopContext.getInstance().getHeroList();
             int heroIndex = RandomUtil.randomInt(heroList.size());
@@ -228,8 +229,9 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
     }
 
     private UnitCard getRandomUnit() {
+        log.info("电脑抽单位");
         UnitCard randomUnit;
-        if (RandomUtil.roll(RandomUtil.rate10)) {
+        if (RandomUtil.roll(RandomUtil.rate40)) {
             // 抽取英雄
             List<UnitCard> heroList = DesktopContext.getInstance().getHeroList();
             int heroIndex = RandomUtil.randomInt(heroList.size());
@@ -243,6 +245,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
     }
 
     private EquipmentCard getRandomEquipment() {
+        log.info("电脑抽装备卡");
         EquipmentCard randomEq = null;
         if (RandomUtil.roll(RandomUtil.rate50)) {
             List<EquipmentCard> equipmentList = DesktopContext.getInstance().getEquipmentList();
@@ -253,8 +256,15 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
     }
 
     private TacticCard getRandomTactic() {
+        log.info("电脑抽计策卡");
         TacticCard randomTactic = null;
-        if (RandomUtil.roll(RandomUtil.rate20)) {
+        boolean rollFlag = RandomUtil.roll(RandomUtil.rate20);
+        // 每5回合，电脑必出一张计策卡
+        if (DesktopContext.getInstance().getTurnCount().get() % 5 == 0) {
+            rollFlag = true;
+            log.info("回合数整除5，必出计策卡");
+        }
+        if (rollFlag) {
             List<TacticCard> tacticList = DesktopContext.getInstance().getTacticList();
             int tacticIndex = RandomUtil.randomInt(tacticList.size());
             randomTactic = tacticList.get(tacticIndex);
