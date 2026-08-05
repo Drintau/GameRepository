@@ -88,7 +88,7 @@ public class HuoGong extends TacticCard {
 
     @Override
     public String getDescription() {
-        return "火攻：一行范围内，敌方等级小于3（等级1和等级2）的单位会被消灭";
+        return "火攻：一行范围内，敌方等级小于3（等级1和2）的单位会被消灭";
     }
 
 }
