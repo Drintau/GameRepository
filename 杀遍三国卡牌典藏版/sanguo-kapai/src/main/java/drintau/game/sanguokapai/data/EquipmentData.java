@@ -14,6 +14,7 @@ public final class EquipmentData {
     public static final EquipmentCard REN_WANG_DUN = new EquipmentCard("仁王盾", CardConstants.UnitType.SHIELD, 0, 2);
     public static final EquipmentCard QI_LIN_GONG = new EquipmentCard("麒麟弓", CardConstants.UnitType.SHOOTER, 0, 2);
     public static final EquipmentCard YAN_YUE_DAO = new EquipmentCard("偃月刀", CardConstants.UnitType.ALL, 0, 1);
+    public static final EquipmentCard CHI_TU = new EquipmentCard("赤兔", CardConstants.UnitType.ALL, 1, 0);
 
     public static List<EquipmentCard> getAllEquipments() {
         return List.of(
@@ -23,7 +24,8 @@ public final class EquipmentData {
                 YU_SHAN,
                 REN_WANG_DUN,
                 QI_LIN_GONG,
-                YAN_YUE_DAO
+                YAN_YUE_DAO,
+                CHI_TU
         );
     }
 

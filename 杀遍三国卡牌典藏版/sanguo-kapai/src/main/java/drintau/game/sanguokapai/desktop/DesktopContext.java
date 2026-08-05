@@ -89,6 +89,7 @@ public class DesktopContext {
         ADVANTAGE_MAP.put(CardConstants.UnitType.MAGE, CardConstants.UnitType.SHIELD);      // 术 → 盾
         ADVANTAGE_MAP.put(CardConstants.UnitType.SHIELD, CardConstants.UnitType.SHOOTER);   // 盾 → 射
         ADVANTAGE_MAP.put(CardConstants.UnitType.SHOOTER, CardConstants.UnitType.GUNNER);   // 射 → 枪
+        ADVANTAGE_MAP.put(CardConstants.UnitType.SIEGE, CardConstants.UnitType.NONE);   // 器械不克制任何，也不被任何克制
     }
 
     public void playerInit() {

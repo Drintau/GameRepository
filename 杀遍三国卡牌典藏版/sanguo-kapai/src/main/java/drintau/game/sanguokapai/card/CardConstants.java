@@ -15,7 +15,9 @@ public final class CardConstants {
         MAGE("术士"),      // 术 → 盾
         SHIELD("盾卫"),   // 盾 → 射
         SHOOTER("射手"),   // 射 → 枪
-        ALL("全部");
+        SIEGE("器械"),  // 器械
+        ALL("全部"),
+        NONE("无");  // 用于补全MAP
 
         public final String displayName;
 
