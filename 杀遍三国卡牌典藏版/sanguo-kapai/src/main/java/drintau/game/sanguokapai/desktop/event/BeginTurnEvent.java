@@ -204,6 +204,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
     private AbstractCard getRandomCard() {
         AbstractCard randomCard;
         int randomInt = RandomUtil.randomInt(RandomUtil.rate100);
+        log.info("随机数是：{}", randomInt);
         if (randomInt < 20) {
             // 策略抽取概率
             List<TacticCard> tacticList = DesktopContext.getInstance().getTacticList();

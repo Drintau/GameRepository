@@ -23,6 +23,7 @@ public class RandomUtil {
 
     public static boolean roll(int successRate) {
         int randomInt = randomInt(rate100);
+        log.info("随机数是：{}", randomInt);
         return randomInt < successRate;
     }
 
@@ -31,9 +32,7 @@ public class RandomUtil {
      * 0 <= x < maxInt
      */
     public static int randomInt(int maxInt) {
-        int randomInt = secureRandom.nextInt(maxInt);
-        log.info("随机数是：{}", randomInt);
-        return randomInt;
+        return secureRandom.nextInt(maxInt);
     }
 
 }
