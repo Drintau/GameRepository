@@ -44,6 +44,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         desktopContext.getPeoplePlayer().setCurTurnPutUnitCardFlag(false);
         desktopContext.getPeoplePlayer().setCurTurnPutEqCardFlag(false);
         desktopContext.getPeoplePlayer().setCurTurnPutTacticCardFlag(false);
+        desktopContext.getPeoplePlayer().setSelectCard(null);
 
         // 轮流行动
         DaemonScheduler.getInstance().submitOnceDelayTask(() -> {

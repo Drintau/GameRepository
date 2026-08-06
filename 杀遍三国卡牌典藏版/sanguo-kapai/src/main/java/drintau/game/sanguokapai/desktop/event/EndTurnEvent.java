@@ -31,6 +31,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
         desktopContext.getBeginTurn().setDisable(true);
         desktopContext.getSelectCard().setDisable(true);
         desktopContext.getEndTurn().setDisable(true);
+        desktopContext.getPeoplePlayer().setSelectCard(null);
 
         // 移动单位
         DaemonScheduler.getInstance().submitOnceDelayTask(() -> {
@@ -65,7 +66,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                         break;
                     }
                     if (chargeMode) {
-                        i = actionItem.getCurSpeed();
+                        i = DesktopContext.maxSpeed;
                     }
                     if (actionItem.isAiPlayer()) {
                         nextColIndex = nextColIndex - 1;

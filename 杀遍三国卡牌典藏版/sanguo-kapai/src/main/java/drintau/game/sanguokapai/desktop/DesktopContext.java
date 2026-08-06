@@ -43,6 +43,7 @@ public class DesktopContext {
     public static final int aiPlayerUnitInitColIndex = 12; // 电脑出兵列
     public static final int moveMinColIndex = 2; // 单位移动最小列
     public static final int moveMaxColIndex = 11; // 单位移动最大列
+    public static final int maxSpeed = 10; // 给冲锋模式用的
 
     private IntegerProperty turnCount = new SimpleIntegerProperty(1);
 
