@@ -65,7 +65,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         // 抽计策
         TacticCard randomTactic = getRandomTactic();
         if (randomTactic != null) {
-            int randomRow = RandomUtil.randomInt(DesktopContext.rows);
+            int randomRow = randomTactic.suggestRow(DesktopContext.getInstance().getAiPlayer());
             // 计策界面
             BorderPane execTacticRoot = new BorderPane();
             execTacticRoot.setPadding(new Insets(10));

@@ -131,6 +131,7 @@ public class LuoLei extends TacticCard {
                 Integer enemyCount = integerIntegerEntry.getValue();
                 if (enemyCount > maxEnemyCount) {
                     maxEnemyCountRowIndex = rowIndex;
+                    maxEnemyCount = enemyCount;
                 }
             }
             return maxEnemyCountRowIndex;
