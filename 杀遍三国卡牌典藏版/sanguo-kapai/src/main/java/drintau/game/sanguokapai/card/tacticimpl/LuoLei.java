@@ -12,6 +12,8 @@ import javafx.application.Platform;
 import javafx.scene.layout.StackPane;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -34,7 +36,7 @@ public class LuoLei extends TacticCard {
                                 cell.setBorder(StyleConstants.CELL_BORDER_ACTION);
                             });
                             ThreadSleepUtil.sleepSeconds(1L);
-                            log.info("落雷计策卡");
+                            log.info("落雷计策卡：单位生效判定");
                             if (RandomUtil.roll(RandomUtil.rate50)) {
                                 targetCellActionItem.setDeadFlag(true);
                                 Platform.runLater(() -> {
@@ -66,7 +68,7 @@ public class LuoLei extends TacticCard {
                                 cell.setBorder(StyleConstants.CELL_BORDER_ACTION);
                             });
                             ThreadSleepUtil.sleepSeconds(1L);
-                            log.info("落雷计策卡");
+                            log.info("落雷计策卡：单位生效判定");
                             if (RandomUtil.roll(RandomUtil.rate50)) {
                                 targetCellActionItem.setDeadFlag(true);
                                 Platform.runLater(() -> {
@@ -98,4 +100,47 @@ public class LuoLei extends TacticCard {
         return "落雷：一行范围内，敌方每个单位有50%概率会被消灭";
     }
 
+    @Override
+    public int suggestRow(PlayerData playerData) {
+        // 只有电脑调用
+        if (playerData.isAiFlag()) {
+            if (!suggestSuccess()) {
+                return super.suggestRow(playerData);
+            }
+            Map<Integer, Integer> rowEnemyCountMap =  new HashMap<>();
+            StackPane[][] cells = DesktopContext.getInstance().getCells();
+            for (int rowIndex = 0; rowIndex < DesktopContext.rows; rowIndex++) {
+                for (int colIndex = DesktopContext.peoplePlayerUnitInitColIndex; colIndex <= DesktopContext.aiPlayerUnitInitColIndex; colIndex++) {
+                    StackPane cell = cells[rowIndex][colIndex];
+                    if (!cell.getChildren().isEmpty()) {
+                        ActionItem targetCellActionItem = (ActionItem) cell.getUserData();
+                        if (playerData.isAiFlag() != targetCellActionItem.isAiPlayer()) {
+                            // 敌人数+1
+                            rowEnemyCountMap.merge(rowIndex, 1, Integer::sum);
+                        }
+                    }
+                }
+            }
+            if (rowEnemyCountMap.isEmpty()) {
+                return super.suggestRow(playerData);
+            }
+            int maxEnemyCount = 0;
+            int maxEnemyCountRowIndex = 3;
+            for (Map.Entry<Integer, Integer> integerIntegerEntry : rowEnemyCountMap.entrySet()) {
+                Integer rowIndex = integerIntegerEntry.getKey();
+                Integer enemyCount = integerIntegerEntry.getValue();
+                if (enemyCount > maxEnemyCount) {
+                    maxEnemyCountRowIndex = rowIndex;
+                }
+            }
+            return maxEnemyCountRowIndex;
+        } else {
+            return super.suggestRow(playerData);
+        }
+    }
+
+    private boolean suggestSuccess() {
+        log.info("落雷计策卡：电脑聪明执行判定");
+        return RandomUtil.roll(RandomUtil.rate80);
+    }
 }

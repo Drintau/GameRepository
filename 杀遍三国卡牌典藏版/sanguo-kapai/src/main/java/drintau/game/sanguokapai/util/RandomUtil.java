@@ -8,6 +8,8 @@ import java.security.SecureRandom;
 public class RandomUtil {
 
     public static final int rate100 = 100;
+    public static final int rate80 = 80;
+    public static final int rate60 = 60;
     public static final int rate50 = 50;
     public static final int rate40 = 50;
     public static final int rate30 = 30;
