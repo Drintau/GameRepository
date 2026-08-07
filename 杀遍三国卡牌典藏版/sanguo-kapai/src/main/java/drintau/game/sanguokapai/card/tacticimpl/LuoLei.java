@@ -144,4 +144,5 @@ public class LuoLei extends TacticCard {
         log.info("落雷计策卡：电脑聪明执行判定");
         return RandomUtil.roll(RandomUtil.rate80);
     }
+
 }
