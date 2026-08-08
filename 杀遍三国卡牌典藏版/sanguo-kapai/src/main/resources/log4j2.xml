@@ -12,12 +12,6 @@
     </Appenders>
 
     <Loggers>
-<!--        <Logger name="org" level="warn" additivity="false">-->
-<!--            <AppenderRef ref="Console"/>-->
-<!--        </Logger>-->
-<!--        <Logger name="com" level="warn" additivity="false">-->
-<!--            <AppenderRef ref="Console"/>-->
-<!--        </Logger>-->
         <Root level="info">
             <AppenderRef ref="Console"/>
         </Root>

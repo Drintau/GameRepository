@@ -11,7 +11,7 @@ public final class SoldierData {
     // 每个兵种跨3个等级，1+2+3 或 2+3+4，器械统一3级
     // 战力范围：枪3-4，骑4-6，甲4-5，术2-3，盾2-3，射2-4，器5-6
 
-    public static final UnitCard JI_BING = new UnitCard("戟兵", CardConstants.UnitType.GUNNER, 1, 2, 3);
+    public static final UnitCard DUAN_QIANG_BING = new UnitCard("短枪兵", CardConstants.UnitType.GUNNER, 1, 2, 3);
     public static final UnitCard CHANG_QIANG_BING = new UnitCard("长枪兵", CardConstants.UnitType.GUNNER, 2, 2, 4);
     public static final UnitCard JING_YING_QIANG_BING = new UnitCard("精英枪兵", CardConstants.UnitType.GUNNER, 3, 2, 4);
 
@@ -32,8 +32,8 @@ public final class SoldierData {
     public static final UnitCard JING_YING_DUN_BING = new UnitCard("精英盾兵", CardConstants.UnitType.SHIELD, 3, 2, 3);
 
     public static final UnitCard GONG_JIAN_SHOU = new UnitCard("弓箭手", CardConstants.UnitType.SHOOTER, 1, 2, 2);
-    public static final UnitCard NU_SHOU = new UnitCard("弩手", CardConstants.UnitType.SHOOTER, 2, 2, 3);
-    public static final UnitCard HUO_JIAN_SHE_SHOU = new UnitCard("火箭射手", CardConstants.UnitType.SHOOTER, 3, 2, 4);
+    public static final UnitCard CHANG_GONG_SHOU = new UnitCard("长弓手", CardConstants.UnitType.SHOOTER, 2, 2, 3);
+    public static final UnitCard ZHU_GE_BU_SHOU = new UnitCard("诸葛弩手", CardConstants.UnitType.SHOOTER, 3, 2, 4);
 
     public static final UnitCard YUN_TI = new UnitCard("云梯", CardConstants.UnitType.SIEGE, 3, 2, 5);
     public static final UnitCard CHONG_CHE = new UnitCard("冲车", CardConstants.UnitType.SIEGE, 3, 3, 5);
@@ -41,7 +41,7 @@ public final class SoldierData {
 
     public static List<UnitCard> getAllSoldiers() {
         return List.of(
-                JI_BING,
+                DUAN_QIANG_BING,
                 CHANG_QIANG_BING,
                 JING_YING_QIANG_BING,
 
@@ -62,8 +62,8 @@ public final class SoldierData {
                 JING_YING_DUN_BING,
 
                 GONG_JIAN_SHOU,
-                NU_SHOU,
-                HUO_JIAN_SHE_SHOU,
+                CHANG_GONG_SHOU,
+                ZHU_GE_BU_SHOU,
 
                 YUN_TI,
                 CHONG_CHE,
