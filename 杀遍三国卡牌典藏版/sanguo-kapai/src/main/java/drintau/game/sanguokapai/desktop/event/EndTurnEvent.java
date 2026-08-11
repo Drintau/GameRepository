@@ -113,7 +113,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                     desktopContext.getPeoplePlayer().getHp().set(desktopContext.getPeoplePlayer().getHp().get() - lowerHP);
                     cells[curRowIndex][actionItem.getCurColIndex()].getChildren().clear();
                     cells[curRowIndex][actionItem.getCurColIndex()].setUserData(null);
-                    desktopContext.getGameOverEvent().testGameOver();
+                    desktopContext.testGameOver();
                 });
                 actionItem.setDeadFlag(true);
                 actionItem.setMoveFinishFlag(true);
@@ -128,7 +128,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                     desktopContext.getAiPlayer().getHp().set(desktopContext.getAiPlayer().getHp().get() - lowerHP);
                     cells[curRowIndex][actionItem.getCurColIndex()].getChildren().clear();
                     cells[curRowIndex][actionItem.getCurColIndex()].setUserData(null);
-                    desktopContext.getGameOverEvent().testGameOver();
+                    desktopContext.testGameOver();
                 });
                 actionItem.setDeadFlag(true);
                 actionItem.setMoveFinishFlag(true);

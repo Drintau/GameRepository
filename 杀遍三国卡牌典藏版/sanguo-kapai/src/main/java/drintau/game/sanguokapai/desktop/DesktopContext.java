@@ -5,8 +5,7 @@ import drintau.game.sanguokapai.card.EquipmentCard;
 import drintau.game.sanguokapai.card.TacticCard;
 import drintau.game.sanguokapai.card.UnitCard;
 import drintau.game.sanguokapai.data.*;
-import drintau.game.sanguokapai.desktop.event.GameOverEvent;
-import javafx.beans.binding.Bindings;
+import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.control.Button;
@@ -90,7 +89,6 @@ public class DesktopContext {
 
     // 游戏结束标记
     private boolean gameOverFlag;
-    private GameOverEvent gameOverEvent = new GameOverEvent();
 
     // 初始化
     public void init(StackPane root) {
@@ -118,6 +116,34 @@ public class DesktopContext {
 
         playerDeque.add(aiPlayer);
         playerDeque.add(peoplePlayer);
+    }
+
+    public void testGameOver() {
+        if (this.getPeoplePlayer().getHp().get() <= 0) {
+            if (!this.isGameOverFlag()) {
+                BorderPane gameOverPane = new BorderPane();
+                Label gameOverLabel = new Label("游戏结束！很遗憾输了！请关闭程序重新游玩。");
+                gameOverLabel.setBackground(StyleConstants.WHITE_BACKGROUND);
+                gameOverLabel.setFont(StyleConstants.font24);
+                gameOverPane.setCenter(gameOverLabel);
+                this.setGameOverFlag(true);
+                Platform.runLater(() -> {
+                    this.getRoot().getChildren().addAll(this.getScrim(), gameOverPane);
+                });
+            }
+        } else if (this.getAiPlayer().getHp().get() <= 0) {
+            if (!this.isGameOverFlag()) {
+                BorderPane gameOverPane = new BorderPane();
+                Label gameOverLabel = new Label("游戏结束！恭喜赢了！请关闭程序重新游玩。");
+                gameOverLabel.setBackground(StyleConstants.WHITE_BACKGROUND);
+                gameOverLabel.setFont(StyleConstants.font24);
+                gameOverPane.setCenter(gameOverLabel);
+                this.setGameOverFlag(true);
+                Platform.runLater(() -> {
+                    this.getRoot().getChildren().addAll(this.getScrim(), gameOverPane);
+                });
+            }
+        }
     }
 
 }

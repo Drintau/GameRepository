@@ -20,7 +20,7 @@ public class AnJianShangRen extends TacticCard {
                 PlayerData aiPlayer = DesktopContext.getInstance().getAiPlayer();
                 aiPlayer.getHp().set(aiPlayer.getHp().get() - 5);
             }
-            DesktopContext.getInstance().getGameOverEvent().testGameOver();
+            DesktopContext.getInstance().testGameOver();
         });
         if (playerData.isAiFlag()) {
             DaemonScheduler.getInstance().submitOnceDelayTask(() -> {
