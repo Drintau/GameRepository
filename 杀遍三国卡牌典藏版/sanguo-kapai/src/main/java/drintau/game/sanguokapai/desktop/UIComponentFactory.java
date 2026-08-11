@@ -59,7 +59,7 @@ public class UIComponentFactory {
             execTacticSureButton.setFont(StyleConstants.font20);
             execTacticSureButton.setOnAction(e -> {
                 tacticCard.exec(playerData, rowIndex);
-                DesktopContext.getInstance().getRoot().getChildren().remove(execTacticRoot);
+                DesktopContext.getInstance().getRoot().getChildren().removeAll(DesktopContext.getInstance().getScrim(), execTacticRoot);
             });
             execTacticBottom.getChildren().addAll(execTacticSureButton);
         }

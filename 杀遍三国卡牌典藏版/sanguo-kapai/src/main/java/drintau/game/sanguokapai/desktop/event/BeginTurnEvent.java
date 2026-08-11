@@ -8,6 +8,7 @@ import drintau.game.sanguokapai.data.PlayerData;
 import drintau.game.sanguokapai.desktop.ActionItem;
 import drintau.game.sanguokapai.desktop.DesktopContext;
 import drintau.game.sanguokapai.desktop.StyleConstants;
+import drintau.game.sanguokapai.desktop.UIComponentFactory;
 import drintau.game.sanguokapai.util.DaemonScheduler;
 import drintau.game.sanguokapai.util.RandomUtil;
 import drintau.game.sanguokapai.util.ThreadSleepUtil;
@@ -67,33 +68,10 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         if (randomTactic != null) {
             int randomRow = randomTactic.suggestRow(DesktopContext.getInstance().getAiPlayer());
             // 计策界面
-            BorderPane execTacticRoot = new BorderPane();
-            execTacticRoot.setPadding(new Insets(10));
-            execTacticRoot.setBackground(StyleConstants.WHITE_BACKGROUND);
-            execTacticRoot.setPrefWidth(300);
-            execTacticRoot.setPrefHeight(220);
-            execTacticRoot.setMinSize(300, 220);
-            execTacticRoot.setMaxSize(300, 220);
-
-            Label execTacticTitle = new Label("电脑执行计策");
-            execTacticTitle.setFont(StyleConstants.font24);
-            execTacticRoot.setTop(execTacticTitle);
-            BorderPane.setAlignment(execTacticTitle, Pos.CENTER);
-
-            Label execTacticCenter = new Label(randomTactic.getDescription());
-            execTacticCenter.setWrapText(true);
-            execTacticCenter.setFont(StyleConstants.font16);
-            execTacticRoot.setCenter(execTacticCenter);
-
-            HBox execTacticBottom = new HBox(10);
-            execTacticBottom.setAlignment(Pos.CENTER);
-            Label aiExecTacticLabel = new Label("请勿操作！电脑行动中");
-            aiExecTacticLabel.setFont(StyleConstants.font20);
-            execTacticBottom.getChildren().addAll(aiExecTacticLabel);
-            execTacticRoot.setBottom(execTacticBottom);
+            BorderPane execTacticRoot = UIComponentFactory.createExecTacticRoot(randomTactic, randomRow, desktopContext.getAiPlayer());
             Platform.runLater(() -> {
                 cells[randomRow][DesktopContext.aiPlayerUnitInitColIndex].setBorder(StyleConstants.CELL_BORDER_ACTION);
-                desktopContext.getRoot().getChildren().add(execTacticRoot);
+                desktopContext.getRoot().getChildren().addAll(desktopContext.getScrim(), execTacticRoot);
             });
             ThreadSleepUtil.sleepSeconds(2L);
 
@@ -108,7 +86,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
                 }
             }
             Platform.runLater(() -> {
-                desktopContext.getRoot().getChildren().remove(execTacticRoot);
+                desktopContext.getRoot().getChildren().removeAll(desktopContext.getScrim(), execTacticRoot);
                 cells[randomRow][DesktopContext.aiPlayerUnitInitColIndex].setBorder(StyleConstants.CELL_BORDER_DEFAULT);
             });
             ThreadSleepUtil.sleepSeconds(1L);

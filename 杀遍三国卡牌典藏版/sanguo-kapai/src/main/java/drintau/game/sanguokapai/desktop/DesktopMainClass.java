@@ -111,7 +111,8 @@ public class DesktopMainClass extends Application {
                             }
                         } else if (userData instanceof TacticCard tacticCard) {
                             if (finalCol == DesktopContext.peoplePlayerUnitInitColIndex) {
-                                execTacticUI(tacticCard, finalRow);
+                                BorderPane execTacticRoot = UIComponentFactory.createExecTacticRoot(tacticCard, finalRow, desktopContext.getPeoplePlayer());
+                                desktopContext.getRoot().getChildren().addAll(desktopContext.getScrim(), execTacticRoot);
                                 putFlag = true;
                                 desktopContext.getPeoplePlayer().setCurTurnPutTacticCardFlag(true);
                             }
@@ -246,41 +247,6 @@ public class DesktopMainClass extends Application {
         stage.setHeight(650);
         stage.setResizable(false);
         stage.show();
-    }
-
-    private void execTacticUI(TacticCard tacticCard, int rowIndex) {
-        DesktopContext desktopContext = DesktopContext.getInstance();
-        // 计策界面
-        BorderPane execTacticRoot = new BorderPane();
-        execTacticRoot.setPadding(new Insets(10));
-        execTacticRoot.setBackground(StyleConstants.WHITE_BACKGROUND);
-        execTacticRoot.setPrefWidth(300);
-        execTacticRoot.setPrefHeight(220);
-        execTacticRoot.setMinSize(300, 220);
-        execTacticRoot.setMaxSize(300, 220);
-
-        Label execTacticTitle = new Label("执行计策");
-        execTacticTitle.setFont(StyleConstants.font24);
-        execTacticRoot.setTop(execTacticTitle);
-        BorderPane.setAlignment(execTacticTitle, Pos.CENTER);
-
-        Label execTacticCenter = new Label(tacticCard.getDescription());
-        execTacticCenter.setWrapText(true);
-        execTacticCenter.setFont(StyleConstants.font16);
-        execTacticRoot.setCenter(execTacticCenter);
-
-        HBox execTacticBottom = new HBox(10);
-        execTacticBottom.setAlignment(Pos.CENTER);
-        Button execTacticSureButton = new Button("确认");
-        execTacticSureButton.setFont(StyleConstants.font20);
-        execTacticSureButton.setOnAction(e -> {
-            tacticCard.exec(DesktopContext.getInstance().getPeoplePlayer(), rowIndex);
-            desktopContext.getRoot().getChildren().remove(execTacticRoot);
-        });
-        execTacticBottom.getChildren().addAll(execTacticSureButton);
-        execTacticRoot.setBottom(execTacticBottom);
-
-        desktopContext.getRoot().getChildren().add(execTacticRoot);
     }
 
 }
