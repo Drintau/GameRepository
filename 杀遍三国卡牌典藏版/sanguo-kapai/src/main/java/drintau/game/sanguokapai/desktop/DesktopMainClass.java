@@ -153,10 +153,7 @@ public class DesktopMainClass extends Application {
         gameBoardPane.setBottom(gameBoardPaneBottom);
 
         // 遮盖层
-        Rectangle scrim = new Rectangle();
-        scrim.widthProperty().bind(root.widthProperty());
-        scrim.heightProperty().bind(root.heightProperty());
-        scrim.setFill(Color.color(0, 0.5, 0, 0.2));
+        Rectangle scrim = UIComponentFactory.createRectangle(root);
 
         // 选择卡牌
         BorderPane cardSelectRoot = new BorderPane();
