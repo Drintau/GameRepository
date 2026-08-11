@@ -14,7 +14,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
@@ -25,11 +24,10 @@ public class DesktopMainClass extends Application {
     @Override
     public void start(Stage stage) {
         DesktopContext desktopContext = DesktopContext.getInstance();
-        desktopContext.ruleInit();
 
         // 根节点
         StackPane root = new StackPane();
-        desktopContext.setRoot(root);
+        desktopContext.init(root);
 
         // 棋盘界面
         BorderPane gameBoardPaneTop = new BorderPane();
@@ -42,10 +40,14 @@ public class DesktopMainClass extends Application {
         );
         Label peoplePlayerHpLabel = new Label();
         peoplePlayerHpLabel.setFont(StyleConstants.font24);
-        desktopContext.setPeoplePlayerHpLabel(peoplePlayerHpLabel);
+        peoplePlayerHpLabel.textProperty().bind(
+                Bindings.format("玩家 生命值：%d / %d", desktopContext.getPeoplePlayer().getHp(), desktopContext.getPeoplePlayer().getMaxHp())
+        );
         Label aiPlayerHpLabel = new Label();
         aiPlayerHpLabel.setFont(StyleConstants.font24);
-        desktopContext.setAiPlayerHpLabel(aiPlayerHpLabel);
+        aiPlayerHpLabel.textProperty().bind(
+                Bindings.format("电脑 生命值：%d / %d", desktopContext.getAiPlayer().getHp(), desktopContext.getAiPlayer().getMaxHp())
+        );
         gameBoardPaneTop.setLeft(peoplePlayerHpLabel);
         gameBoardPaneTop.setCenter(turnCountLabel);
         gameBoardPaneTop.setRight(aiPlayerHpLabel);
@@ -237,9 +239,6 @@ public class DesktopMainClass extends Application {
 
         root.getChildren().addAll(gameBoardPane);
         Scene scene = new Scene(root);
-
-        // 玩家初始化
-        desktopContext.playerInit();
 
         stage.setScene(scene);
         stage.setTitle("杀遍三国卡牌典藏版");

@@ -15,6 +15,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -45,27 +46,34 @@ public class DesktopContext {
     public static final int moveMaxColIndex = 11; // 单位移动最大列
     public static final int maxSpeed = 10; // 给冲锋模式用的
 
+    // 回合计数
     private IntegerProperty turnCount = new SimpleIntegerProperty(1);
 
+    // 根节点
+    private StackPane root;
+    // 遮盖层
+    private Rectangle scrim;
+    // 棋盘格子
     private StackPane[][] cells;
-
-    // 玩游戏界面的控件
+    // 回合控件
     private Button beginTurn;
     private Button selectCard;
     private Button endTurn;
-    // 选卡牌界面的控件
+    // 选卡牌控件
     private HBox cardSelectCenter;
     private List<ToggleButton> cardList = new ArrayList<>(5);
-    // 根节点
-    private StackPane root;
-    // 战斗界面需要的控件
+    // 战斗控件
     private BorderPane attackRoot;
+    // 战斗锁
     private final Object battleLock = new Object();
+    // 电脑行动锁
     private final Object aiActionLock = new Object();
 
+    // 行动单位队列
     private ArrayDeque<ActionItem> actionDeque = new ArrayDeque<>();
     private ArrayDeque<ActionItem> nextActionDeque = new ArrayDeque<>();
 
+    // 卡牌
     private List<UnitCard> heroList = HeroData.getAllHeroes();
     private List<UnitCard> soldierList = SoldierData.getAllSoldiers();
     private List<EquipmentCard> equipmentList = EquipmentData.getAllEquipments();
@@ -73,17 +81,18 @@ public class DesktopContext {
     // 兵种克制关系
     public EnumMap<CardConstants.UnitType, CardConstants.UnitType> ADVANTAGE_MAP = new EnumMap<>(CardConstants.UnitType.class);
 
+    // 玩家行动
     private ArrayDeque<PlayerData> playerDeque = new ArrayDeque<>();
     private ArrayDeque<PlayerData> nextPlayerDeque = new ArrayDeque<>();
     private PlayerData aiPlayer = new PlayerData();
     private PlayerData peoplePlayer = new PlayerData();
-    private Label peoplePlayerHpLabel;
-    private Label aiPlayerHpLabel;
 
+    // 游戏结束标记
     private boolean gameOverFlag;
     private GameOverEvent gameOverEvent = new GameOverEvent();
 
-    public void ruleInit() {
+    // 初始化
+    public void init(StackPane root) {
         ADVANTAGE_MAP.put(CardConstants.UnitType.GUNNER, CardConstants.UnitType.CAVALRY);   // 枪 → 骑
         ADVANTAGE_MAP.put(CardConstants.UnitType.CAVALRY, CardConstants.UnitType.ARMOR);    // 骑 → 甲
         ADVANTAGE_MAP.put(CardConstants.UnitType.ARMOR, CardConstants.UnitType.MAGE);       // 甲 → 术
@@ -91,22 +100,17 @@ public class DesktopContext {
         ADVANTAGE_MAP.put(CardConstants.UnitType.SHIELD, CardConstants.UnitType.SHOOTER);   // 盾 → 射
         ADVANTAGE_MAP.put(CardConstants.UnitType.SHOOTER, CardConstants.UnitType.GUNNER);   // 射 → 枪
         ADVANTAGE_MAP.put(CardConstants.UnitType.SIEGE, CardConstants.UnitType.NONE);   // 器械不克制任何，也不被任何克制
-    }
 
-    public void playerInit() {
+        this.root = root;
+        scrim = UIComponentFactory.createRectangle(this.root);
+
         aiPlayer.setAiFlag(true);
         aiPlayer.setEqColIndex(aiPlayerEqColIndex);
         aiPlayer.setUnitInitColIndex(aiPlayerUnitInitColIndex);
-        aiPlayerHpLabel.textProperty().bind(
-                Bindings.format("电脑 生命值：%d / %d", aiPlayer.getHp(), aiPlayer.getMaxHp())
-        );
 
         peoplePlayer.setAiFlag(false);
         peoplePlayer.setEqColIndex(peoplePlayerEqColIndex);
         peoplePlayer.setUnitInitColIndex(peoplePlayerUnitInitColIndex);
-        peoplePlayerHpLabel.textProperty().bind(
-                Bindings.format("玩家 生命值：%d / %d", peoplePlayer.getHp(), peoplePlayer.getMaxHp())
-        );
 
         playerDeque.add(aiPlayer);
         playerDeque.add(peoplePlayer);
