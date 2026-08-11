@@ -203,7 +203,7 @@ public class DesktopMainClass extends Application {
         Button attackSureButton = new Button("确认");
         attackSureButton.setFont(StyleConstants.font20);
         attackSureButton.setOnAction(e -> {
-            desktopContext.getRoot().getChildren().remove(desktopContext.getAttackRoot());
+            desktopContext.getRoot().getChildren().removeAll(desktopContext.getScrim(), desktopContext.getAttackRoot());
             synchronized (desktopContext.getBattleLock()) {
                 desktopContext.getBattleLock().notify();
             }

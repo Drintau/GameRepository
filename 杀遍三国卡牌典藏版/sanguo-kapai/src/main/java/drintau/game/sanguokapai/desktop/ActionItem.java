@@ -11,7 +11,7 @@ public class ActionItem {
     // 归属阵营
     private boolean aiPlayer;
 
-    // 存活标记
+    // 消灭标记
     private boolean deadFlag;
     // 行动完成标记
     private boolean moveFinishFlag;
@@ -20,6 +20,7 @@ public class ActionItem {
     private int curRowIndex;
     private int curColIndex;
 
+    // 卡牌
     private UnitCard unitCard;
 
     // 增加速度
