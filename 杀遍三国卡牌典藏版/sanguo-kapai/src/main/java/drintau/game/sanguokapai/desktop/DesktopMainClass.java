@@ -155,9 +155,6 @@ public class DesktopMainClass extends Application {
         gameBoardPane.setCenter(gridPane);
         gameBoardPane.setBottom(gameBoardPaneBottom);
 
-        // 遮盖层
-        Rectangle scrim = UIComponentFactory.createRectangle(root);
-
         // 选择卡牌
         BorderPane cardSelectRoot = new BorderPane();
         cardSelectRoot.setPadding(new Insets(10));
@@ -222,21 +219,21 @@ public class DesktopMainClass extends Application {
                 Object userData = desktopContext.getPeoplePlayer().getSelectCard().getUserData();
                 if (userData instanceof UnitCard) {
                     if (!desktopContext.getPeoplePlayer().isCurTurnPutUnitCardFlag()) {
-                        root.getChildren().removeAll(scrim,cardSelectRoot);
+                        root.getChildren().removeAll(desktopContext.getScrim(), cardSelectRoot);
                     }
                 } else if (userData instanceof EquipmentCard) {
                     if (!desktopContext.getPeoplePlayer().isCurTurnPutEqCardFlag()) {
-                        root.getChildren().removeAll(scrim,cardSelectRoot);
+                        root.getChildren().removeAll(desktopContext.getScrim(), cardSelectRoot);
                     }
                 } else if (userData instanceof TacticCard) {
                     if (!desktopContext.getPeoplePlayer().isCurTurnPutTacticCardFlag()) {
-                        root.getChildren().removeAll(scrim,cardSelectRoot);
+                        root.getChildren().removeAll(desktopContext.getScrim(), cardSelectRoot);
                     }
                 }
             }
         });
-        selectCard.setOnAction(e -> root.getChildren().addAll(scrim, cardSelectRoot));
-        cardSelectCloseButton.setOnAction(e -> root.getChildren().removeAll(scrim,cardSelectRoot));
+        selectCard.setOnAction(e -> root.getChildren().addAll(desktopContext.getScrim(), cardSelectRoot));
+        cardSelectCloseButton.setOnAction(e -> root.getChildren().removeAll(desktopContext.getScrim(), cardSelectRoot));
 
         root.getChildren().addAll(gameBoardPane);
         Scene scene = new Scene(root);

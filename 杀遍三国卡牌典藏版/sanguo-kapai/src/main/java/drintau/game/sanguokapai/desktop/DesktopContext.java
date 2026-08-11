@@ -15,6 +15,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import lombok.Getter;
 import lombok.Setter;
@@ -102,7 +103,10 @@ public class DesktopContext {
         ADVANTAGE_MAP.put(CardConstants.UnitType.SIEGE, CardConstants.UnitType.NONE);   // 器械不克制任何，也不被任何克制
 
         this.root = root;
-        scrim = UIComponentFactory.createRectangle(this.root);
+        scrim = new Rectangle();
+        scrim.widthProperty().bind(root.widthProperty());
+        scrim.heightProperty().bind(root.heightProperty());
+        scrim.setFill(Color.color(0, 0.5, 0, 0.2));
 
         aiPlayer.setAiFlag(true);
         aiPlayer.setEqColIndex(aiPlayerEqColIndex);

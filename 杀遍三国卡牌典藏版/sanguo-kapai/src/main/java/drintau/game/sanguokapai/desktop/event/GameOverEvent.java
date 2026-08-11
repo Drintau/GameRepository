@@ -15,7 +15,6 @@ public class GameOverEvent {
 
         if (desktopContext.getPeoplePlayer().getHp().get() <= 0) {
             if (!desktopContext.isGameOverFlag()) {
-                Rectangle scrim = UIComponentFactory.createRectangle(desktopContext.getRoot());
                 BorderPane gameOverPane = new BorderPane();
                 Label gameOverLabel = new Label("游戏结束！很遗憾输了！请关闭程序重新游玩。");
                 gameOverLabel.setBackground(StyleConstants.WHITE_BACKGROUND);
@@ -23,12 +22,11 @@ public class GameOverEvent {
                 gameOverPane.setCenter(gameOverLabel);
                 desktopContext.setGameOverFlag(true);
                 Platform.runLater(() -> {
-                    desktopContext.getRoot().getChildren().addAll(scrim, gameOverPane);
+                    desktopContext.getRoot().getChildren().addAll(desktopContext.getScrim(), gameOverPane);
                 });
             }
         } else if (desktopContext.getAiPlayer().getHp().get() <= 0) {
             if (!desktopContext.isGameOverFlag()) {
-                Rectangle scrim = UIComponentFactory.createRectangle(desktopContext.getRoot());
                 BorderPane gameOverPane = new BorderPane();
                 Label gameOverLabel = new Label("游戏结束！恭喜赢了！请关闭程序重新游玩。");
                 gameOverLabel.setBackground(StyleConstants.WHITE_BACKGROUND);
@@ -36,7 +34,7 @@ public class GameOverEvent {
                 gameOverPane.setCenter(gameOverLabel);
                 desktopContext.setGameOverFlag(true);
                 Platform.runLater(() -> {
-                    desktopContext.getRoot().getChildren().addAll(scrim, gameOverPane);
+                    desktopContext.getRoot().getChildren().addAll(desktopContext.getScrim(), gameOverPane);
                 });
             }
         }
