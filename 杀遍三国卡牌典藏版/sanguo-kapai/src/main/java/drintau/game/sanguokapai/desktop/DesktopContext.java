@@ -111,15 +111,25 @@ public class DesktopContext {
         aiPlayer.setAiFlag(true);
         aiPlayer.setEqColIndex(aiPlayerEqColIndex);
         aiPlayer.setUnitInitColIndex(aiPlayerUnitInitColIndex);
-        aiPlayer.setMaxDeadCount(new SimpleIntegerProperty(10000));
+        aiPlayer.setMaxDeadCount(new SimpleIntegerProperty(100));
 
         peoplePlayer.setAiFlag(false);
         peoplePlayer.setEqColIndex(peoplePlayerEqColIndex);
         peoplePlayer.setUnitInitColIndex(peoplePlayerUnitInitColIndex);
-        peoplePlayer.setMaxDeadCount(new SimpleIntegerProperty(10));
+        peoplePlayer.setMaxDeadCount(new SimpleIntegerProperty(30));
 
         playerDeque.add(aiPlayer);
         playerDeque.add(peoplePlayer);
+    }
+
+    public void handleDeadCount(ActionItem actionItem) {
+        if (actionItem.isAiPlayer()) {
+            int nowDeadCount = this.getAiPlayer().getDeadCount().get() + 1;
+            this.getAiPlayer().getDeadCount().set(nowDeadCount);
+        } else {
+            int nowDeadCount = this.getPeoplePlayer().getDeadCount().get() + 1;
+            this.getPeoplePlayer().getDeadCount().set(nowDeadCount);
+        }
     }
 
     public void testGameOver() {

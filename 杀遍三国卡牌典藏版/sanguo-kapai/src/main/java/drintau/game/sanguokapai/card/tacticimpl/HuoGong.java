@@ -42,6 +42,7 @@ public class HuoGong extends TacticCard {
                                     cell.getChildren().clear();
                                     cell.setUserData(null);
                                     cell.setBorder(StyleConstants.CELL_BORDER_DEFAULT);
+                                    DesktopContext.getInstance().handleDeadCount(targetCellActionItem);
                                 });
                             } else {
                                 Platform.runLater(() -> {
@@ -73,6 +74,7 @@ public class HuoGong extends TacticCard {
                                     cell.getChildren().clear();
                                     cell.setUserData(null);
                                     cell.setBorder(StyleConstants.CELL_BORDER_DEFAULT);
+                                    DesktopContext.getInstance().handleDeadCount(targetCellActionItem);
                                 });
                             } else {
                                 Platform.runLater(() -> {
@@ -90,6 +92,8 @@ public class HuoGong extends TacticCard {
                     DesktopContext.getInstance().getEndTurnBtn().setDisable(false);
                 });
             }
+
+            DesktopContext.getInstance().testGameOver();
         }, 1L, TimeUnit.SECONDS);
     }
 

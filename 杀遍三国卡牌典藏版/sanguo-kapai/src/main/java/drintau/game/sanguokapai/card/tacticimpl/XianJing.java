@@ -41,6 +41,7 @@ public class XianJing extends TacticCard {
                                 cell.getChildren().clear();
                                 cell.setUserData(null);
                                 cell.setBorder(StyleConstants.CELL_BORDER_DEFAULT);
+                                DesktopContext.getInstance().handleDeadCount(targetCellActionItem);
                             });
                             ThreadSleepUtil.sleepSeconds(1L);
                             break;
@@ -67,6 +68,7 @@ public class XianJing extends TacticCard {
                                 cell.getChildren().clear();
                                 cell.setUserData(null);
                                 cell.setBorder(StyleConstants.CELL_BORDER_DEFAULT);
+                                DesktopContext.getInstance().handleDeadCount(targetCellActionItem);
                             });
                             ThreadSleepUtil.sleepSeconds(1L);
                             break;
@@ -80,6 +82,8 @@ public class XianJing extends TacticCard {
                     DesktopContext.getInstance().getEndTurnBtn().setDisable(false);
                 });
             }
+
+            DesktopContext.getInstance().testGameOver();
         }, 1L, TimeUnit.SECONDS);
     }
 

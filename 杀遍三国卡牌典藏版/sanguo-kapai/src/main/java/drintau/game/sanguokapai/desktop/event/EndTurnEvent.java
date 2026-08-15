@@ -179,7 +179,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                     Platform.runLater(() -> {
                         cells[curRowIndex][removeColIndex].getChildren().clear();
                         cells[curRowIndex][removeColIndex].setUserData(null);
-                        handleDeadCount(targetCellActionItem);
+                        desktopContext.handleDeadCount(targetCellActionItem);
                     });
                     // 提前标记，后面的移动还是正常执行一次的
                     actionItem.setMoveFinishFlag(true);
@@ -198,7 +198,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                     Platform.runLater(() -> {
                         cells[curRowIndex][removeColIndex].getChildren().clear();
                         cells[curRowIndex][removeColIndex].setUserData(null);
-                        handleDeadCount(actionItem);
+                        desktopContext.handleDeadCount(actionItem);
                     });
                     ThreadSleepUtil.sleepSeconds(1L);
                     return false;
@@ -213,8 +213,8 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                         cells[curRowIndex][removeColIndex1].setUserData(null);
                         cells[curRowIndex][removeColIndex2].getChildren().clear();
                         cells[curRowIndex][removeColIndex2].setUserData(null);
-                        handleDeadCount(actionItem);
-                        handleDeadCount(targetCellActionItem);
+                        desktopContext.handleDeadCount(actionItem);
+                        desktopContext.handleDeadCount(targetCellActionItem);
                     });
                     ThreadSleepUtil.sleepSeconds(1L);
                     return false;
@@ -310,16 +310,6 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
             }
         }
         return true;
-    }
-
-    private void handleDeadCount(ActionItem actionItem) {
-        if (actionItem.isAiPlayer()) {
-            int nowDeadCount = DesktopContext.getInstance().getAiPlayer().getDeadCount().get() + 1;
-            DesktopContext.getInstance().getAiPlayer().getDeadCount().set(nowDeadCount);
-        } else {
-            int nowDeadCount = DesktopContext.getInstance().getPeoplePlayer().getDeadCount().get() + 1;
-            DesktopContext.getInstance().getPeoplePlayer().getDeadCount().set(nowDeadCount);
-        }
     }
 
 }
