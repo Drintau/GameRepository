@@ -48,9 +48,10 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
 
                 chargeMode = checkChargeMode(chargeMode, actionItem);
 
-                // 移动力
-                int addSpeed = calcEqAddSpeed(actionItem);
-                actionItem.setAddSpeed(addSpeed);
+                // 装备加成：移动力、战力
+                actionItem.setAddSpeed(0);
+                actionItem.setAddAttack(0);
+                calcEqAdd(actionItem);
                 actionItem.setCurSpeed(actionItem.getUnitCard().getSpeed() + actionItem.getAddSpeed());
                 // 当前行
                 int curRowIndex = actionItem.getCurRowIndex();
@@ -79,6 +80,8 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                     }
                 }
                 if (!actionItem.isDeadFlag()) {
+                    actionItem.setAddSpeed(0);
+                    actionItem.setAddAttack(0);
                     actionItem.setMoveFinishFlag(false);
                     desktopContext.getNextActionDeque().add(actionItem);
                 }
@@ -105,8 +108,6 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
         if (cell.getChildren().isEmpty()) {
             // 目标格子空白：如果是敌方本阵，攻入；否则移动到该格子
             if (actionItem.isAiPlayer() && desktopContext.getPeoplePlayer().beAttack(nextColIndex)) {
-                int eqAddAttack = calcEqAddAttack(actionItem);
-                actionItem.setAddAttack(eqAddAttack);
                 actionItem.setCurAttack(actionItem.getUnitCard().getBaseAttack() + actionItem.getAddAttack());
                 int lowerHP = actionItem.getCurAttack();
                 Platform.runLater(() -> {
@@ -120,8 +121,6 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                 ThreadSleepUtil.sleepSeconds(1L);
                 return false;
             } else if (!actionItem.isAiPlayer() && desktopContext.getAiPlayer().beAttack(nextColIndex)) {
-                int eqAddAttack = calcEqAddAttack(actionItem);
-                actionItem.setAddAttack(eqAddAttack);
                 actionItem.setCurAttack(actionItem.getUnitCard().getBaseAttack() + actionItem.getAddAttack());
                 int lowerHP = actionItem.getCurAttack();
                 Platform.runLater(() -> {
@@ -143,14 +142,11 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
             // 目标格子不空白：如果是敌方单位，战斗；如果是己方单位，再判断下一格，移动力消耗加1
             ActionItem targetCellActionItem = (ActionItem) cell.getUserData();
             if (actionItem.isAiPlayer() != targetCellActionItem.isAiPlayer()) {
-                // 加成战力归0
-                actionItem.setAddAttack(0);
+                // 计算敌方装备加成
+                targetCellActionItem.setAddSpeed(0);
                 targetCellActionItem.setAddAttack(0);
-                // 装备加成
-                int actionItemEqAddAttack = calcEqAddAttack(actionItem);
-                int targetCellEqAddAttack = calcEqAddAttack(targetCellActionItem);
-                actionItem.setAddAttack(actionItem.getAddAttack() + actionItemEqAddAttack);
-                targetCellActionItem.setAddAttack(targetCellActionItem.getAddAttack() + targetCellEqAddAttack);
+                calcEqAdd(targetCellActionItem);
+
                 // 属性克制
                 CardConstants.UnitType actionItemBeatUnitType = desktopContext.ADVANTAGE_MAP.get(actionItem.getUnitCard().getUnitType());
                 CardConstants.UnitType targetCellBeatUnitType = desktopContext.ADVANTAGE_MAP.get(targetCellActionItem.getUnitCard().getUnitType());
@@ -248,7 +244,8 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
         });
     }
 
-    private int calcEqAddAttack(ActionItem actionItem) {
+    // 计算装备加成
+    private void calcEqAdd(ActionItem actionItem) {
         DesktopContext desktopContext = DesktopContext.getInstance();
         StackPane[][] cells = desktopContext.getCells();
 
@@ -256,7 +253,10 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
             if (!cells[actionItem.getCurRowIndex()][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getChildren().isEmpty()) {
                 if (cells[actionItem.getCurRowIndex()][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
                     if (equipmentCard.getUnitType() == CardConstants.UnitType.ALL || equipmentCard.getUnitType() == actionItem.getUnitCard().getUnitType()) {
-                        return equipmentCard.getAddAttack();
+                        // 加速度
+                        actionItem.setAddSpeed(actionItem.getAddSpeed() + equipmentCard.getAddSpeed());
+                        // 加战力
+                        actionItem.setAddAttack(actionItem.getAddAttack() +  equipmentCard.getAddAttack());
                     }
                 }
             }
@@ -264,36 +264,14 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
             if (!cells[actionItem.getCurRowIndex()][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getChildren().isEmpty()) {
                 if (cells[actionItem.getCurRowIndex()][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
                     if (equipmentCard.getUnitType() == CardConstants.UnitType.ALL || equipmentCard.getUnitType() == actionItem.getUnitCard().getUnitType()) {
-                        return equipmentCard.getAddAttack();
+                        // 加速度
+                        actionItem.setAddSpeed(actionItem.getAddSpeed() + equipmentCard.getAddSpeed());
+                        // 加战力
+                        actionItem.setAddAttack(actionItem.getAddAttack() +  equipmentCard.getAddAttack());
                     }
                 }
             }
         }
-        return 0;
-    }
-
-    private int calcEqAddSpeed(ActionItem actionItem) {
-        DesktopContext desktopContext = DesktopContext.getInstance();
-        StackPane[][] cells = desktopContext.getCells();
-
-        if (actionItem.isAiPlayer()) {
-            if (!cells[actionItem.getCurRowIndex()][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getChildren().isEmpty()) {
-                if (cells[actionItem.getCurRowIndex()][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
-                    if (equipmentCard.getUnitType() == CardConstants.UnitType.ALL) {
-                        return equipmentCard.getAddSpeed();
-                    }
-                }
-            }
-        } else {
-            if (!cells[actionItem.getCurRowIndex()][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getChildren().isEmpty()) {
-                if (cells[actionItem.getCurRowIndex()][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
-                    if (equipmentCard.getUnitType() == CardConstants.UnitType.ALL) {
-                        return equipmentCard.getAddSpeed();
-                    }
-                }
-            }
-        }
-        return 0;
     }
 
     private void showAttackUI(ActionItem actionItem, ActionItem targetCellActionItem) {
