@@ -6,12 +6,17 @@ import drintau.game.sanguokapai.desktop.ActionItem;
 import drintau.game.sanguokapai.desktop.DesktopContext;
 import drintau.game.sanguokapai.desktop.StyleConstants;
 import drintau.game.sanguokapai.util.DaemonScheduler;
+import drintau.game.sanguokapai.util.RandomUtil;
 import drintau.game.sanguokapai.util.ThreadSleepUtil;
 import javafx.application.Platform;
 import javafx.scene.layout.StackPane;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 public class XianJing extends TacticCard {
 
     @Override
@@ -81,5 +86,51 @@ public class XianJing extends TacticCard {
     @Override
     public String getDescription() {
         return "陷阱：一行范围内，敌方最前面的一个单位会被消灭";
+    }
+
+    @Override
+    public int suggestRow(PlayerData playerData) {
+        if (playerData.isAiFlag()) {
+            if (!suggestSuccess()) {
+                return super.suggestRow(playerData);
+            }
+            Map<Integer, Integer> rowEnemyLevelMap =  new HashMap<>();
+            StackPane[][] cells = DesktopContext.getInstance().getCells();
+            for (int rowIndex = 0; rowIndex < DesktopContext.rows; rowIndex++) {
+                for (int colIndex = DesktopContext.aiPlayerUnitInitColIndex; colIndex >= DesktopContext.peoplePlayerUnitInitColIndex; colIndex--) {
+                    StackPane cell = cells[rowIndex][colIndex];
+                    if (!cell.getChildren().isEmpty()) {
+                        ActionItem targetCellActionItem = (ActionItem) cell.getUserData();
+                        if (playerData.isAiFlag() != targetCellActionItem.isAiPlayer()) {
+                            int enemyLevel = targetCellActionItem.getUnitCard().getLevel();
+                            // 敌人数+1
+                            rowEnemyLevelMap.put(rowIndex, enemyLevel);
+                            break;
+                        }
+                    }
+                }
+            }
+            if (rowEnemyLevelMap.isEmpty()) {
+                return super.suggestRow(playerData);
+            }
+            int maxEnemyLevel = 0;
+            int maxEnemyCountRowIndex = 3;
+            for (Map.Entry<Integer, Integer> integerIntegerEntry : rowEnemyLevelMap.entrySet()) {
+                Integer rowIndex = integerIntegerEntry.getKey();
+                Integer enemyLevel = integerIntegerEntry.getValue();
+                if (enemyLevel > maxEnemyLevel) {
+                    maxEnemyCountRowIndex = rowIndex;
+                    maxEnemyLevel = enemyLevel;
+                }
+            }
+            return maxEnemyCountRowIndex;
+        } else {
+            return super.suggestRow(playerData);
+        }
+    }
+
+    private boolean suggestSuccess() {
+        log.info("陷阱计策卡：电脑聪明执行判定");
+        return RandomUtil.roll(RandomUtil.rate80);
     }
 }
