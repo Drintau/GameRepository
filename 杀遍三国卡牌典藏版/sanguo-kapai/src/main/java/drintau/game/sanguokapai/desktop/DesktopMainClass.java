@@ -78,9 +78,9 @@ public class DesktopMainClass extends Application {
                 int finalRow = row;
                 int finalCol = col;
                 cell.setOnMouseClicked(e -> {
-                    if (desktopContext.getPeoplePlayer().getSelectCard() != null) {
+                    if (desktopContext.getPeoplePlayer().getCurCard() != null) {
                         boolean putFlag = false;
-                        ToggleButton selectCard = desktopContext.getPeoplePlayer().getSelectCard();
+                        ToggleButton selectCard = desktopContext.getPeoplePlayer().getCurCard();
                         Object userData = selectCard.getUserData();
                         if (userData instanceof UnitCard unitCard) {
                             if (finalCol == DesktopContext.peoplePlayerUnitInitColIndex && !desktopContext.getPeoplePlayer().isCurTurnPutUnitCardFlag()) {
@@ -118,7 +118,7 @@ public class DesktopMainClass extends Application {
                         }
 
                         if (putFlag) {
-                            desktopContext.getPeoplePlayer().setSelectCard(null);
+                            desktopContext.getPeoplePlayer().setCurCard(null);
                             desktopContext.getCardList().remove(selectCard);
                             desktopContext.getSelectCardCenter().getChildren().remove(selectCard);
                         }
@@ -159,7 +159,7 @@ public class DesktopMainClass extends Application {
 
         // 跳转
         selectCardBtn.setOnAction(e -> {
-            desktopContext.getPeoplePlayer().setSelectCard(null);
+            desktopContext.getPeoplePlayer().setCurCard(null);
             for (ToggleButton toggleButton : desktopContext.getCardList()) {
                 toggleButton.setSelected(false);
             }

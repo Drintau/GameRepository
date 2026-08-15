@@ -18,10 +18,15 @@ public class PlayerData {
     // 出兵列下表，也是大本营下标
     private int unitInitColIndex;
 
+    // 生命值
     private IntegerProperty hp = new SimpleIntegerProperty(100);
     private IntegerProperty maxHp = new SimpleIntegerProperty(100);
 
-    private ToggleButton selectCard;
+    // 伤亡计数
+    private IntegerProperty deadCount = new SimpleIntegerProperty(0);
+    private IntegerProperty maxDeadCount;
+
+    private ToggleButton curCard;
     private boolean curTurnPutUnitCardFlag;
     private boolean curTurnPutEqCardFlag;
     private boolean curTurnPutTacticCardFlag;

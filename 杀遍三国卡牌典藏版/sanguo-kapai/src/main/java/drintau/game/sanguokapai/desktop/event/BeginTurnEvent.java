@@ -42,7 +42,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         desktopContext.getPeoplePlayer().setCurTurnPutUnitCardFlag(false);
         desktopContext.getPeoplePlayer().setCurTurnPutEqCardFlag(false);
         desktopContext.getPeoplePlayer().setCurTurnPutTacticCardFlag(false);
-        desktopContext.getPeoplePlayer().setSelectCard(null);
+        desktopContext.getPeoplePlayer().setCurCard(null);
 
         // 轮流行动
         DaemonScheduler.getInstance().submitOnceDelayTask(() -> {
@@ -173,10 +173,10 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
             }
             cardSelectGroup.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
                 if (newVal != null) {
-                    ToggleButton selected = (ToggleButton) newVal;
-                    desktopContext.getPeoplePlayer().setSelectCard(selected);
+                    ToggleButton card = (ToggleButton) newVal;
+                    desktopContext.getPeoplePlayer().setCurCard(card);
                 } else {
-                    desktopContext.getPeoplePlayer().setSelectCard(null);
+                    desktopContext.getPeoplePlayer().setCurCard(null);
                 }
             });
 

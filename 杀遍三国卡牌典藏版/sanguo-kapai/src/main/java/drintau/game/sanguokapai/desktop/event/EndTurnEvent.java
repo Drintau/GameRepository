@@ -27,7 +27,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
         desktopContext.getBeginTurnBtn().setDisable(true);
         desktopContext.getSelectCardBtn().setDisable(true);
         desktopContext.getEndTurnBtn().setDisable(true);
-        desktopContext.getPeoplePlayer().setSelectCard(null);
+        desktopContext.getPeoplePlayer().setCurCard(null);
 
         // 移动单位
         DaemonScheduler.getInstance().submitOnceDelayTask(() -> {

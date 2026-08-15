@@ -119,8 +119,8 @@ public class UIComponentFactory {
         selectCardRoot.setBottom(selectCardBottom);
 
         selectCardSureButton.setOnAction(e -> {
-            if (desktopContext.getPeoplePlayer().getSelectCard() != null) {
-                Object userData = desktopContext.getPeoplePlayer().getSelectCard().getUserData();
+            if (desktopContext.getPeoplePlayer().getCurCard() != null) {
+                Object userData = desktopContext.getPeoplePlayer().getCurCard().getUserData();
                 if (userData instanceof UnitCard) {
                     if (!desktopContext.getPeoplePlayer().isCurTurnPutUnitCardFlag()) {
                         desktopContext.getRoot().getChildren().removeAll(desktopContext.getScrim(), selectCardRoot);
@@ -137,7 +137,7 @@ public class UIComponentFactory {
             }
         });
         selectCardCloseButton.setOnAction(e -> {
-            desktopContext.getPeoplePlayer().setSelectCard(null);
+            desktopContext.getPeoplePlayer().setCurCard(null);
             desktopContext.getRoot().getChildren().removeAll(desktopContext.getScrim(), selectCardRoot);
         });
 
