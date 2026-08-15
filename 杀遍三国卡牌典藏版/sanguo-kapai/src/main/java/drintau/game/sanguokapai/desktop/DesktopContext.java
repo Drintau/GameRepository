@@ -111,12 +111,12 @@ public class DesktopContext {
         aiPlayer.setAiFlag(true);
         aiPlayer.setEqColIndex(aiPlayerEqColIndex);
         aiPlayer.setUnitInitColIndex(aiPlayerUnitInitColIndex);
-        aiPlayer.setMaxDeadCount(new SimpleIntegerProperty(100));
+        aiPlayer.setMaxDeadCount(new SimpleIntegerProperty(50));
 
         peoplePlayer.setAiFlag(false);
         peoplePlayer.setEqColIndex(peoplePlayerEqColIndex);
         peoplePlayer.setUnitInitColIndex(peoplePlayerUnitInitColIndex);
-        peoplePlayer.setMaxDeadCount(new SimpleIntegerProperty(30));
+        peoplePlayer.setMaxDeadCount(new SimpleIntegerProperty(20));
 
         playerDeque.add(aiPlayer);
         playerDeque.add(peoplePlayer);

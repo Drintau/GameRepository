@@ -60,7 +60,7 @@ public class DesktopMainClass extends Application {
         Label aiPlayerDeadCountLabel = new Label();
         aiPlayerDeadCountLabel.setFont(StyleConstants.font24);
         aiPlayerDeadCountLabel.textProperty().bind(
-                Bindings.format("玩家 伤亡数：%d / %d", desktopContext.getAiPlayer().getDeadCount(), desktopContext.getAiPlayer().getMaxDeadCount())
+                Bindings.format("电脑 伤亡数：%d / %d", desktopContext.getAiPlayer().getDeadCount(), desktopContext.getAiPlayer().getMaxDeadCount())
         );
         VBox aiPlayerInfo = new VBox();
         aiPlayerInfo.getChildren().addAll(aiPlayerHpLabel, aiPlayerDeadCountLabel);
