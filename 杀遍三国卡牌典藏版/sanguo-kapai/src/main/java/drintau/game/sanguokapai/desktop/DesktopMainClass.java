@@ -214,7 +214,13 @@ public class DesktopMainClass extends Application {
         desktopContext.setAttackRoot(attackRoot);
 
         // 跳转
-        selectCard.setOnAction(e -> root.getChildren().addAll(desktopContext.getScrim(), cardSelectRoot));
+        selectCard.setOnAction(e -> {
+            desktopContext.getPeoplePlayer().setSelectCard(null);
+            for (ToggleButton toggleButton : desktopContext.getCardList()) {
+                toggleButton.setSelected(false);
+            }
+            root.getChildren().addAll(desktopContext.getScrim(), cardSelectRoot);
+        });
         cardSelectSureButton.setOnAction(e -> {
             if (desktopContext.getPeoplePlayer().getSelectCard() != null) {
                 Object userData = desktopContext.getPeoplePlayer().getSelectCard().getUserData();
