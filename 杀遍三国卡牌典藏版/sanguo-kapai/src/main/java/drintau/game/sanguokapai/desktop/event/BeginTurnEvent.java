@@ -75,6 +75,10 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
             });
             ThreadSleepUtil.sleepSeconds(2L);
 
+            Platform.runLater(() -> {
+                desktopContext.getRoot().getChildren().removeAll(desktopContext.getScrim(), execTacticRoot);
+            });
+
             randomTactic.exec(DesktopContext.getInstance().getAiPlayer(), randomRow);
 
             synchronized (desktopContext.getAiActionLock()){
@@ -85,8 +89,8 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
                     throw new RuntimeException(e);
                 }
             }
+
             Platform.runLater(() -> {
-                desktopContext.getRoot().getChildren().removeAll(desktopContext.getScrim(), execTacticRoot);
                 cells[randomRow][DesktopContext.aiPlayerUnitInitColIndex].setBorder(StyleConstants.CELL_BORDER_DEFAULT);
             });
             ThreadSleepUtil.sleepSeconds(1L);
