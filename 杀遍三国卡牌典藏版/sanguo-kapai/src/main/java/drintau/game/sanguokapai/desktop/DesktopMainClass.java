@@ -84,7 +84,7 @@ public class DesktopMainClass extends Application {
                         ToggleButton selectCard = desktopContext.getPeoplePlayer().getSelectCard();
                         Object userData = selectCard.getUserData();
                         if (userData instanceof UnitCard unitCard) {
-                            if (finalCol == DesktopContext.peoplePlayerUnitInitColIndex) {
+                            if (finalCol == DesktopContext.peoplePlayerUnitInitColIndex && !desktopContext.getPeoplePlayer().isCurTurnPutUnitCardFlag()) {
                                 cell.getChildren().clear();
                                 cell.setUserData(null);
                                 ActionItem actionItem = new ActionItem(false, finalRow, finalCol, unitCard);
@@ -98,7 +98,7 @@ public class DesktopMainClass extends Application {
                                 desktopContext.getPeoplePlayer().setCurTurnPutUnitCardFlag(true);
                             }
                         } else if (userData instanceof EquipmentCard equipmentCard) {
-                            if (finalCol == DesktopContext.peoplePlayerEqColIndex) {
+                            if (finalCol == DesktopContext.peoplePlayerEqColIndex && !desktopContext.getPeoplePlayer().isCurTurnPutEqCardFlag()) {
                                 cell.getChildren().clear();
                                 cell.setUserData(null);
                                 Label label = new Label(equipmentCard.getDescription());
@@ -110,7 +110,7 @@ public class DesktopMainClass extends Application {
                                 desktopContext.getPeoplePlayer().setCurTurnPutEqCardFlag(true);
                             }
                         } else if (userData instanceof TacticCard tacticCard) {
-                            if (finalCol == DesktopContext.peoplePlayerUnitInitColIndex) {
+                            if (finalCol == DesktopContext.peoplePlayerUnitInitColIndex && !desktopContext.getPeoplePlayer().isCurTurnPutTacticCardFlag()) {
                                 BorderPane execTacticRoot = UIComponentFactory.createExecTacticRoot(tacticCard, finalRow, desktopContext.getPeoplePlayer());
                                 desktopContext.getRoot().getChildren().addAll(desktopContext.getScrim(), execTacticRoot);
                                 putFlag = true;
@@ -214,6 +214,7 @@ public class DesktopMainClass extends Application {
         desktopContext.setAttackRoot(attackRoot);
 
         // 跳转
+        selectCard.setOnAction(e -> root.getChildren().addAll(desktopContext.getScrim(), cardSelectRoot));
         cardSelectSureButton.setOnAction(e -> {
             if (desktopContext.getPeoplePlayer().getSelectCard() != null) {
                 Object userData = desktopContext.getPeoplePlayer().getSelectCard().getUserData();
@@ -232,8 +233,10 @@ public class DesktopMainClass extends Application {
                 }
             }
         });
-        selectCard.setOnAction(e -> root.getChildren().addAll(desktopContext.getScrim(), cardSelectRoot));
-        cardSelectCloseButton.setOnAction(e -> root.getChildren().removeAll(desktopContext.getScrim(), cardSelectRoot));
+        cardSelectCloseButton.setOnAction(e -> {
+            desktopContext.getPeoplePlayer().setSelectCard(null);
+            root.getChildren().removeAll(desktopContext.getScrim(), cardSelectRoot);
+        });
 
         root.getChildren().addAll(gameBoardPane);
         Scene scene = new Scene(root);
