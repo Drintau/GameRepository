@@ -74,6 +74,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                     if (moveSuccessFlag) {
                         actionItem.setCurColIndex(nextColIndex);
                     }
+                    Platform.runLater(desktopContext::testGameOver);
                 }
                 if (!actionItem.isDeadFlag()) {
                     actionItem.setAddSpeed(0);
@@ -110,7 +111,6 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                     desktopContext.getPeoplePlayer().getHp().set(desktopContext.getPeoplePlayer().getHp().get() - lowerHP);
                     cells[curRowIndex][actionItem.getCurColIndex()].getChildren().clear();
                     cells[curRowIndex][actionItem.getCurColIndex()].setUserData(null);
-                    desktopContext.testGameOver();
                 });
                 actionItem.setDeadFlag(true);
                 actionItem.setMoveFinishFlag(true);
@@ -123,7 +123,6 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                     desktopContext.getAiPlayer().getHp().set(desktopContext.getAiPlayer().getHp().get() - lowerHP);
                     cells[curRowIndex][actionItem.getCurColIndex()].getChildren().clear();
                     cells[curRowIndex][actionItem.getCurColIndex()].setUserData(null);
-                    desktopContext.testGameOver();
                 });
                 actionItem.setDeadFlag(true);
                 actionItem.setMoveFinishFlag(true);
@@ -180,6 +179,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                     Platform.runLater(() -> {
                         cells[curRowIndex][removeColIndex].getChildren().clear();
                         cells[curRowIndex][removeColIndex].setUserData(null);
+                        handleDeadCount(targetCellActionItem);
                     });
                     // 提前标记，后面的移动还是正常执行一次的
                     actionItem.setMoveFinishFlag(true);
@@ -198,6 +198,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                     Platform.runLater(() -> {
                         cells[curRowIndex][removeColIndex].getChildren().clear();
                         cells[curRowIndex][removeColIndex].setUserData(null);
+                        handleDeadCount(actionItem);
                     });
                     ThreadSleepUtil.sleepSeconds(1L);
                     return false;
@@ -212,6 +213,8 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
                         cells[curRowIndex][removeColIndex1].setUserData(null);
                         cells[curRowIndex][removeColIndex2].getChildren().clear();
                         cells[curRowIndex][removeColIndex2].setUserData(null);
+                        handleDeadCount(actionItem);
+                        handleDeadCount(targetCellActionItem);
                     });
                     ThreadSleepUtil.sleepSeconds(1L);
                     return false;
@@ -307,6 +310,16 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
             }
         }
         return true;
+    }
+
+    private void handleDeadCount(ActionItem actionItem) {
+        if (actionItem.isAiPlayer()) {
+            int nowDeadCount = DesktopContext.getInstance().getAiPlayer().getDeadCount().get() + 1;
+            DesktopContext.getInstance().getAiPlayer().getDeadCount().set(nowDeadCount);
+        } else {
+            int nowDeadCount = DesktopContext.getInstance().getPeoplePlayer().getDeadCount().get() + 1;
+            DesktopContext.getInstance().getPeoplePlayer().getDeadCount().set(nowDeadCount);
+        }
     }
 
 }

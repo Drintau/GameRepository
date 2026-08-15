@@ -32,24 +32,42 @@ public class DesktopMainClass extends Application {
         BorderPane gameBoardPaneTop = new BorderPane();
         gameBoardPaneTop.setPadding(new Insets(10));
         gameBoardPaneTop.setPrefHeight(50);
+
         Label turnCountLabel = new Label();
         turnCountLabel.setFont(StyleConstants.font24);
         turnCountLabel.textProperty().bind(
                 Bindings.format("回合数：%d", desktopContext.getTurnCount())
         );
+
         Label peoplePlayerHpLabel = new Label();
         peoplePlayerHpLabel.setFont(StyleConstants.font24);
         peoplePlayerHpLabel.textProperty().bind(
                 Bindings.format("玩家 生命值：%d / %d", desktopContext.getPeoplePlayer().getHp(), desktopContext.getPeoplePlayer().getMaxHp())
         );
+        Label peoplePlayerDeadCountLabel = new Label();
+        peoplePlayerDeadCountLabel.setFont(StyleConstants.font24);
+        peoplePlayerDeadCountLabel.textProperty().bind(
+                Bindings.format("玩家 伤亡数：%d / %d", desktopContext.getPeoplePlayer().getDeadCount(), desktopContext.getPeoplePlayer().getMaxDeadCount())
+        );
+        VBox peoplePlayerInfo = new VBox();
+        peoplePlayerInfo.getChildren().addAll(peoplePlayerHpLabel, peoplePlayerDeadCountLabel);
+
         Label aiPlayerHpLabel = new Label();
         aiPlayerHpLabel.setFont(StyleConstants.font24);
         aiPlayerHpLabel.textProperty().bind(
                 Bindings.format("电脑 生命值：%d / %d", desktopContext.getAiPlayer().getHp(), desktopContext.getAiPlayer().getMaxHp())
         );
-        gameBoardPaneTop.setLeft(peoplePlayerHpLabel);
+        Label aiPlayerDeadCountLabel = new Label();
+        aiPlayerDeadCountLabel.setFont(StyleConstants.font24);
+        aiPlayerDeadCountLabel.textProperty().bind(
+                Bindings.format("玩家 伤亡数：%d / %d", desktopContext.getAiPlayer().getDeadCount(), desktopContext.getAiPlayer().getMaxDeadCount())
+        );
+        VBox aiPlayerInfo = new VBox();
+        aiPlayerInfo.getChildren().addAll(aiPlayerHpLabel, aiPlayerDeadCountLabel);
+
+        gameBoardPaneTop.setLeft(peoplePlayerInfo);
         gameBoardPaneTop.setCenter(turnCountLabel);
-        gameBoardPaneTop.setRight(aiPlayerHpLabel);
+        gameBoardPaneTop.setRight(aiPlayerInfo);
         Label helpTextLabel = new Label("克制关系：枪->骑->甲->术->盾->射->枪，器械无克制关系");
         helpTextLabel.setFont(StyleConstants.font24);
         gameBoardPaneTop.setTop(helpTextLabel);
@@ -172,7 +190,7 @@ public class DesktopMainClass extends Application {
         stage.setScene(scene);
         stage.setTitle("杀遍三国卡牌典藏版");
         stage.setWidth(1400);
-        stage.setHeight(650);
+        stage.setHeight(680);
         stage.setResizable(false);
         stage.show();
     }
