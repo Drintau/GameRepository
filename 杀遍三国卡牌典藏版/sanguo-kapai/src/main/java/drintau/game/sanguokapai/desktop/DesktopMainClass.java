@@ -125,7 +125,7 @@ public class DesktopMainClass extends Application {
                         }
                     }
                 });
-                gridPane.add(cell, col ,row);
+                gridPane.add(cell, col, row);
                 cells[row][col] = cell;
             }
         }
