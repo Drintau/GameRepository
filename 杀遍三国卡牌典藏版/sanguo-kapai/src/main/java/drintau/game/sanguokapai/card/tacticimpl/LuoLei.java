@@ -21,8 +21,8 @@ public class LuoLei extends TacticCard {
 
     @Override
     public void exec(PlayerData playerData, int rowIndex) {
-        DesktopContext.getInstance().getSelectCard().setDisable(true);
-        DesktopContext.getInstance().getEndTurn().setDisable(true);
+        DesktopContext.getInstance().getSelectCardBtn().setDisable(true);
+        DesktopContext.getInstance().getEndTurnBtn().setDisable(true);
         DaemonScheduler.getInstance().submitOnceDelayTask(() -> {
             StackPane[][] cells = DesktopContext.getInstance().getCells();
             if (playerData.isAiFlag()) {
@@ -88,8 +88,8 @@ public class LuoLei extends TacticCard {
                 // 玩家继续选择卡牌
                 ThreadSleepUtil.sleepSeconds(1L);
                 Platform.runLater(() -> {
-                    DesktopContext.getInstance().getSelectCard().setDisable(false);
-                    DesktopContext.getInstance().getEndTurn().setDisable(false);
+                    DesktopContext.getInstance().getSelectCardBtn().setDisable(false);
+                    DesktopContext.getInstance().getEndTurnBtn().setDisable(false);
                 });
             }
         }, 1L, TimeUnit.SECONDS);

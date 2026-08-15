@@ -2,7 +2,6 @@ package drintau.game.sanguokapai.desktop.event;
 
 import drintau.game.sanguokapai.card.CardConstants;
 import drintau.game.sanguokapai.card.EquipmentCard;
-import drintau.game.sanguokapai.card.UnitCard;
 import drintau.game.sanguokapai.desktop.ActionItem;
 import drintau.game.sanguokapai.desktop.DesktopContext;
 import drintau.game.sanguokapai.desktop.StyleConstants;
@@ -12,10 +11,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayDeque;
@@ -28,9 +24,9 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
     public void handle(ActionEvent event) {
         DesktopContext desktopContext = DesktopContext.getInstance();
 
-        desktopContext.getBeginTurn().setDisable(true);
-        desktopContext.getSelectCard().setDisable(true);
-        desktopContext.getEndTurn().setDisable(true);
+        desktopContext.getBeginTurnBtn().setDisable(true);
+        desktopContext.getSelectCardBtn().setDisable(true);
+        desktopContext.getEndTurnBtn().setDisable(true);
         desktopContext.getPeoplePlayer().setSelectCard(null);
 
         // 移动单位
@@ -92,9 +88,9 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
             // 回合数+1
             Platform.runLater(() -> {
                 desktopContext.getTurnCount().set(desktopContext.getTurnCount().get() + 1);
-                desktopContext.getBeginTurn().setDisable(false);
-                desktopContext.getSelectCard().setDisable(true);
-                desktopContext.getEndTurn().setDisable(true);
+                desktopContext.getBeginTurnBtn().setDisable(false);
+                desktopContext.getSelectCardBtn().setDisable(true);
+                desktopContext.getEndTurnBtn().setDisable(true);
             });
         }, 1L, TimeUnit.SECONDS);
     }

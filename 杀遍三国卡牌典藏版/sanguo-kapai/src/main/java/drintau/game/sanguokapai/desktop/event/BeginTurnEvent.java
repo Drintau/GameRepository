@@ -15,9 +15,6 @@ import drintau.game.sanguokapai.util.ThreadSleepUtil;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
@@ -40,7 +37,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
     public void handle(ActionEvent event) {
         DesktopContext desktopContext = DesktopContext.getInstance();
 
-        desktopContext.getBeginTurn().setDisable(true);
+        desktopContext.getBeginTurnBtn().setDisable(true);
 
         desktopContext.getPeoplePlayer().setCurTurnPutUnitCardFlag(false);
         desktopContext.getPeoplePlayer().setCurTurnPutEqCardFlag(false);
@@ -140,7 +137,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
     private void peoplePlayGame() {
         DesktopContext desktopContext = DesktopContext.getInstance();
         // 抽取卡牌，重新生成卡牌选项
-        HBox cardSelectCenter = desktopContext.getCardSelectCenter();
+        HBox cardSelectCenter = desktopContext.getSelectCardCenter();
         if (desktopContext.getCardList().size() < 5) {
             log.info("玩家抽卡");
             int createNum = 5 - desktopContext.getCardList().size();
@@ -183,8 +180,8 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
                 }
             });
 
-            desktopContext.getSelectCard().setDisable(false);
-            desktopContext.getEndTurn().setDisable(false);
+            desktopContext.getSelectCardBtn().setDisable(false);
+            desktopContext.getEndTurnBtn().setDisable(false);
         });
     }
 

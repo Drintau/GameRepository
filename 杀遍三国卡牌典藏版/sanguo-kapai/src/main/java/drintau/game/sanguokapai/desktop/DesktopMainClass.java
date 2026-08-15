@@ -14,7 +14,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
@@ -121,7 +120,7 @@ public class DesktopMainClass extends Application {
                         if (putFlag) {
                             desktopContext.getPeoplePlayer().setSelectCard(null);
                             desktopContext.getCardList().remove(selectCard);
-                            desktopContext.getCardSelectCenter().getChildren().remove(selectCard);
+                            desktopContext.getSelectCardCenter().getChildren().remove(selectCard);
                         }
                     }
                 });
@@ -133,21 +132,21 @@ public class DesktopMainClass extends Application {
         HBox gameBoardPaneBottom = new HBox(10);
         gameBoardPaneBottom.setAlignment(Pos.CENTER);
         gameBoardPaneBottom.setPadding(new Insets(10));
-        Button beginTurn = new Button("开始回合");
-        beginTurn.setFont(StyleConstants.font20);
-        Button selectCard = new Button("选择卡牌");
-        selectCard.setFont(StyleConstants.font20);
-        selectCard.setDisable(true);
-        Button endTurn = new Button("结束操作");
-        endTurn.setFont(StyleConstants.font20);
-        endTurn.setDisable(true);
-        gameBoardPaneBottom.getChildren().addAll(beginTurn, selectCard, endTurn);
-        desktopContext.setBeginTurn(beginTurn);
-        desktopContext.setSelectCard(selectCard);
-        desktopContext.setEndTurn(endTurn);
+        Button beginTurnBtn = new Button("开始回合");
+        beginTurnBtn.setFont(StyleConstants.font20);
+        Button selectCardBtn = new Button("选择卡牌");
+        selectCardBtn.setFont(StyleConstants.font20);
+        selectCardBtn.setDisable(true);
+        Button endTurnBtn = new Button("结束操作");
+        endTurnBtn.setFont(StyleConstants.font20);
+        endTurnBtn.setDisable(true);
+        gameBoardPaneBottom.getChildren().addAll(beginTurnBtn, selectCardBtn, endTurnBtn);
+        desktopContext.setBeginTurnBtn(beginTurnBtn);
+        desktopContext.setSelectCardBtn(selectCardBtn);
+        desktopContext.setEndTurnBtn(endTurnBtn);
 
-        beginTurn.setOnAction(new BeginTurnEvent());
-        endTurn.setOnAction(new EndTurnEvent());
+        beginTurnBtn.setOnAction(new BeginTurnEvent());
+        endTurnBtn.setOnAction(new EndTurnEvent());
 
         BorderPane gameBoardPane = new BorderPane();
         gameBoardPane.setBackground(StyleConstants.BLUE_BACKGROUND);
@@ -156,92 +155,15 @@ public class DesktopMainClass extends Application {
         gameBoardPane.setBottom(gameBoardPaneBottom);
 
         // 选择卡牌
-        BorderPane cardSelectRoot = new BorderPane();
-        cardSelectRoot.setPadding(new Insets(10));
-        cardSelectRoot.setBackground(StyleConstants.WHITE_BACKGROUND);
-        cardSelectRoot.setPrefWidth(600);
-        cardSelectRoot.setPrefHeight(300);
-        cardSelectRoot.setMinSize(600, 300);
-        cardSelectRoot.setMaxSize(600, 300);
-
-        Label cardSelectTitle = new Label("选择卡牌");
-        cardSelectTitle.setFont(StyleConstants.font24);
-        cardSelectRoot.setTop(cardSelectTitle);
-        BorderPane.setAlignment(cardSelectTitle, Pos.CENTER);
-
-        HBox cardSelectCenter = new HBox(10);
-        cardSelectCenter.setAlignment(Pos.CENTER);
-        desktopContext.setCardSelectCenter(cardSelectCenter);
-
-        cardSelectRoot.setCenter(cardSelectCenter);
-
-        HBox cardSelectBottom = new HBox(10);
-        cardSelectBottom.setAlignment(Pos.CENTER);
-        Button cardSelectSureButton = new Button("确认");
-        cardSelectSureButton.setFont(StyleConstants.font20);
-        Button cardSelectCloseButton = new Button("关闭");
-        cardSelectCloseButton.setFont(StyleConstants.font20);
-        cardSelectBottom.getChildren().addAll(cardSelectSureButton, cardSelectCloseButton);
-        cardSelectRoot.setBottom(cardSelectBottom);
-
-        // 战斗界面
-        BorderPane attackRoot = new BorderPane();
-        attackRoot.setPadding(new Insets(10));
-        attackRoot.setBackground(StyleConstants.WHITE_BACKGROUND);
-        attackRoot.setPrefWidth(300);
-        attackRoot.setPrefHeight(220);
-        attackRoot.setMinSize(300, 220);
-        attackRoot.setMaxSize(300, 220);
-
-        Label attackTitle = new Label("战斗");
-        attackTitle.setFont(StyleConstants.font24);
-        attackRoot.setTop(attackTitle);
-        BorderPane.setAlignment(attackTitle, Pos.CENTER);
-
-        HBox attackBottom = new HBox(10);
-        attackBottom.setAlignment(Pos.CENTER);
-        Button attackSureButton = new Button("确认");
-        attackSureButton.setFont(StyleConstants.font20);
-        attackSureButton.setOnAction(e -> {
-            desktopContext.getRoot().getChildren().removeAll(desktopContext.getScrim(), desktopContext.getAttackRoot());
-            synchronized (desktopContext.getBattleLock()) {
-                desktopContext.getBattleLock().notify();
-            }
-        });
-        attackBottom.getChildren().addAll(attackSureButton);
-        attackRoot.setBottom(attackBottom);
-
-        desktopContext.setAttackRoot(attackRoot);
+        BorderPane selectCardRoot = UIComponentFactory.createSelectCardRoot(desktopContext);
 
         // 跳转
-        selectCard.setOnAction(e -> {
+        selectCardBtn.setOnAction(e -> {
             desktopContext.getPeoplePlayer().setSelectCard(null);
             for (ToggleButton toggleButton : desktopContext.getCardList()) {
                 toggleButton.setSelected(false);
             }
-            root.getChildren().addAll(desktopContext.getScrim(), cardSelectRoot);
-        });
-        cardSelectSureButton.setOnAction(e -> {
-            if (desktopContext.getPeoplePlayer().getSelectCard() != null) {
-                Object userData = desktopContext.getPeoplePlayer().getSelectCard().getUserData();
-                if (userData instanceof UnitCard) {
-                    if (!desktopContext.getPeoplePlayer().isCurTurnPutUnitCardFlag()) {
-                        root.getChildren().removeAll(desktopContext.getScrim(), cardSelectRoot);
-                    }
-                } else if (userData instanceof EquipmentCard) {
-                    if (!desktopContext.getPeoplePlayer().isCurTurnPutEqCardFlag()) {
-                        root.getChildren().removeAll(desktopContext.getScrim(), cardSelectRoot);
-                    }
-                } else if (userData instanceof TacticCard) {
-                    if (!desktopContext.getPeoplePlayer().isCurTurnPutTacticCardFlag()) {
-                        root.getChildren().removeAll(desktopContext.getScrim(), cardSelectRoot);
-                    }
-                }
-            }
-        });
-        cardSelectCloseButton.setOnAction(e -> {
-            desktopContext.getPeoplePlayer().setSelectCard(null);
-            root.getChildren().removeAll(desktopContext.getScrim(), cardSelectRoot);
+            root.getChildren().addAll(desktopContext.getScrim(), selectCardRoot);
         });
 
         root.getChildren().addAll(gameBoardPane);

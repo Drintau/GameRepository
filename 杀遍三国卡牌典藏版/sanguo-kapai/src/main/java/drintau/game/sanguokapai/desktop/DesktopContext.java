@@ -56,11 +56,11 @@ public class DesktopContext {
     // 棋盘格子
     private StackPane[][] cells;
     // 回合控件
-    private Button beginTurn;
-    private Button selectCard;
-    private Button endTurn;
+    private Button beginTurnBtn;
+    private Button selectCardBtn;
+    private Button endTurnBtn;
     // 选卡牌控件
-    private HBox cardSelectCenter;
+    private HBox selectCardCenter;
     private List<ToggleButton> cardList = new ArrayList<>(5);
     // 战斗控件
     private BorderPane attackRoot;
@@ -105,6 +105,8 @@ public class DesktopContext {
         scrim.widthProperty().bind(root.widthProperty());
         scrim.heightProperty().bind(root.heightProperty());
         scrim.setFill(Color.color(0, 0.5, 0, 0.2));
+
+        this.attackRoot = UIComponentFactory.createAttackRoot(this);
 
         aiPlayer.setAiFlag(true);
         aiPlayer.setEqColIndex(aiPlayerEqColIndex);
