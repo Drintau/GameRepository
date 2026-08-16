@@ -5,6 +5,7 @@ import drintau.game.sanguokapai.card.EquipmentCard;
 import drintau.game.sanguokapai.card.TacticCard;
 import drintau.game.sanguokapai.card.UnitCard;
 import drintau.game.sanguokapai.data.*;
+import drintau.game.sanguokapai.util.RandomUtil;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -136,12 +137,12 @@ public class DesktopContext {
         aiPlayer.setAiFlag(true);
         aiPlayer.setEqColIndex(aiPlayerEqColIndex);
         aiPlayer.setUnitInitColIndex(aiPlayerUnitInitColIndex);
-        aiPlayer.setMaxDeadCount(new SimpleIntegerProperty(50));
+        aiPlayer.setMaxDeadCount(new SimpleIntegerProperty(RandomUtil.randomInt(30) + 30));
 
         peoplePlayer.setAiFlag(false);
         peoplePlayer.setEqColIndex(peoplePlayerEqColIndex);
         peoplePlayer.setUnitInitColIndex(peoplePlayerUnitInitColIndex);
-        peoplePlayer.setMaxDeadCount(new SimpleIntegerProperty(20));
+        peoplePlayer.setMaxDeadCount(new SimpleIntegerProperty(RandomUtil.randomInt(20) + 20));
 
         playerDeque.add(aiPlayer);
         playerDeque.add(peoplePlayer);

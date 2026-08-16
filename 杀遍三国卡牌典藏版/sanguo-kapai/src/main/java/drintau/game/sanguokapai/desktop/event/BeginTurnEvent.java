@@ -243,11 +243,13 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
     private TacticCard getRandomTactic() {
         log.info("电脑抽计策卡");
         TacticCard randomTactic = null;
-        boolean rollFlag = RandomUtil.roll(RandomUtil.rate20);
-        // 每5回合，电脑必出一张计策卡
+        boolean rollFlag;
+        // 每5回合，电脑出张计策卡概率翻倍
         if (DesktopContext.getInstance().getTurnCount().get() % 5 == 0) {
-            rollFlag = true;
-            log.info("回合数整除5，强制出计策卡");
+            log.info("回合数整除5，出计策卡概率翻倍");
+            rollFlag = RandomUtil.roll(RandomUtil.rate40);
+        } else {
+            rollFlag = RandomUtil.roll(RandomUtil.rate20);
         }
         if (rollFlag) {
             List<TacticCard> tacticList = DesktopContext.getInstance().getTacticList();
