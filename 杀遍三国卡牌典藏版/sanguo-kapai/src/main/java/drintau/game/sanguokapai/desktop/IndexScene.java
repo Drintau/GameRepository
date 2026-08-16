@@ -15,11 +15,14 @@ public final class IndexScene extends Scene {
     }
 
     private static Parent createContent() {
+        DesktopContext desktopContext = DesktopContext.getInstance();
+
         BorderPane indexRoot = new BorderPane();
         indexRoot.setBackground(StyleConstants.BLUE_BACKGROUND);
 
         Button startGame = new Button("开始游戏");
         startGame.setFont(StyleConstants.font20);
+        desktopContext.setStartGameBtn(startGame);
 
         Button showAllCard = new Button("卡牌一览");
         showAllCard.setFont(StyleConstants.font20);

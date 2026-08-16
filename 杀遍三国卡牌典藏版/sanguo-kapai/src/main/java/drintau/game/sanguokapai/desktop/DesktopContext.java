@@ -49,6 +49,9 @@ public class DesktopContext {
     // 回合计数
     private IntegerProperty turnCount;
 
+    // 开始游戏、结束游戏按钮，用于设置场景跳转
+    private Button startGameBtn;
+    private Button endGameBtn;
     // 玩游戏场景的根节点
     private StackPane playGameSceneRoot;
     // 遮盖层
@@ -155,36 +158,12 @@ public class DesktopContext {
         // 生命值低于0游戏结束
         if (this.getPeoplePlayer().getHp().get() <= 0) {
             if (!this.isGameOverFlag()) {
-                Rectangle scrim = new Rectangle();
-                scrim.widthProperty().bind(playGameSceneRoot.widthProperty());
-                scrim.heightProperty().bind(playGameSceneRoot.heightProperty());
-                scrim.setFill(Color.color(0, 0.5, 0, 0.8));
-                BorderPane gameOverPane = new BorderPane();
-                Label gameOverLabel = new Label("游戏结束！很遗憾输了！请关闭程序重新游玩。");
-                gameOverLabel.setBackground(StyleConstants.WHITE_BACKGROUND);
-                gameOverLabel.setFont(StyleConstants.font24);
-                gameOverPane.setCenter(gameOverLabel);
-                this.setGameOverFlag(true);
-                Platform.runLater(() -> {
-                    playGameSceneRoot.getChildren().addAll(scrim, gameOverPane);
-                });
+                shouGameOverUI(false);
                 return;
             }
         } else if (this.getAiPlayer().getHp().get() <= 0) {
             if (!this.isGameOverFlag()) {
-                Rectangle scrim = new Rectangle();
-                scrim.widthProperty().bind(playGameSceneRoot.widthProperty());
-                scrim.heightProperty().bind(playGameSceneRoot.heightProperty());
-                scrim.setFill(Color.color(0, 0.5, 0, 0.8));
-                BorderPane gameOverPane = new BorderPane();
-                Label gameOverLabel = new Label("游戏结束！恭喜赢了！请关闭程序重新游玩。");
-                gameOverLabel.setBackground(StyleConstants.WHITE_BACKGROUND);
-                gameOverLabel.setFont(StyleConstants.font24);
-                gameOverPane.setCenter(gameOverLabel);
-                this.setGameOverFlag(true);
-                Platform.runLater(() -> {
-                    playGameSceneRoot.getChildren().addAll(scrim, gameOverPane);
-                });
+                shouGameOverUI(true);
                 return;
             }
         }
@@ -192,39 +171,37 @@ public class DesktopContext {
         // 伤亡超过最大值游戏结束
         if (this.getPeoplePlayer().getDeadCount().get() >= this.getPeoplePlayer().getMaxDeadCount().get()) {
             if (!this.isGameOverFlag()) {
-                Rectangle scrim = new Rectangle();
-                scrim.widthProperty().bind(playGameSceneRoot.widthProperty());
-                scrim.heightProperty().bind(playGameSceneRoot.heightProperty());
-                scrim.setFill(Color.color(0, 0.5, 0, 0.8));
-                BorderPane gameOverPane = new BorderPane();
-                Label gameOverLabel = new Label("游戏结束！很遗憾输了！请关闭程序重新游玩。");
-                gameOverLabel.setBackground(StyleConstants.WHITE_BACKGROUND);
-                gameOverLabel.setFont(StyleConstants.font24);
-                gameOverPane.setCenter(gameOverLabel);
-                this.setGameOverFlag(true);
-                Platform.runLater(() -> {
-                    playGameSceneRoot.getChildren().addAll(scrim, gameOverPane);
-                });
+                shouGameOverUI(false);
                 return;
             }
         } else if (this.getAiPlayer().getDeadCount().get() >= this.getAiPlayer().getMaxDeadCount().get()) {
             if (!this.isGameOverFlag()) {
-                Rectangle scrim = new Rectangle();
-                scrim.widthProperty().bind(playGameSceneRoot.widthProperty());
-                scrim.heightProperty().bind(playGameSceneRoot.heightProperty());
-                scrim.setFill(Color.color(0, 0.5, 0, 0.8));
-                BorderPane gameOverPane = new BorderPane();
-                Label gameOverLabel = new Label("游戏结束！恭喜赢了！请关闭程序重新游玩。");
-                gameOverLabel.setBackground(StyleConstants.WHITE_BACKGROUND);
-                gameOverLabel.setFont(StyleConstants.font24);
-                gameOverPane.setCenter(gameOverLabel);
-                this.setGameOverFlag(true);
-                Platform.runLater(() -> {
-                    playGameSceneRoot.getChildren().addAll(scrim, gameOverPane);
-                });
+                shouGameOverUI(true);
                 return;
             }
         }
+    }
+
+    private void shouGameOverUI(boolean peopleWinFlag) {
+        Rectangle scrim = new Rectangle();
+        scrim.widthProperty().bind(playGameSceneRoot.widthProperty());
+        scrim.heightProperty().bind(playGameSceneRoot.heightProperty());
+        scrim.setFill(Color.color(0, 0.5, 0, 0.8));
+        BorderPane gameOverPane = new BorderPane();
+        Label gameOverLabel;
+        if (peopleWinFlag) {
+            gameOverLabel = new Label("游戏结束！恭喜赢了！");
+        } else {
+            gameOverLabel = new Label("游戏结束！很遗憾输了！");
+        }
+        gameOverLabel.setBackground(StyleConstants.WHITE_BACKGROUND);
+        gameOverLabel.setFont(StyleConstants.font24);
+        gameOverPane.setCenter(gameOverLabel);
+        gameOverPane.setBottom(endGameBtn);
+        this.setGameOverFlag(true);
+        Platform.runLater(() -> {
+            playGameSceneRoot.getChildren().addAll(scrim, gameOverPane);
+        });
     }
 
 }
