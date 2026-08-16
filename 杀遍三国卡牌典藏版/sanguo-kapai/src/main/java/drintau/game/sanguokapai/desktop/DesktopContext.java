@@ -8,12 +8,15 @@ import drintau.game.sanguokapai.data.*;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import lombok.Getter;
@@ -196,8 +199,13 @@ public class DesktopContext {
         }
         gameOverLabel.setBackground(StyleConstants.WHITE_BACKGROUND);
         gameOverLabel.setFont(StyleConstants.font24);
-        gameOverPane.setCenter(gameOverLabel);
-        gameOverPane.setBottom(endGameBtn);
+
+        VBox gameOverCenter = new VBox(10);
+        gameOverCenter.setAlignment(Pos.CENTER);
+        gameOverCenter.setPadding(new Insets(10));
+        gameOverCenter.getChildren().addAll(gameOverLabel, endGameBtn);
+
+        gameOverPane.setCenter(gameOverCenter);
         this.setGameOverFlag(true);
         Platform.runLater(() -> {
             playGameSceneRoot.getChildren().addAll(scrim, gameOverPane);

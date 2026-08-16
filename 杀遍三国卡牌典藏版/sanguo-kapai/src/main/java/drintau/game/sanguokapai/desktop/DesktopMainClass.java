@@ -23,7 +23,7 @@ public class DesktopMainClass extends Application {
     @Override
     public void start(Stage stage) {
         DesktopContext desktopContext = DesktopContext.getInstance();
-        Button endGame = new Button("结束游戏");
+        Button endGame = new Button("返回首页");
         endGame.setFont(StyleConstants.font20);
         desktopContext.setEndGameBtn(endGame);
 
