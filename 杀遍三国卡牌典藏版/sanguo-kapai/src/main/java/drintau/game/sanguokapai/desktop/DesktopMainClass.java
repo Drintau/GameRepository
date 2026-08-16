@@ -24,9 +24,11 @@ public class DesktopMainClass extends Application {
     public void start(Stage stage) {
         DesktopContext desktopContext = DesktopContext.getInstance();
 
+        IndexScene indexScene = new IndexScene();
+
         PlayGameScene playGameScene = new PlayGameScene();
 
-        stage.setScene(playGameScene);
+        stage.setScene(indexScene);
         stage.setTitle("杀遍三国卡牌典藏版");
         stage.setWidth(1400);
         stage.setHeight(680);

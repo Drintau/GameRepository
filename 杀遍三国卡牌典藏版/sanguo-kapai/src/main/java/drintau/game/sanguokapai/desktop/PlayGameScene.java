@@ -15,7 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.*;
 
-public class PlayGameScene extends Scene {
+public final class PlayGameScene extends Scene {
 
     public PlayGameScene() {
         super(createContent());
@@ -24,8 +24,8 @@ public class PlayGameScene extends Scene {
     private static Parent createContent() {
         DesktopContext desktopContext = DesktopContext.getInstance();
         // 根节点
-        StackPane root = new StackPane();
-        desktopContext.init(root);
+        StackPane playGameRoot = new StackPane();
+        desktopContext.init(playGameRoot);
 
         // 棋盘界面
         BorderPane gameBoardPaneTop = new BorderPane();
@@ -180,11 +180,11 @@ public class PlayGameScene extends Scene {
             for (ToggleButton toggleButton : desktopContext.getCardList()) {
                 toggleButton.setSelected(false);
             }
-            root.getChildren().addAll(desktopContext.getScrim(), selectCardRoot);
+            playGameRoot.getChildren().addAll(desktopContext.getScrim(), selectCardRoot);
         });
 
-        root.getChildren().addAll(gameBoardPane);
-        return root;
+        playGameRoot.getChildren().addAll(gameBoardPane);
+        return playGameRoot;
     }
 
 }

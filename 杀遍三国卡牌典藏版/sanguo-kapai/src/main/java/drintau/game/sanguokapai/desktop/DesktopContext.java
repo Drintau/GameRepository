@@ -47,7 +47,7 @@ public class DesktopContext {
     public static final int maxSpeed = 10; // 给冲锋模式用的
 
     // 回合计数
-    private IntegerProperty turnCount = new SimpleIntegerProperty(1);
+    private IntegerProperty turnCount;
 
     // 玩游戏场景的根节点
     private StackPane playGameSceneRoot;
@@ -84,14 +84,33 @@ public class DesktopContext {
     // 玩家行动
     private ArrayDeque<PlayerData> playerDeque = new ArrayDeque<>();
     private ArrayDeque<PlayerData> nextPlayerDeque = new ArrayDeque<>();
-    private PlayerData aiPlayer = new PlayerData();
-    private PlayerData peoplePlayer = new PlayerData();
+    private PlayerData aiPlayer;
+    private PlayerData peoplePlayer;
 
     // 游戏结束标记
     private boolean gameOverFlag;
 
     // 初始化
     public void init(StackPane root) {
+        turnCount = new SimpleIntegerProperty(1);
+        playGameSceneRoot = null;
+        scrim = null;
+        cells = null;
+        beginTurnBtn = null;
+        selectCardBtn = null;
+        endTurnBtn = null;
+        selectCardCenter = null;
+        cardList.clear();
+        attackRoot = null;
+        actionDeque.clear();
+        nextActionDeque.clear();
+        ADVANTAGE_MAP.clear();
+        playerDeque.clear();
+        nextPlayerDeque.clear();
+        aiPlayer = new PlayerData();
+        peoplePlayer = new PlayerData();
+        gameOverFlag = false;
+
         ADVANTAGE_MAP.put(CardConstants.UnitType.GUNNER, CardConstants.UnitType.CAVALRY);   // 枪 → 骑
         ADVANTAGE_MAP.put(CardConstants.UnitType.CAVALRY, CardConstants.UnitType.ARMOR);    // 骑 → 甲
         ADVANTAGE_MAP.put(CardConstants.UnitType.ARMOR, CardConstants.UnitType.MAGE);       // 甲 → 术
