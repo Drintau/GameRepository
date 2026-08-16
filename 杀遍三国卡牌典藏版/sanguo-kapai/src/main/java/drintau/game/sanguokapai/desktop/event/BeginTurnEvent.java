@@ -187,8 +187,8 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
 
     private AbstractCard getRandomCard() {
         AbstractCard randomCard;
-        int randomInt = RandomUtil.randomInt(RandomUtil.rate100);
-        log.info("0<=策略卡<{}<=装备卡<{}<=英雄<{}<=士兵<{}，随机数是：{}", range1, range2, range3, RandomUtil.rate100, randomInt);
+        int randomInt = RandomUtil.randomInt(RandomUtil.maxRandomInt100);
+        log.info("0<=策略卡<{}<=装备卡<{}<=英雄<{}<=士兵<{}，随机数是：{}", range1, range2, range3, RandomUtil.maxRandomInt100, randomInt);
         if (randomInt < range1) {
             // 策略抽取概率
             List<TacticCard> tacticList = DesktopContext.getInstance().getTacticList();
@@ -244,10 +244,10 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         log.info("电脑抽计策卡");
         TacticCard randomTactic = null;
         boolean rollFlag;
-        // 每5回合，电脑出张计策卡概率翻倍
+        // 每5回合，电脑出张计策卡概率增加
         if (DesktopContext.getInstance().getTurnCount().get() % 5 == 0) {
-            log.info("回合数整除5，出计策卡概率翻倍");
-            rollFlag = RandomUtil.roll(RandomUtil.rate40);
+            log.info("回合数整除5，出计策卡概率增加");
+            rollFlag = RandomUtil.roll(RandomUtil.rate50);
         } else {
             rollFlag = RandomUtil.roll(RandomUtil.rate20);
         }
