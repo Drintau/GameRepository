@@ -68,12 +68,12 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
             BorderPane execTacticRoot = UIComponentFactory.createExecTacticRoot(randomTactic, randomRow, desktopContext.getAiPlayer());
             Platform.runLater(() -> {
                 cells[randomRow][DesktopContext.aiPlayerUnitInitColIndex].setBorder(StyleConstants.CELL_BORDER_ACTION);
-                desktopContext.getRoot().getChildren().addAll(desktopContext.getScrim(), execTacticRoot);
+                desktopContext.getPlayGameSceneRoot().getChildren().addAll(desktopContext.getScrim(), execTacticRoot);
             });
             ThreadSleepUtil.sleepSeconds(2L);
 
             Platform.runLater(() -> {
-                desktopContext.getRoot().getChildren().removeAll(desktopContext.getScrim(), execTacticRoot);
+                desktopContext.getPlayGameSceneRoot().getChildren().removeAll(desktopContext.getScrim(), execTacticRoot);
             });
 
             randomTactic.exec(DesktopContext.getInstance().getAiPlayer(), randomRow);

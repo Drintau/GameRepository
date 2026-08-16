@@ -49,8 +49,8 @@ public class DesktopContext {
     // 回合计数
     private IntegerProperty turnCount = new SimpleIntegerProperty(1);
 
-    // 根节点
-    private StackPane root;
+    // 玩游戏场景的根节点
+    private StackPane playGameSceneRoot;
     // 遮盖层
     private Rectangle scrim;
     // 棋盘格子
@@ -100,7 +100,7 @@ public class DesktopContext {
         ADVANTAGE_MAP.put(CardConstants.UnitType.SHOOTER, CardConstants.UnitType.GUNNER);   // 射 → 枪
         ADVANTAGE_MAP.put(CardConstants.UnitType.SIEGE, CardConstants.UnitType.NONE);   // 器械不克制任何，也不被任何克制
 
-        this.root = root;
+        this.playGameSceneRoot = root;
         scrim = new Rectangle();
         scrim.widthProperty().bind(root.widthProperty());
         scrim.heightProperty().bind(root.heightProperty());
@@ -137,8 +137,8 @@ public class DesktopContext {
         if (this.getPeoplePlayer().getHp().get() <= 0) {
             if (!this.isGameOverFlag()) {
                 Rectangle scrim = new Rectangle();
-                scrim.widthProperty().bind(root.widthProperty());
-                scrim.heightProperty().bind(root.heightProperty());
+                scrim.widthProperty().bind(playGameSceneRoot.widthProperty());
+                scrim.heightProperty().bind(playGameSceneRoot.heightProperty());
                 scrim.setFill(Color.color(0, 0.5, 0, 0.8));
                 BorderPane gameOverPane = new BorderPane();
                 Label gameOverLabel = new Label("游戏结束！很遗憾输了！请关闭程序重新游玩。");
@@ -147,15 +147,15 @@ public class DesktopContext {
                 gameOverPane.setCenter(gameOverLabel);
                 this.setGameOverFlag(true);
                 Platform.runLater(() -> {
-                    root.getChildren().addAll(scrim, gameOverPane);
+                    playGameSceneRoot.getChildren().addAll(scrim, gameOverPane);
                 });
                 return;
             }
         } else if (this.getAiPlayer().getHp().get() <= 0) {
             if (!this.isGameOverFlag()) {
                 Rectangle scrim = new Rectangle();
-                scrim.widthProperty().bind(root.widthProperty());
-                scrim.heightProperty().bind(root.heightProperty());
+                scrim.widthProperty().bind(playGameSceneRoot.widthProperty());
+                scrim.heightProperty().bind(playGameSceneRoot.heightProperty());
                 scrim.setFill(Color.color(0, 0.5, 0, 0.8));
                 BorderPane gameOverPane = new BorderPane();
                 Label gameOverLabel = new Label("游戏结束！恭喜赢了！请关闭程序重新游玩。");
@@ -164,7 +164,7 @@ public class DesktopContext {
                 gameOverPane.setCenter(gameOverLabel);
                 this.setGameOverFlag(true);
                 Platform.runLater(() -> {
-                    root.getChildren().addAll(scrim, gameOverPane);
+                    playGameSceneRoot.getChildren().addAll(scrim, gameOverPane);
                 });
                 return;
             }
@@ -174,8 +174,8 @@ public class DesktopContext {
         if (this.getPeoplePlayer().getDeadCount().get() >= this.getPeoplePlayer().getMaxDeadCount().get()) {
             if (!this.isGameOverFlag()) {
                 Rectangle scrim = new Rectangle();
-                scrim.widthProperty().bind(root.widthProperty());
-                scrim.heightProperty().bind(root.heightProperty());
+                scrim.widthProperty().bind(playGameSceneRoot.widthProperty());
+                scrim.heightProperty().bind(playGameSceneRoot.heightProperty());
                 scrim.setFill(Color.color(0, 0.5, 0, 0.8));
                 BorderPane gameOverPane = new BorderPane();
                 Label gameOverLabel = new Label("游戏结束！很遗憾输了！请关闭程序重新游玩。");
@@ -184,15 +184,15 @@ public class DesktopContext {
                 gameOverPane.setCenter(gameOverLabel);
                 this.setGameOverFlag(true);
                 Platform.runLater(() -> {
-                    root.getChildren().addAll(scrim, gameOverPane);
+                    playGameSceneRoot.getChildren().addAll(scrim, gameOverPane);
                 });
                 return;
             }
         } else if (this.getAiPlayer().getDeadCount().get() >= this.getAiPlayer().getMaxDeadCount().get()) {
             if (!this.isGameOverFlag()) {
                 Rectangle scrim = new Rectangle();
-                scrim.widthProperty().bind(root.widthProperty());
-                scrim.heightProperty().bind(root.heightProperty());
+                scrim.widthProperty().bind(playGameSceneRoot.widthProperty());
+                scrim.heightProperty().bind(playGameSceneRoot.heightProperty());
                 scrim.setFill(Color.color(0, 0.5, 0, 0.8));
                 BorderPane gameOverPane = new BorderPane();
                 Label gameOverLabel = new Label("游戏结束！恭喜赢了！请关闭程序重新游玩。");
@@ -201,7 +201,7 @@ public class DesktopContext {
                 gameOverPane.setCenter(gameOverLabel);
                 this.setGameOverFlag(true);
                 Platform.runLater(() -> {
-                    root.getChildren().addAll(scrim, gameOverPane);
+                    playGameSceneRoot.getChildren().addAll(scrim, gameOverPane);
                 });
                 return;
             }

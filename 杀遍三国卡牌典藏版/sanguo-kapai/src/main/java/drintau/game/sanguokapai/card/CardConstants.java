@@ -2,7 +2,7 @@ package drintau.game.sanguokapai.card;
 
 public final class CardConstants {
 
-    // 卡牌类型：装备、战术、单位
+    // 卡牌类型：装备、计策、单位
     public enum CardType {
         EQUIPMENT,TACTIC,UNIT;
     }

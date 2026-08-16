@@ -49,7 +49,7 @@ public class UIComponentFactory {
             execTacticSureButton.setFont(StyleConstants.font20);
             execTacticSureButton.setOnAction(e -> {
                 tacticCard.exec(playerData, rowIndex);
-                DesktopContext.getInstance().getRoot().getChildren().removeAll(DesktopContext.getInstance().getScrim(), execTacticRoot);
+                DesktopContext.getInstance().getPlayGameSceneRoot().getChildren().removeAll(DesktopContext.getInstance().getScrim(), execTacticRoot);
             });
             execTacticBottom.getChildren().addAll(execTacticSureButton);
         }
@@ -77,7 +77,7 @@ public class UIComponentFactory {
         Button attackSureButton = new Button("确认");
         attackSureButton.setFont(StyleConstants.font20);
         attackSureButton.setOnAction(e -> {
-            desktopContext.getRoot().getChildren().removeAll(desktopContext.getScrim(), desktopContext.getAttackRoot());
+            desktopContext.getPlayGameSceneRoot().getChildren().removeAll(desktopContext.getScrim(), desktopContext.getAttackRoot());
             synchronized (desktopContext.getBattleLock()) {
                 desktopContext.getBattleLock().notify();
             }
@@ -123,22 +123,22 @@ public class UIComponentFactory {
                 Object userData = desktopContext.getPeoplePlayer().getCurCard().getUserData();
                 if (userData instanceof UnitCard) {
                     if (!desktopContext.getPeoplePlayer().isCurTurnPutUnitCardFlag()) {
-                        desktopContext.getRoot().getChildren().removeAll(desktopContext.getScrim(), selectCardRoot);
+                        desktopContext.getPlayGameSceneRoot().getChildren().removeAll(desktopContext.getScrim(), selectCardRoot);
                     }
                 } else if (userData instanceof EquipmentCard) {
                     if (!desktopContext.getPeoplePlayer().isCurTurnPutEqCardFlag()) {
-                        desktopContext.getRoot().getChildren().removeAll(desktopContext.getScrim(), selectCardRoot);
+                        desktopContext.getPlayGameSceneRoot().getChildren().removeAll(desktopContext.getScrim(), selectCardRoot);
                     }
                 } else if (userData instanceof TacticCard) {
                     if (!desktopContext.getPeoplePlayer().isCurTurnPutTacticCardFlag()) {
-                        desktopContext.getRoot().getChildren().removeAll(desktopContext.getScrim(), selectCardRoot);
+                        desktopContext.getPlayGameSceneRoot().getChildren().removeAll(desktopContext.getScrim(), selectCardRoot);
                     }
                 }
             }
         });
         selectCardCloseButton.setOnAction(e -> {
             desktopContext.getPeoplePlayer().setCurCard(null);
-            desktopContext.getRoot().getChildren().removeAll(desktopContext.getScrim(), selectCardRoot);
+            desktopContext.getPlayGameSceneRoot().getChildren().removeAll(desktopContext.getScrim(), selectCardRoot);
         });
 
         return selectCardRoot;

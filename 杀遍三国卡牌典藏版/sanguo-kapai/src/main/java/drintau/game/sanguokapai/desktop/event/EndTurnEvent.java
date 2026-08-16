@@ -290,7 +290,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
         aiPlayerUnit.setBackground(StyleConstants.RED_BACKGROUND);
         desktopContext.getAttackRoot().setLeft(peoplePlayerUnit);
         desktopContext.getAttackRoot().setRight(aiPlayerUnit);
-        desktopContext.getRoot().getChildren().addAll(desktopContext.getScrim(), desktopContext.getAttackRoot());
+        desktopContext.getPlayGameSceneRoot().getChildren().addAll(desktopContext.getScrim(), desktopContext.getAttackRoot());
     }
 
     // 判断是否开启冲锋模式
