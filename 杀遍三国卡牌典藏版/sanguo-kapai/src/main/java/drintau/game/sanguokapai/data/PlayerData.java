@@ -1,5 +1,6 @@
 package drintau.game.sanguokapai.data;
 
+import drintau.game.sanguokapai.data.formation.AbstractFormation;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.control.ToggleButton;
@@ -22,6 +23,8 @@ public class PlayerData {
     private IntegerProperty hp = new SimpleIntegerProperty(100);
     private IntegerProperty maxHp = new SimpleIntegerProperty(100);
 
+    // 阵型
+    private AbstractFormation formation;
     // 伤亡计数
     private IntegerProperty deadCount = new SimpleIntegerProperty(0);
     private IntegerProperty maxDeadCount;

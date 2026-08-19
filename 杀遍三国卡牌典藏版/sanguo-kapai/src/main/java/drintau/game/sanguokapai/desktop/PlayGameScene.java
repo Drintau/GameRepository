@@ -46,7 +46,7 @@ public final class PlayGameScene extends Scene {
         Label peoplePlayerDeadCountLabel = new Label();
         peoplePlayerDeadCountLabel.setFont(StyleConstants.font24);
         peoplePlayerDeadCountLabel.textProperty().bind(
-                Bindings.format("玩家 伤亡数：%d / %d", desktopContext.getPeoplePlayer().getDeadCount(), desktopContext.getPeoplePlayer().getMaxDeadCount())
+                Bindings.format("%s 伤亡数：%d / %d", desktopContext.getPeoplePlayer().getFormation().getName(), desktopContext.getPeoplePlayer().getDeadCount(), desktopContext.getPeoplePlayer().getMaxDeadCount())
         );
         VBox peoplePlayerInfo = new VBox();
         peoplePlayerInfo.getChildren().addAll(peoplePlayerHpLabel, peoplePlayerDeadCountLabel);
@@ -59,7 +59,7 @@ public final class PlayGameScene extends Scene {
         Label aiPlayerDeadCountLabel = new Label();
         aiPlayerDeadCountLabel.setFont(StyleConstants.font24);
         aiPlayerDeadCountLabel.textProperty().bind(
-                Bindings.format("电脑 伤亡数：%d / %d", desktopContext.getAiPlayer().getDeadCount(), desktopContext.getAiPlayer().getMaxDeadCount())
+                Bindings.format("%s 伤亡数：%d / %d", desktopContext.getAiPlayer().getFormation().getName(), desktopContext.getAiPlayer().getDeadCount(), desktopContext.getAiPlayer().getMaxDeadCount())
         );
         VBox aiPlayerInfo = new VBox();
         aiPlayerInfo.getChildren().addAll(aiPlayerHpLabel, aiPlayerDeadCountLabel);
