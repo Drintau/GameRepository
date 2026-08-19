@@ -5,7 +5,7 @@ import drintau.game.sanguokapai.card.CardConstants;
 public final class ChongEZhen extends AbstractFormation{
 
     public ChongEZhen() {
-        super("冲轭阵", 40);
+        super(FormationConstants.CHONG_E_ZHEN, 40);
 
         getUnitTypeCountMap().put(CardConstants.UnitType.GUNNER, 3);
         getUnitTypeCountMap().put(CardConstants.UnitType.CAVALRY, 9);

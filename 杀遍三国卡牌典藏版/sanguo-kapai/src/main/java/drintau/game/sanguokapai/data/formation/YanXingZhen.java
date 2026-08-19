@@ -5,7 +5,7 @@ import drintau.game.sanguokapai.card.CardConstants;
 public final class YanXingZhen extends AbstractFormation{
 
     public YanXingZhen() {
-        super("雁形阵", 50);
+        super(FormationConstants.YAN_XING_ZHEN, 50);
 
         getUnitTypeCountMap().put(CardConstants.UnitType.GUNNER, 3);
         getUnitTypeCountMap().put(CardConstants.UnitType.CAVALRY, 12);

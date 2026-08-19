@@ -5,7 +5,7 @@ import drintau.game.sanguokapai.card.CardConstants;
 public final class ChangSheZhen extends AbstractFormation{
 
     public ChangSheZhen() {
-        super("长蛇阵", 50);
+        super(FormationConstants.CHANG_SHE_ZHEN, 50);
 
         getUnitTypeCountMap().put(CardConstants.UnitType.GUNNER, 12);
         getUnitTypeCountMap().put(CardConstants.UnitType.ARMOR, 12);
