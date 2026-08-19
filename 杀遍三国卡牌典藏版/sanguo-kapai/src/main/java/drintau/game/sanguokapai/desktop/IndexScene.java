@@ -7,14 +7,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public final class IndexScene extends Scene {
 
-    public IndexScene() {
-        super(createContent());
+    public IndexScene(Stage stage) {
+        super(createContent(stage));
     }
 
-    private static Parent createContent() {
+    private static Parent createContent(Stage stage) {
         DesktopContext desktopContext = DesktopContext.getInstance();
 
         BorderPane indexRoot = new BorderPane();
@@ -22,7 +23,9 @@ public final class IndexScene extends Scene {
 
         Button startGame = new Button("开始游戏");
         startGame.setFont(StyleConstants.font20);
-        desktopContext.setStartGameBtn(startGame);
+        startGame.setOnAction(event -> {
+            stage.setScene(new PlayGameScene());
+        });
 
         Button showAllCard = new Button("卡牌一览");
         showAllCard.setFont(StyleConstants.font20);

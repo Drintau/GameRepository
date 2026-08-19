@@ -27,11 +27,8 @@ public class DesktopMainClass extends Application {
         endGame.setFont(StyleConstants.font20);
         desktopContext.setEndGameBtn(endGame);
 
-        IndexScene indexScene = new IndexScene();
+        IndexScene indexScene = new IndexScene(stage);
 
-        desktopContext.getStartGameBtn().setOnAction(event -> {
-            stage.setScene(new PlayGameScene());
-        });
         desktopContext.getEndGameBtn().setOnAction(event -> {
             stage.setScene(indexScene);
         });

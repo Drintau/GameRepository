@@ -53,8 +53,7 @@ public class DesktopContext {
     // 回合计数
     private IntegerProperty turnCount;
 
-    // 开始游戏、结束游戏按钮，用于设置场景跳转
-    private Button startGameBtn;
+    // 场景跳转按钮
     private Button endGameBtn;
     // 玩游戏场景的根节点
     private StackPane playGameSceneRoot;
