@@ -201,12 +201,14 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
             randomCard = equipmentList.get(eqIndex);
         } else if (randomInt < range3) {
             // 英雄抽取概率
-            List<UnitCard> heroList = DesktopContext.getInstance().getHeroList();
+//            List<UnitCard> heroList = DesktopContext.getInstance().getHeroList();
+            List<UnitCard> heroList = DesktopContext.getInstance().getPeoplePlayer().getFormation().getHeroList();
             int heroIndex = RandomUtil.randomInt(heroList.size());
             randomCard = heroList.get(heroIndex);
         } else {
             // 基础战斗单位抽取概率
-            List<UnitCard> soldierList = DesktopContext.getInstance().getSoldierList();
+//            List<UnitCard> soldierList = DesktopContext.getInstance().getSoldierList();
+            List<UnitCard> soldierList = DesktopContext.getInstance().getPeoplePlayer().getFormation().getSoldierList();
             int soldierIndex = RandomUtil.randomInt(soldierList.size());
             randomCard = soldierList.get(soldierIndex);
         }
@@ -218,11 +220,13 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
         UnitCard randomUnit;
         if (RandomUtil.roll(RandomUtil.rate20)) {
             // 抽取英雄
-            List<UnitCard> heroList = DesktopContext.getInstance().getHeroList();
+//            List<UnitCard> heroList = DesktopContext.getInstance().getHeroList();
+            List<UnitCard> heroList = DesktopContext.getInstance().getAiPlayer().getFormation().getHeroList();
             int heroIndex = RandomUtil.randomInt(heroList.size());
             randomUnit = heroList.get(heroIndex);
         } else {
-            List<UnitCard> soldierList = DesktopContext.getInstance().getSoldierList();
+//            List<UnitCard> soldierList = DesktopContext.getInstance().getSoldierList();
+            List<UnitCard> soldierList = DesktopContext.getInstance().getAiPlayer().getFormation().getSoldierList();
             int soldierIndex = RandomUtil.randomInt(soldierList.size());
             randomUnit = soldierList.get(soldierIndex);
         }
