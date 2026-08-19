@@ -23,8 +23,8 @@ public abstract class AbstractFormation {
     private String name;
     private Integer unitCount;
 
-    private List<UnitCard> soldierList;
-    private List<UnitCard> heroList;
+    private List<UnitCard> soldierList = new ArrayList<>();
+    private List<UnitCard> heroList = new ArrayList<>();
 
     private Map<CardConstants.UnitType, Integer> unitTypeCountMap =  new HashMap<>();
 
