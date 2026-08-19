@@ -4,6 +4,8 @@ import drintau.game.sanguokapai.card.CardConstants;
 import drintau.game.sanguokapai.card.UnitCard;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public final class SoldierData {
 
@@ -69,6 +71,10 @@ public final class SoldierData {
                 CHONG_CHE,
                 TOU_SHI_CHE
         );
+    }
+
+    public static Map<CardConstants.UnitType, List<UnitCard>> getUnitTypeCardListMap() {
+        return getAllSoldiers().stream().collect(Collectors.groupingBy(UnitCard::getUnitType));
     }
 
 }
