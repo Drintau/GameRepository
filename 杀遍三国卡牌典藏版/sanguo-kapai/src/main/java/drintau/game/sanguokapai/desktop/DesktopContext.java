@@ -23,10 +23,7 @@ import javafx.scene.shape.Rectangle;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
+import java.util.*;
 
 @Setter
 @Getter
@@ -144,6 +141,7 @@ public class DesktopContext {
         peoplePlayer.setUnitInitColIndex(peoplePlayerUnitInitColIndex);
         peoplePlayer.setFormation(FormationFactory.getRandomFormation());
         peoplePlayer.setMaxDeadCount(new SimpleIntegerProperty(peoplePlayer.getFormation().getUnitCount() / 2));
+        peoplePlayer.createNewUnitQueue();
 
         playerDeque.add(aiPlayer);
         playerDeque.add(peoplePlayer);

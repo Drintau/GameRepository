@@ -188,7 +188,8 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
     private AbstractCard getRandomCard() {
         AbstractCard randomCard;
         int randomInt = RandomUtil.randomInt(RandomUtil.maxRandomInt100);
-        log.info("0<=策略卡<{}<=装备卡<{}<=英雄<{}<=士兵<{}，随机数是：{}", range1, range2, range3, RandomUtil.maxRandomInt100, randomInt);
+//        log.info("0<=策略卡<{}<=装备卡<{}<=英雄<{}<=士兵<{}，随机数是：{}", range1, range2, range3, RandomUtil.maxRandomInt100, randomInt);
+        log.info("0<=策略卡<{}<=装备卡<{}<=单位<{}，随机数是：{}", range1, range2, RandomUtil.maxRandomInt100, randomInt);
         if (randomInt < range1) {
             // 策略抽取概率
             List<TacticCard> tacticList = DesktopContext.getInstance().getTacticList();
@@ -199,7 +200,11 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
             List<EquipmentCard> equipmentList = DesktopContext.getInstance().getEquipmentList();
             int eqIndex = RandomUtil.randomInt(equipmentList.size());
             randomCard = equipmentList.get(eqIndex);
-        } else if (randomInt < range3) {
+        } else {
+            randomCard = DesktopContext.getInstance().getPeoplePlayer().getNextUnitCard();
+        }
+        /*
+        else if (randomInt < range3) {
             // 英雄抽取概率
 //            List<UnitCard> heroList = DesktopContext.getInstance().getHeroList();
             List<UnitCard> heroList = DesktopContext.getInstance().getPeoplePlayer().getFormation().getHeroList();
@@ -212,6 +217,8 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
             int soldierIndex = RandomUtil.randomInt(soldierList.size());
             randomCard = soldierList.get(soldierIndex);
         }
+         */
+
         return randomCard;
     }
 
