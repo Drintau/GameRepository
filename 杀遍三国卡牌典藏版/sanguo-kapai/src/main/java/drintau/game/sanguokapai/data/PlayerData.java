@@ -30,7 +30,7 @@ public class PlayerData {
 
     // 阵型
     private AbstractFormation formation;
-    // 单位卡牌随机顺序队列，玩家使用
+    // 单位卡牌随机顺序队列
     private Queue<UnitCard> unitQueue;
     // 伤亡计数
     private IntegerProperty deadCount = new SimpleIntegerProperty(0);

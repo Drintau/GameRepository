@@ -223,6 +223,8 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
     }
 
     private UnitCard getRandomUnit() {
+        return DesktopContext.getInstance().getAiPlayer().getNextUnitCard();
+        /*
         log.info("电脑抽单位卡，概率阈值指英雄概率");
         UnitCard randomUnit;
         if (RandomUtil.roll(RandomUtil.rate20)) {
@@ -238,6 +240,7 @@ public class BeginTurnEvent implements EventHandler<ActionEvent> {
             randomUnit = soldierList.get(soldierIndex);
         }
         return randomUnit;
+         */
     }
 
     private EquipmentCard getRandomEquipment() {
