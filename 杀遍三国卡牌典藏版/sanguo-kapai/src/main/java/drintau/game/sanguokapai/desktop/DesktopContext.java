@@ -5,7 +5,7 @@ import drintau.game.sanguokapai.card.EquipmentCard;
 import drintau.game.sanguokapai.card.TacticCard;
 import drintau.game.sanguokapai.card.UnitCard;
 import drintau.game.sanguokapai.data.*;
-import drintau.game.sanguokapai.util.RandomUtil;
+import drintau.game.sanguokapai.desktop.scene.IndexScene;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -20,6 +20,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -50,8 +51,10 @@ public class DesktopContext {
     // 回合计数
     private IntegerProperty turnCount;
 
-    // 场景跳转按钮
-    private Button endGameBtn;
+    // 场景跳转
+    private Stage stage;
+    private IndexScene indexScene;
+    private Button showIndexSceneBtn;
     // 玩游戏场景的根节点
     private StackPane playGameSceneRoot;
     // 遮盖层
@@ -204,7 +207,7 @@ public class DesktopContext {
         VBox gameOverCenter = new VBox(10);
         gameOverCenter.setAlignment(Pos.CENTER);
         gameOverCenter.setPadding(new Insets(10));
-        gameOverCenter.getChildren().addAll(gameOverLabel, endGameBtn);
+        gameOverCenter.getChildren().addAll(gameOverLabel, showIndexSceneBtn);
 
         gameOverPane.setCenter(gameOverCenter);
         this.setGameOverFlag(true);
