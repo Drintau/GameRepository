@@ -71,7 +71,7 @@ public final class PlayGameScene extends Scene {
         gameBoardPaneTop.setLeft(peoplePlayerInfo);
         gameBoardPaneTop.setCenter(turnCountLabel);
         gameBoardPaneTop.setRight(aiPlayerInfo);
-        Label helpTextLabel = new Label("克制关系：枪->骑->甲->术->盾->射->枪，器械无克制关系");
+        Label helpTextLabel = new Label("兵种克制关系：枪->骑->甲->术->盾->射->枪，器械无克制关系");
         helpTextLabel.setFont(StyleConstants.font24);
         gameBoardPaneTop.setTop(helpTextLabel);
         BorderPane.setAlignment(helpTextLabel, Pos.CENTER);
