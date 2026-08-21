@@ -22,18 +22,18 @@ public abstract class AbstractFormation {
 
     private String name;
     private Integer unitCount;
+    private Map<CardConstants.UnitType, Integer> unitTypeCountMap =  new HashMap<>();
 
+    // init是给单位、英雄列表填充实际数据
     private List<UnitCard> soldierList = new ArrayList<>();
     private List<UnitCard> heroList = new ArrayList<>();
-
-    private Map<CardConstants.UnitType, Integer> unitTypeCountMap =  new HashMap<>();
 
     public AbstractFormation(String name,  Integer unitCount) {
         this.name = name;
         this.unitCount = unitCount;
     }
 
-    void init(){
+    public AbstractFormation init(){
         // 士兵列表
         Map<CardConstants.UnitType, List<UnitCard>> unitTypeCardListMap = SoldierData.getUnitTypeCardListMap();
         for (Map.Entry<CardConstants.UnitType, Integer> unitTypeIntegerEntry : unitTypeCountMap.entrySet()) {
@@ -51,16 +51,20 @@ public abstract class AbstractFormation {
             int heroIndex = RandomUtil.randomInt(allHeroList.size());
             heroList.add(allHeroList.get(heroIndex));
         }
+
+        return this;
     }
 
     public String getDescription() {
+        int soldierSum = unitTypeCountMap.values().stream().mapToInt(Integer::intValue).sum();
+
         StringBuilder sb = new StringBuilder();
         sb.append("""
             %s
             单位数：%d
             英雄数：%d
             士兵数：%d
-            """.formatted(name, unitCount, heroList.size(), soldierList.size()));
+            """.formatted(name, unitCount, unitCount - soldierSum, soldierSum));
 
         for (Map.Entry<CardConstants.UnitType, Integer> unitTypeIntegerEntry : unitTypeCountMap.entrySet()) {
             CardConstants.UnitType key = unitTypeIntegerEntry.getKey();

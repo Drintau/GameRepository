@@ -23,6 +23,8 @@ public class HelpScene extends Scene {
         helpRoot.setBackground(StyleConstants.BLUE_BACKGROUND);
         helpRoot.setPadding(new Insets(10));
 
+        helpRoot.setTop(desktopContext.getShowIndexSceneBtn());
+
         Label helpTextLabel = new Label("""
                 1、卡牌包括：策略卡、装备卡、单位卡
                 2、每回合各种卡牌最多放置一张
@@ -35,9 +37,6 @@ public class HelpScene extends Scene {
                 """);
         helpTextLabel.setFont(StyleConstants.font24);
         helpRoot.setCenter(helpTextLabel);
-
-        helpRoot.setBottom(desktopContext.getShowIndexSceneBtn());
-        BorderPane.setAlignment(desktopContext.getShowIndexSceneBtn(), Pos.CENTER);
 
         return helpRoot;
     }

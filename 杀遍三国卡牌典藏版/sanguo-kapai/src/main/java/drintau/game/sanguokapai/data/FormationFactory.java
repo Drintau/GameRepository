@@ -2,6 +2,7 @@ package drintau.game.sanguokapai.data;
 
 import drintau.game.sanguokapai.data.formation.*;
 import drintau.game.sanguokapai.util.RandomUtil;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +12,7 @@ import java.util.function.Supplier;
 
 public final class FormationFactory {
 
-    private static final List<String> FORMATION_NAME_LIST = new ArrayList<>();
+    public static final List<String> FORMATION_NAME_LIST = new ArrayList<>();
 
     private static final Map<String, Supplier<AbstractFormation>> FORMATION_MAP = new HashMap<>();
 
