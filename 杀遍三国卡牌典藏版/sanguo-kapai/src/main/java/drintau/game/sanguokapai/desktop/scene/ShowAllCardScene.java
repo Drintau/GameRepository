@@ -20,6 +20,11 @@ import java.util.List;
 
 public class ShowAllCardScene extends Scene {
 
+    private static Button heroPaginationBtn = new Button("英雄卡");
+    private static Button soldierPaginationBtn = new Button("士兵卡");
+    private static Button equipmentPaginationBtn = new Button("装备卡");
+    private static Button tacticPaginationBtn = new Button("策略卡");
+
     public ShowAllCardScene() {
         super(createContent());
     }
@@ -34,27 +39,27 @@ public class ShowAllCardScene extends Scene {
         Pagination equipmentPagination = equipmentPagination();
         Pagination tacticPagination = tacticPagination();
 
-        Button heroPaginationBtn = new Button("英雄卡");
         heroPaginationBtn.setFont(StyleConstants.font20);
         heroPaginationBtn.setOnAction(event -> {
+            changeShow(heroPaginationBtn);
             showAllCardRoot.setCenter(heroPagination);
         });
 
-        Button soldierPaginationBtn = new Button("士兵卡");
         soldierPaginationBtn.setFont(StyleConstants.font20);
         soldierPaginationBtn.setOnAction(event -> {
+            changeShow(soldierPaginationBtn);
             showAllCardRoot.setCenter(soldierPagination);
         });
 
-        Button equipmentPaginationBtn = new Button("装备卡");
         equipmentPaginationBtn.setFont(StyleConstants.font20);
         equipmentPaginationBtn.setOnAction(event -> {
+            changeShow(equipmentPaginationBtn);
             showAllCardRoot.setCenter(equipmentPagination);
         });
 
-        Button tacticPaginationBtn = new Button("策略卡");
         tacticPaginationBtn.setFont(StyleConstants.font20);
         tacticPaginationBtn.setOnAction(event -> {
+            changeShow(tacticPaginationBtn);
             showAllCardRoot.setCenter(tacticPagination);
         });
 
@@ -109,6 +114,13 @@ public class ShowAllCardScene extends Scene {
         return pagination;
     }
 
+    private static void changeShow(Button btn) {
+        heroPaginationBtn.setDisable(false);
+        soldierPaginationBtn.setDisable(false);
+        equipmentPaginationBtn.setDisable(false);
+        tacticPaginationBtn.setDisable(false);
 
+        btn.setDisable(true);
+    }
 
 }
