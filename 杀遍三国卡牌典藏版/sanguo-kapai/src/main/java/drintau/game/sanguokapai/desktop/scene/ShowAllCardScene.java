@@ -1,17 +1,19 @@
 package drintau.game.sanguokapai.desktop.scene;
 
+import drintau.game.sanguokapai.card.EquipmentCard;
+import drintau.game.sanguokapai.card.TacticCard;
 import drintau.game.sanguokapai.card.UnitCard;
-import drintau.game.sanguokapai.data.FormationFactory;
-import drintau.game.sanguokapai.data.HeroData;
-import drintau.game.sanguokapai.data.formation.AbstractFormation;
+import drintau.game.sanguokapai.data.*;
 import drintau.game.sanguokapai.desktop.DesktopContext;
 import drintau.game.sanguokapai.desktop.StyleConstants;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
 import java.util.List;
@@ -27,11 +29,38 @@ public class ShowAllCardScene extends Scene {
         showAllCardRoot.setBackground(StyleConstants.BLUE_BACKGROUND);
         showAllCardRoot.setPadding(new Insets(10));
 
-        showAllCardRoot.setTop(DesktopContext.getInstance().getShowIndexSceneBtn());
-
         Pagination heroPagination = heroPagination();
+        Pagination soldierPagination = soldierPagination();
+        Pagination equipmentPagination = equipmentPagination();
+        Pagination tacticPagination = tacticPagination();
 
-        showAllCardRoot.setCenter(heroPagination);
+        Button heroPaginationBtn = new Button("英雄卡");
+        heroPaginationBtn.setFont(StyleConstants.font20);
+        heroPaginationBtn.setOnAction(event -> {
+            showAllCardRoot.setCenter(heroPagination);
+        });
+
+        Button soldierPaginationBtn = new Button("士兵卡");
+        soldierPaginationBtn.setFont(StyleConstants.font20);
+        soldierPaginationBtn.setOnAction(event -> {
+            showAllCardRoot.setCenter(soldierPagination);
+        });
+
+        Button equipmentPaginationBtn = new Button("装备卡");
+        equipmentPaginationBtn.setFont(StyleConstants.font20);
+        equipmentPaginationBtn.setOnAction(event -> {
+            showAllCardRoot.setCenter(equipmentPagination);
+        });
+
+        Button tacticPaginationBtn = new Button("策略卡");
+        tacticPaginationBtn.setFont(StyleConstants.font20);
+        tacticPaginationBtn.setOnAction(event -> {
+            showAllCardRoot.setCenter(tacticPagination);
+        });
+
+        HBox hBox = new HBox(10);
+        hBox.getChildren().addAll(DesktopContext.getInstance().getShowIndexSceneBtn(), heroPaginationBtn, soldierPaginationBtn, equipmentPaginationBtn, tacticPaginationBtn);
+        showAllCardRoot.setTop(hBox);
 
         return showAllCardRoot;
     }
@@ -46,5 +75,40 @@ public class ShowAllCardScene extends Scene {
         });
         return pagination;
     }
+
+    private static Pagination soldierPagination() {
+        List<UnitCard> allSoldiers = SoldierData.getAllSoldiers();
+        Pagination pagination = new Pagination(allSoldiers.size(), 0);
+        pagination.setPageFactory(pageIndex -> {
+            Label label = new Label(allSoldiers.get(pageIndex).getDescription());
+            label.setFont(StyleConstants.font24);
+            return new StackPane(label);
+        });
+        return pagination;
+    }
+
+    private static Pagination equipmentPagination() {
+        List<EquipmentCard> allEquipments = EquipmentData.getAllEquipments();
+        Pagination pagination = new Pagination(allEquipments.size(), 0);
+        pagination.setPageFactory(pageIndex -> {
+            Label label = new Label(allEquipments.get(pageIndex).getDescription());
+            label.setFont(StyleConstants.font24);
+            return new StackPane(label);
+        });
+        return pagination;
+    }
+
+    private static Pagination tacticPagination() {
+        List<TacticCard> allTactics = TacticData.getAllTactics();
+        Pagination pagination = new Pagination(allTactics.size(), 0);
+        pagination.setPageFactory(pageIndex -> {
+            Label label = new Label(allTactics.get(pageIndex).getDescription());
+            label.setFont(StyleConstants.font24);
+            return new StackPane(label);
+        });
+        return pagination;
+    }
+
+
 
 }
