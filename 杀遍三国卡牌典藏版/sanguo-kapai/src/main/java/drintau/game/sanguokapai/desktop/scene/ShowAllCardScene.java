@@ -20,10 +20,10 @@ import java.util.List;
 
 public class ShowAllCardScene extends Scene {
 
-    private static Button heroPaginationBtn = new Button("英雄卡");
-    private static Button soldierPaginationBtn = new Button("士兵卡");
-    private static Button equipmentPaginationBtn = new Button("装备卡");
-    private static Button tacticPaginationBtn = new Button("策略卡");
+    private static final Button heroPaginationBtn = new Button("英雄卡");
+    private static final Button soldierPaginationBtn = new Button("士兵卡");
+    private static final Button equipmentPaginationBtn = new Button("装备卡");
+    private static final Button tacticPaginationBtn = new Button("策略卡");
 
     public ShowAllCardScene() {
         super(createContent());
@@ -66,6 +66,8 @@ public class ShowAllCardScene extends Scene {
         HBox hBox = new HBox(10);
         hBox.getChildren().addAll(DesktopContext.getInstance().getShowIndexSceneBtn(), heroPaginationBtn, soldierPaginationBtn, equipmentPaginationBtn, tacticPaginationBtn);
         showAllCardRoot.setTop(hBox);
+
+        changeShow(null);
 
         return showAllCardRoot;
     }
@@ -120,7 +122,9 @@ public class ShowAllCardScene extends Scene {
         equipmentPaginationBtn.setDisable(false);
         tacticPaginationBtn.setDisable(false);
 
-        btn.setDisable(true);
+        if (btn != null) {
+            btn.setDisable(true);
+        }
     }
 
 }
