@@ -35,6 +35,9 @@ public final class IndexScene extends Scene {
 
         Button showAllCard = new Button("卡牌一览");
         showAllCard.setFont(StyleConstants.font20);
+        showAllCard.setOnAction(event -> {
+            stage.setScene(new ShowAllCardScene());
+        });
 
         Button help = new Button("游玩说明");
         help.setFont(StyleConstants.font20);
