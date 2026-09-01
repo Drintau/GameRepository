@@ -32,7 +32,8 @@ public class HelpScene extends Scene {
                 5、兵种克制关系：枪->骑->甲->术->盾->射->枪，器械无克制关系
                 6、让对手生命值归0或者让对手伤亡单位数达到指定值，都可以获胜
                 7、生命值固定为100，伤亡单位数上限由阵型单位数决定
-                8、电脑加强：每5回合，抽到策略卡概率上升
+                8、场上没有敌方单位时，会触发“冲锋模式”，己方单位无视移动力前进
+                9、电脑加强：每5回合，抽到策略卡概率上升；单位伤亡数上限较高
                 """);
         helpTextLabel.setFont(StyleConstants.font24);
         helpRoot.setCenter(helpTextLabel);
