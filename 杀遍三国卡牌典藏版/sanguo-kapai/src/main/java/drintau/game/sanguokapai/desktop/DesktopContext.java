@@ -137,14 +137,14 @@ public class DesktopContext {
         aiPlayer.setEqColIndex(aiPlayerEqColIndex);
         aiPlayer.setUnitInitColIndex(aiPlayerUnitInitColIndex);
         aiPlayer.setFormation(FormationFactory.getRandomFormation().init());
-        aiPlayer.setMaxDeadCount(new SimpleIntegerProperty(aiPlayer.getFormation().getUnitCount() * 4 / 10));
+        aiPlayer.setMaxDeadCount(new SimpleIntegerProperty(aiPlayer.getFormation().getUnitCount() * 6 / 10));
         aiPlayer.createNewUnitQueue();
 
         peoplePlayer.setAiFlag(false);
         peoplePlayer.setEqColIndex(peoplePlayerEqColIndex);
         peoplePlayer.setUnitInitColIndex(peoplePlayerUnitInitColIndex);
         peoplePlayer.setFormation(FormationFactory.getRandomFormation().init());
-        peoplePlayer.setMaxDeadCount(new SimpleIntegerProperty(peoplePlayer.getFormation().getUnitCount() * 6 / 10));
+        peoplePlayer.setMaxDeadCount(new SimpleIntegerProperty(peoplePlayer.getFormation().getUnitCount() * 4 / 10));
         peoplePlayer.createNewUnitQueue();
 
         playerDeque.add(aiPlayer);
