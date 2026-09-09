@@ -61,9 +61,7 @@ public abstract class AbstractFormation {
         StringBuilder sb = new StringBuilder();
         sb.append("""
             %s
-            单位数：%d
-            英雄数：%d
-            士兵数：%d
+            单位数：%d（英雄：%d，士兵：%d）
             """.formatted(name, unitCount, unitCount - soldierSum, soldierSum));
 
         for (Map.Entry<CardConstants.UnitType, Integer> unitTypeIntegerEntry : unitTypeCountMap.entrySet()) {
