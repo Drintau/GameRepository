@@ -22,34 +22,46 @@ public abstract class AbstractFormation {
 
     private String name;
     private Integer unitCount;
+    private boolean randomFlag;
     private Map<CardConstants.UnitType, Integer> unitTypeCountMap =  new HashMap<>();
 
     // init是给单位、英雄列表填充实际数据
     private List<UnitCard> soldierList = new ArrayList<>();
     private List<UnitCard> heroList = new ArrayList<>();
 
-    public AbstractFormation(String name,  Integer unitCount) {
+    public AbstractFormation(String name, Integer unitCount) {
         this.name = name;
         this.unitCount = unitCount;
     }
 
     public AbstractFormation init(){
-        // 士兵列表
-        Map<CardConstants.UnitType, List<UnitCard>> unitTypeCardListMap = SoldierData.getUnitTypeCardListMap();
-        for (Map.Entry<CardConstants.UnitType, Integer> unitTypeIntegerEntry : unitTypeCountMap.entrySet()) {
-            CardConstants.UnitType key = unitTypeIntegerEntry.getKey();
-            List<UnitCard> unitCardList = new ArrayList<>();
-            while (unitCardList.size() < unitTypeIntegerEntry.getValue()) {
-                unitCardList.addAll(unitTypeCardListMap.get(key));
+        if (randomFlag) {
+            List<UnitCard> allUnitList = new ArrayList<>();
+            allUnitList.addAll(SoldierData.getAllSoldiers());
+            allUnitList.addAll(HeroData.getAllHeroes());
+            for (int i = 0; i < unitCount; i++) {
+                int randomIndex = RandomUtil.randomInt(allUnitList.size());
+                // 均存到士兵集合
+                soldierList.add(allUnitList.get(randomIndex));
             }
-            soldierList.addAll(unitCardList);
-        }
+        } else {
+            // 士兵列表
+            Map<CardConstants.UnitType, List<UnitCard>> unitTypeCardListMap = SoldierData.getUnitTypeCardListMap();
+            for (Map.Entry<CardConstants.UnitType, Integer> unitTypeIntegerEntry : unitTypeCountMap.entrySet()) {
+                CardConstants.UnitType key = unitTypeIntegerEntry.getKey();
+                List<UnitCard> unitCardList = new ArrayList<>();
+                while (unitCardList.size() < unitTypeIntegerEntry.getValue()) {
+                    unitCardList.addAll(unitTypeCardListMap.get(key));
+                }
+                soldierList.addAll(unitCardList);
+            }
 
-        // 英雄列表
-        List<UnitCard> allHeroList = HeroData.getAllHeroes();
-        for (int i = 0; i < unitCount - soldierList.size(); i++) {
-            int heroIndex = RandomUtil.randomInt(allHeroList.size());
-            heroList.add(allHeroList.get(heroIndex));
+            // 英雄列表
+            List<UnitCard> allHeroList = HeroData.getAllHeroes();
+            for (int i = 0; i < unitCount - soldierList.size(); i++) {
+                int heroIndex = RandomUtil.randomInt(allHeroList.size());
+                heroList.add(allHeroList.get(heroIndex));
+            }
         }
 
         return this;

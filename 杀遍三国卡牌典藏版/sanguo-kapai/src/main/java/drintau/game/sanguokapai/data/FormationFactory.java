@@ -20,10 +20,12 @@ public final class FormationFactory {
         FORMATION_NAME_LIST.add(FormationConstants.CHANG_SHE_ZHEN);
         FORMATION_NAME_LIST.add(FormationConstants.YAN_XING_ZHEN);
         FORMATION_NAME_LIST.add(FormationConstants.CHONG_E_ZHEN);
+        FORMATION_NAME_LIST.add(FormationConstants.SUI_JI_ZHEN);
 
         FORMATION_MAP.put(FormationConstants.CHANG_SHE_ZHEN, ChangSheZhen::new);
         FORMATION_MAP.put(FormationConstants.YAN_XING_ZHEN, YanXingZhen::new);
         FORMATION_MAP.put(FormationConstants.CHONG_E_ZHEN, ChongEZhen::new);
+        FORMATION_MAP.put(FormationConstants.SUI_JI_ZHEN, SuiJiZhen::new);
     }
 
     public static AbstractFormation getFormation(String formationName){
