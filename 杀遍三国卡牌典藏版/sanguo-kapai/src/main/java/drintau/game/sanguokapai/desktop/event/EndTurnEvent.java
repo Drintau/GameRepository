@@ -252,7 +252,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
             if (!cells[actionItem.getCurRowIndex()][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getChildren().isEmpty()) {
                 if (cells[actionItem.getCurRowIndex()][DesktopContext.getInstance().getAiPlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
                     if (equipmentCard.getUnitType() == CardConstants.UnitType.ALL || equipmentCard.getUnitType() == actionItem.getUnitCard().getUnitType()) {
-                        // 加速度
+                        // 加移力
                         actionItem.setAddSpeed(actionItem.getAddSpeed() + equipmentCard.getAddSpeed());
                         // 加战力
                         actionItem.setAddAttack(actionItem.getAddAttack() +  equipmentCard.getAddAttack());
@@ -263,7 +263,7 @@ public class EndTurnEvent implements EventHandler<ActionEvent> {
             if (!cells[actionItem.getCurRowIndex()][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getChildren().isEmpty()) {
                 if (cells[actionItem.getCurRowIndex()][DesktopContext.getInstance().getPeoplePlayer().getEqColIndex()].getUserData() instanceof EquipmentCard equipmentCard) {
                     if (equipmentCard.getUnitType() == CardConstants.UnitType.ALL || equipmentCard.getUnitType() == actionItem.getUnitCard().getUnitType()) {
-                        // 加速度
+                        // 加移力
                         actionItem.setAddSpeed(actionItem.getAddSpeed() + equipmentCard.getAddSpeed());
                         // 加战力
                         actionItem.setAddAttack(actionItem.getAddAttack() +  equipmentCard.getAddAttack());

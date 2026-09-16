@@ -23,9 +23,9 @@ public class ActionItem {
     // 卡牌
     private UnitCard unitCard;
 
-    // 增加速度
+    // 增加移力
     private int addSpeed;
-    // 当前速度
+    // 当前移力
     private int curSpeed;
 
     // 增加战力
@@ -45,7 +45,7 @@ public class ActionItem {
             %s
             兵种：%s
             等级：%d
-            速度：%d + %d = %d
+            移力：%d + %d = %d
             战力：%d + %d = %d
             """.formatted(unitCard.getName(), unitCard.getUnitType().displayName, unitCard.getLevel(), unitCard.getSpeed(), addSpeed, curSpeed, unitCard.getBaseAttack(), addAttack, curAttack);
     }

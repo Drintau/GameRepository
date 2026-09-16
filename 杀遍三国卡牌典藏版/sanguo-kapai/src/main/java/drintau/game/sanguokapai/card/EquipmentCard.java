@@ -31,7 +31,7 @@ public class EquipmentCard extends AbstractCard {
         return """
             %s
             兵种：%s
-            加速度：%d
+            加移力：%d
             加战力：%d
             """.formatted(name, unitType.displayName, addSpeed, addAttack);
     }
